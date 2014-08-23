@@ -4,7 +4,7 @@
   "description": "Uber API nodejs wrapper",
   "main": "index.js",
   "scripts": {
-    "test": "npm test"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Shern Shiou Tan (shernshiou@gmail.com)",
   "license": "MIT",
