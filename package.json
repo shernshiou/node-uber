@@ -1,0 +1,15 @@
+{
+  "name": "node-uber",
+  "version": "0.0.1",
+  "description": "Uber API nodejs wrapper",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm test"
+  },
+  "author": "Shern Shiou Tan (shernshiou@gmail.com)",
+  "license": "MIT",
+  "dependencies": {
+    "oauth": "^0.9.12",
+    "request": "^2.40.0"
+  }
+}
