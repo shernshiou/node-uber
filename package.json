@@ -10,7 +10,7 @@
     "type": "git",
     "url": "git://github.com/shernshiou/node-uber.git"
   },
-  "author": "Shern Shiou Tan (shernshiou@gmail.com)",
+  "author": "Shern Shiou Tan <shernshiou@gmail.com> (http://blog.shernshiou.com)",
   "license": "MIT",
   "dependencies": {
     "oauth": "^0.9.12",
