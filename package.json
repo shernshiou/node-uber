@@ -1,6 +1,6 @@
 {
   "name": "node-uber",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Uber API nodejs wrapper",
   "main": "index.js",
   "scripts": {
