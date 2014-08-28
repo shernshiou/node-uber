@@ -6,7 +6,9 @@ A Node.js wrapper for Uber API
 
 Version
 -------
-0.0.3 Error handling, Mocha tests
+0.0.4 Mocha tests
+
+0.0.3 Error handling
 
 0.0.2 Support User Profile
 
