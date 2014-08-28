@@ -6,6 +6,7 @@ A Node.js wrapper for Uber API
 
 Version
 -------
+0.0.3 Error handling, Mocha tests
 
 0.0.2 Support User Profile
 
@@ -22,6 +23,13 @@ Installation
 
 ```sh
 npm install node-uber
+```
+
+Test
+------------
+
+```sh
+npm test
 ```
 
 Usage
