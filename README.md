@@ -1,5 +1,6 @@
 node-uber
 =========
+[![Build Status](https://travis-ci.org/shernshiou/node-uber.png)](https://travis-ci.org/shernshiou/node-uber)
 
 A Node.js wrapper for Uber API
 
