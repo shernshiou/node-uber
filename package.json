@@ -1,6 +1,6 @@
 {
   "name": "node-uber",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "A Node.js wrapper for Uber API",
   "main": "index.js",
   "scripts": {
@@ -13,18 +13,18 @@
   "author": "Shern Shiou Tan <shernshiou@gmail.com> (http://blog.shernshiou.com)",
   "license": "MIT",
   "dependencies": {
-    "oauth": "^0.9.12",
-    "request": "^2.40.0"
+    "oauth": "^0.9.13",
+    "request": "^2.55.0"
   },
   "devDependencies": {
-    "chai": "^1.9.1",
+    "chai": "^2.3.0",
     "gulp": "^3.8.7",
     "gulp-mocha": "^1.0.0",
     "gulp-util": "^3.0.0",
     "mocha": "^1.21.4",
     "nock": "^0.45.0",
     "sinon": "^1.10.3",
-    "sinon-chai": "^2.5.0",
+    "sinon-chai": "^2.7.0",
     "superagent": "^0.18.2"
   }
 }
