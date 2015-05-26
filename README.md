@@ -7,6 +7,8 @@ A Node.js wrapper for Uber API
 
 Version
 -------
+0.0.5 Support Promotions & Fixes oauth warning message
+
 0.0.4 Mocha tests
 
 0.0.3 Error handling
@@ -102,6 +104,29 @@ uber.products.list(params, callback);
 ##### Example
 ```javascript
 uber.products.list({ latitude: 3.1357, longitude: 101.6880 }, function (err, res) {
+  if (err) console.error(err);
+  else console.log(res);
+});
+```
+
+### Promotions
+#### Lists
+```javascript
+uber.promotions.list(params, callback);
+```
+
+##### Params
+* start_latitude
+* start_longitude
+* end_latitude
+* end_longitude
+
+##### Example
+```javascript
+uber.promotions.list({ 
+  start_latitude: 3.1357, start_longitude: 101.6880, 
+  end_latitude: 3.0833, end_longitude: 101.6500 
+}, function (err, res) {
   if (err) console.error(err);
   else console.log(res);
 });
