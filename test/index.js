@@ -31,7 +31,7 @@ describe('Uber client general test', function () {
     uber.defaults.client_secret.should.equal(key.client_secret);
     uber.defaults.server_token.should.equal(key.server_token);
     uber.defaults.redirect_uri.should.equal(key.redirect_uri);
-    uber.defaults.base_url.should.equal('https://api.uber.com/v1');
+    uber.defaults.base_url.should.equal('https://api.uber.com/');
     uber.defaults.authorize_url.should.equal('https://login.uber.com/oauth/authorize');
     uber.defaults.access_token_url.should.equal('https://login.uber.com/oauth/token');
     uber.should.have.property('oauth2');
