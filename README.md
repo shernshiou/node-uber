@@ -7,6 +7,8 @@ A Node.js wrapper for Uber API
 
 Version
 -------
+0.0.6 Support User History v1.2
+
 0.0.5 Support Promotions & Fixes oauth warning message
 
 0.0.4 Mocha tests
