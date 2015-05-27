@@ -178,7 +178,24 @@ uber.estimates.time({
 
 ### User 
 #### Activity
-_NOTE: Have not tested yet because unable to get `history` scope_
+```javascript
+uber.user.activity(params, callback);
+```
+
+##### Params
+* access_token
+* offset (defautls to 0)
+* limit (defaults to 5, maximum 50)
+
+##### Example
+```javascript
+uber.user.activity({
+  access_token: 'ACCESS_TOKEN'
+}, function (err, res) {
+  if (err) console.log(err);
+  else console.log(res);
+});
+```
 
 #### Profile
 ```javascript
