@@ -7,6 +7,8 @@ A Node.js wrapper for Uber API
 
 Version
 -------
+0.0.8 Support Places
+
 0.0.7 Support multiple scopes
 
 0.0.6 Support User History v1.2
@@ -85,7 +87,7 @@ uber.authorization(params, callback);
 
 ##### Example
 ```javascript
-uber.authorization({ refresh_token: 'REFRESH_TOKEN' }, 
+uber.authorization({ refresh_token: 'REFRESH_TOKEN' },
   function (err, access_token, refresh_token) {
     if (err) console.error(err);
     else {
@@ -97,7 +99,7 @@ uber.authorization({ refresh_token: 'REFRESH_TOKEN' },
 ```
 
 ### Product
-#### Types 
+#### Types
 ```javascript
 uber.products.list(params, callback);
 ```
@@ -127,9 +129,9 @@ uber.promotions.list(params, callback);
 
 ##### Example
 ```javascript
-uber.promotions.list({ 
-  start_latitude: 3.1357, start_longitude: 101.6880, 
-  end_latitude: 3.0833, end_longitude: 101.6500 
+uber.promotions.list({
+  start_latitude: 3.1357, start_longitude: 101.6880,
+  end_latitude: 3.0833, end_longitude: 101.6500
 }, function (err, res) {
   if (err) console.error(err);
   else console.log(res);
@@ -149,9 +151,9 @@ uber.estimates.price(params, callback);
 
 ##### Example
 ```javascript
-uber.estimates.price({ 
-  start_latitude: 3.1357, start_longitude: 101.6880, 
-  end_latitude: 3.0833, end_longitude: 101.6500 
+uber.estimates.price({
+  start_latitude: 3.1357, start_longitude: 101.6880,
+  end_latitude: 3.0833, end_longitude: 101.6500
 }, function (err, res) {
   if (err) console.error(err);
   else console.log(res);
@@ -170,7 +172,7 @@ uber.estimates.time(params, callback);
 
 ##### Example
 ```javascript
-uber.estimates.time({ 
+uber.estimates.time({
   start_latitude: 3.1357, start_longitude: 101.6880
 }, function (err, res) {
   if (err) console.error(err);
@@ -178,7 +180,7 @@ uber.estimates.time({
 });
 ```
 
-### User 
+### User
 #### Activity
 ```javascript
 uber.user.activity(params, callback);
