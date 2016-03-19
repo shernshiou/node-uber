@@ -218,3 +218,38 @@ uber.user.profile(params, function (err, res) {
   else console.log(res);
 });
 ```
+
+### Places
+The `/places/{place_id}` endpoint provides access to predefined addresses for the current user. Must have authorization with places scope.
+
+#### Home
+```javascript
+uber.places.home(callback);
+```
+
+##### Example
+```javascript
+uber.places.home(function(err, res) {
+  if (err) {
+    console.log(err);
+  } else {
+    console.log(res);
+  }
+});
+```
+
+#### Work
+```javascript
+uber.places.work(callback);
+```
+
+##### Example
+```javascript
+uber.places.work(function(err, res) {
+  if (err) {
+    console.log(err);
+  } else {
+    console.log(res);
+  }
+});
+```
