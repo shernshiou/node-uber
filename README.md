@@ -7,6 +7,8 @@ A Node.js wrapper for Uber API
 
 Version
 -------
+0.0.9 Support Payment-Methods
+
 0.0.8 Support Places
 
 0.0.7 Support multiple scopes
@@ -220,7 +222,11 @@ uber.user.profile(params, function (err, res) {
 ```
 
 ### Places
-The `/places/{place_id}` endpoint provides access to predefined addresses for the current user. Must have authorization with places scope.
+The `/places/{place_id}` endpoint provides access to predefined addresses for the current user. Must have authorization with `places` scope.
+
+Right now, only home and work `place_id` is supported by the Uber API.
+
+
 
 #### Home
 ```javascript
@@ -246,6 +252,24 @@ uber.places.work(callback);
 ##### Example
 ```javascript
 uber.places.work(function(err, res) {
+  if (err) {
+    console.log(err);
+  } else {
+    console.log(res);
+  }
+});
+```
+
+### Payment-Methods
+The `/payment-methods` endpoint allows retrieving the list of the user’s available payment methods. These can be leveraged in order to supply a payment_method_id to the POST /v1/requests endpoint. Must have authorization with `request` scope.
+
+```javascript
+uber.payment.methods(callback);
+```
+
+#### Example
+```javascript
+uber.payment.methods(function(err, res) {
   if (err) {
     console.log(err);
   } else {
