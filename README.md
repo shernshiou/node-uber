@@ -30,6 +30,32 @@ License
 
 MIT
 
+Implementation Status
+-------
+- [x] GET /v1/products - ``uber.products.list``
+- [] GET /v1/products/{product_id}
+- [x] GET /v1/estimates/price - ``uber.estimates.price``
+- [x] GET /v1/estimates/time - ``uber.estimates.time``
+- [x] GET /v1.2/history - ``uber.user.activity``
+- [] GET /v1.1/history
+- [x] GET /v1/me - ``uber.user.profile``
+- [x] POST /v1/requests - ``uber.requests.requestRide``
+- [] GET /v1/requests/current
+- [] PATCH /v1/requests/current
+- [] DELETE /v1/requests/current
+- [x] POST /v1/requests/estimate - ``uber.requests.estimate``
+- [] GET /v1/requests/{request_id}
+- [] PATCH /v1/requests/{request_id}
+- [] DELETE /v1/requests/{request_id}
+- [] GET /v1/requests/{request_id}/map
+- [] GET /v1/requests/{request_id}/receipt
+- [x] GET /v1/places/{place_id} - ``uber.places.home`` and ``uber.places.work``
+- [] PUT /v1/places/{place_id}
+- [x] GET /v1/payment-methods - ``uber.payment.methods``
+- [] POST /v1/reminders
+- [] GET /v1/reminders/{reminder_id}
+- [] PATCH /v1/reminders/{reminder_id}
+- [] DELETE /v1/reminders/{reminder_id}
 
 Installation
 ------------
