@@ -24,11 +24,11 @@ Implementation Status
 - [x] PATCH /v1/requests/current - ``requests.updateCurrentRequest``
 - [x] DELETE /v1/requests/current - ``requests.deleteCurrentRequest``
 - [x] POST /v1/requests/estimate - ``requests.getEstimatesForCurrentRequest``
-- [] GET /v1/requests/{request_id}
-- [] PATCH /v1/requests/{request_id}
-- [] DELETE /v1/requests/{request_id}
-- [] GET /v1/requests/{request_id}/map
-- [] GET /v1/requests/{request_id}/receipt
+- [x] GET /v1/requests/{request_id} - ``requests.getRequestByID``
+- [x] PATCH /v1/requests/{request_id} - ``requests.updateRequestByID``
+- [x] DELETE /v1/requests/{request_id} - ``requests.deleteRequestByID``
+- [x] GET /v1/requests/{request_id}/map - ``requests.getRequestMapByID``
+- [x] GET /v1/requests/{request_id}/receipt - ``requests.getRequestReceiptByID``
 - [x] GET /v1/places/{place_id} - ``places.getHome`` and ``places.getWork``
 - [] PUT /v1/places/{place_id}
 - [x] GET /v1/payment-methods - ``payment.getMethods``
