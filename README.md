@@ -32,26 +32,25 @@ MIT
 
 Implementation Status
 -------
-- [x] GET /v1/products - ``uber.products.list``
-- [] GET /v1/products/{product_id}
-- [x] GET /v1/estimates/price - ``uber.estimates.price``
-- [x] GET /v1/estimates/time - ``uber.estimates.time``
-- [x] GET /v1.2/history - ``uber.user.activity``
-- [] GET /v1.1/history
-- [x] GET /v1/me - ``uber.user.profile``
-- [x] POST /v1/requests - ``uber.requests.requestRide``
-- [] GET /v1/requests/current
-- [] PATCH /v1/requests/current
-- [] DELETE /v1/requests/current
-- [x] POST /v1/requests/estimate - ``uber.requests.estimate``
+- [x] GET /v1/products - ``products.getAllForLocation``
+- [x] GET /v1/products/{product_id} - ``products.getByID``
+- [x] GET /v1/estimates/price - ``estimates.getPriceForRoute``
+- [x] GET /v1/estimates/time - ``estimates.getETAForLocation``
+- [x] GET /v1.2/history - ``user.getHistory``
+- [x] GET /v1/me - ``user.getProfile``
+- [x] POST /v1/requests - ``requests.createRequest``
+- [x] GET /v1/requests/current - ``requests.getCurrentRequest``
+- [x] PATCH /v1/requests/current - ``requests.updateCurrentRequest``
+- [x] DELETE /v1/requests/current - ``requests.deleteCurrentRequest``
+- [x] POST /v1/requests/estimate - ``requests.getEstimatesForCurrentRequest``
 - [] GET /v1/requests/{request_id}
 - [] PATCH /v1/requests/{request_id}
 - [] DELETE /v1/requests/{request_id}
 - [] GET /v1/requests/{request_id}/map
 - [] GET /v1/requests/{request_id}/receipt
-- [x] GET /v1/places/{place_id} - ``uber.places.home`` and ``uber.places.work``
+- [x] GET /v1/places/{place_id} - ``places.getHome`` and ``places.getWork``
 - [] PUT /v1/places/{place_id}
-- [x] GET /v1/payment-methods - ``uber.payment.methods``
+- [x] GET /v1/payment-methods - ``payment.getMethods``
 - [] POST /v1/reminders
 - [] GET /v1/reminders/{reminder_id}
 - [] PATCH /v1/reminders/{reminder_id}
@@ -143,28 +142,6 @@ uber.products.list({ latitude: 3.1357, longitude: 101.6880 }, function (err, res
 });
 ```
 
-### Promotions
-#### Lists
-```javascript
-uber.promotions.list(params, callback);
-```
-
-##### Params
-* start_latitude
-* start_longitude
-* end_latitude
-* end_longitude
-
-##### Example
-```javascript
-uber.promotions.list({
-  start_latitude: 3.1357, start_longitude: 101.6880,
-  end_latitude: 3.0833, end_longitude: 101.6500
-}, function (err, res) {
-  if (err) console.error(err);
-  else console.log(res);
-});
-```
 
 ### Estimates
 #### Price
