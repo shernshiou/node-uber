@@ -1,33 +1,14 @@
-node-uber
-=========
 [![build status](https://img.shields.io/travis/shernshiou/node-uber.svg?style=flat-square)](https://travis-ci.org/shernshiou/node-uber) [![npm version](http://img.shields.io/npm/v/gh-badges.svg?style=flat-square)](https://npmjs.org/package/gh-badges) [![Dependency Status](https://david-dm.org/shernshiou/node-uber.svg?style=flat-square)](https://david-dm.org/shernshiou/node-uber) [![devDependency Status](https://david-dm.org/shernshiou/node-uber/dev-status.svg)](https://david-dm.org/shernshiou/node-uber#info=devDependencies)
 
-A Node.js wrapper for Uber API
+node-uber - Node.js wrapper for Uber API
+=========
 
-
-Version
+Version History
 -------
-0.0.9 Support Payment-Methods
-
-0.0.8 Support Places
-
-0.0.7 Support multiple scopes
-
-0.0.6 Support User History v1.2
-
-0.0.5 Support Promotions & Fixes oauth warning message
-
-0.0.4 Mocha tests
-
-0.0.3 Error handling
-
-0.0.2 Support User Profile
-
-0.0.1 Support Product Types, Time Estimates & Price Estimates
+The change-log can be found in the [Wiki: Version History](https://github.com/shernshiou/node-uber/wiki/Version-History).
 
 License
 -------
-
 MIT
 
 Implementation Status
