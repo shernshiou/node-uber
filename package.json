@@ -1,6 +1,6 @@
 {
   "name": "node-uber",
-  "version": "0.0.7",
+  "version": "0.9.0",
   "description": "A Node.js wrapper for Uber API",
   "main": "index.js",
   "scripts": {
@@ -11,6 +11,10 @@
     "url": "git://github.com/shernshiou/node-uber.git"
   },
   "author": "Shern Shiou Tan <shernshiou@gmail.com> (http://blog.shernshiou.com)",
+  "contributors": [{
+      "name": "Alexander Graebe",
+      "email": "alex.graebe@gmail.com"
+    }],
   "license": "MIT",
   "dependencies": {
     "oauth": "^0.9.14",

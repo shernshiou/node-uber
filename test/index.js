@@ -158,10 +158,7 @@ describe('Products Resource', function() {
         });
 
         it('should list down all the product types', function(done) {
-            uber.products.getAllForLocation({
-                latitude: 3.1357,
-                longitude: 101.6880
-            }, function(err, res) {
+            uber.products.getAllForLocation(3.1357, 101.6880, function(err, res) {
                 should.not.exist(err);
                 res.should.deep.equal(productReply);
                 done();
@@ -169,8 +166,8 @@ describe('Products Resource', function() {
         });
 
         it('should return error if there is no required params', function(done) {
-            uber.products.getAllForLocation({}, function(err, res) {
-                err.message.should.equal('Invalid parameters');
+            uber.products.getAllForLocation('', null, function(err, res) {
+                err.message.should.equal('Invalid latitude & longitude');
                 done();
             });
         });

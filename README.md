@@ -23,19 +23,19 @@ Implementation Status
 - [x] GET /v1/requests/current - ``requests.getCurrentRequest``
 - [x] PATCH /v1/requests/current - ``requests.updateCurrentRequest``
 - [x] DELETE /v1/requests/current - ``requests.deleteCurrentRequest``
-- [x] POST /v1/requests/estimate - ``requests.getEstimatesForCurrentRequest``
+- [x] POST /v1/requests/estimate - ``requests.getEstimates``
 - [x] GET /v1/requests/{request_id} - ``requests.getRequestByID``
 - [x] PATCH /v1/requests/{request_id} - ``requests.updateRequestByID``
 - [x] DELETE /v1/requests/{request_id} - ``requests.deleteRequestByID``
 - [x] GET /v1/requests/{request_id}/map - ``requests.getRequestMapByID``
 - [x] GET /v1/requests/{request_id}/receipt - ``requests.getRequestReceiptByID``
 - [x] GET /v1/places/{place_id} - ``places.getHome`` and ``places.getWork``
-- [] PUT /v1/places/{place_id}
+- [x] PUT /v1/places/{place_id} - ``places.updatePlaceByID``
 - [x] GET /v1/payment-methods - ``payment.getMethods``
-- [] POST /v1/reminders
-- [] GET /v1/reminders/{reminder_id}
-- [] PATCH /v1/reminders/{reminder_id}
-- [] DELETE /v1/reminders/{reminder_id}
+- [x] POST /v1/reminders - ``reminders.createReminder``
+- [x] GET /v1/reminders/{reminder_id} - ``reminders.getReminderByID``
+- [x] PATCH /v1/reminders/{reminder_id} - ``reminders.updateReminderByID``
+- [x] DELETE /v1/reminders/{reminder_id} - ``reminders.deleteReminderByID``
 
 Installation
 ------------
