@@ -405,7 +405,7 @@ describe('Estimates Resource', function() {
     before(function() {
       nock('https://api.uber.com')
         .get('/v1/estimates/price?server_token=SERVERTOKENSERVERTOKENSERVERTOKENSERVERT&' +
-          'start_latitude=3.1357&start_longitude=101.688&end_latitude=3.0833&end_longitude=101.65')
+          'start_latitude=3.1357&start_longitude=101.688&end_latitude=3.0833&end_longitude=101.65&seat_count=2')
         .reply(200, priceReply);
     });
 
@@ -434,16 +434,14 @@ describe('Estimates Resource', function() {
     before(function() {
       nock('https://api.uber.com')
         .get('/v1/estimates/time?server_token=SERVERTOKENSERVERTOKENSERVERTOKENSERVERT&' +
-          'start_latitude=3.1357&start_longitude=101.688&end_latitude=3.0833&end_longitude=101.65')
+          'start_latitude=3.1357&start_longitude=101.688')
         .reply(200, timeReply);
     });
 
     it('should list all the price estimates from server', function(done) {
       uber.estimates.time({
         start_latitude: 3.1357,
-        start_longitude: 101.6880,
-        end_latitude: 3.0833,
-        end_longitude: 101.6500
+        start_longitude: 101.6880
       }, function(err, res) {
         should.not.exist(err);
         res.should.deep.equal(timeReply);

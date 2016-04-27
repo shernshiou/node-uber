@@ -402,17 +402,13 @@ describe('Estimates Resource', function() {
         before(function() {
             nock('https://api.uber.com')
                 .get('/v1/estimates/price?server_token=SERVERTOKENSERVERTOKENSERVERTOKENSERVERT&' +
-                    'start_latitude=3.1357&start_longitude=101.688&end_latitude=3.0833&end_longitude=101.65')
+                    'start_latitude=3.1357&start_longitude=101.688&end_latitude=3.0833&end_longitude=101.65&seat_count=2')
                 .reply(200, priceReply);
         });
 
         it('should list all the price estimates from server', function(done) {
-            uber.estimates.getPriceForRoute({
-                start_latitude: 3.1357,
-                start_longitude: 101.6880,
-                end_latitude: 3.0833,
-                end_longitude: 101.6500
-            }, function(err, res) {
+            uber.estimates.getPriceForRoute(3.1357,101.6880,3.0833,101.6500,
+                function(err, res) {
                 should.not.exist(err);
                 res.should.deep.equal(priceReply);
                 done();
@@ -420,8 +416,8 @@ describe('Estimates Resource', function() {
         });
 
         it('should return error if there is no required params', function(done) {
-            uber.estimates.getPriceForRoute({}, function(err, res) {
-                err.message.should.equal('Invalid parameters');
+            uber.estimates.getPriceForRoute(null, null, null, null, function(err, res) {
+                err.message.should.equal('Invalid starting point latitude & longitude');
                 done();
             });
         });
@@ -431,26 +427,22 @@ describe('Estimates Resource', function() {
         before(function() {
             nock('https://api.uber.com')
                 .get('/v1/estimates/time?server_token=SERVERTOKENSERVERTOKENSERVERTOKENSERVERT&' +
-                    'start_latitude=3.1357&start_longitude=101.688&end_latitude=3.0833&end_longitude=101.65')
+                    'start_latitude=3.1357&start_longitude=101.688')
                 .reply(200, timeReply);
         });
 
         it('should list all the price estimates from server', function(done) {
-            uber.estimates.getETAForLocation({
-                start_latitude: 3.1357,
-                start_longitude: 101.6880,
-                end_latitude: 3.0833,
-                end_longitude: 101.6500
-            }, function(err, res) {
-                should.not.exist(err);
-                res.should.deep.equal(timeReply);
-                done();
+            uber.estimates.getETAForLocation(3.1357,101.6880,
+                function(err, res) {
+                    should.not.exist(err);
+                    res.should.deep.equal(timeReply);
+                    done();
             });
         });
 
         it('should return error if there is no required params', function(done) {
-            uber.estimates.getPriceForRoute({}, function(err, res) {
-                err.message.should.equal('Invalid parameters');
+            uber.estimates.getETAForLocation(null, null, function(err, res) {
+                err.message.should.equal('Invalid latitude & longitude');
                 done();
             });
         });
