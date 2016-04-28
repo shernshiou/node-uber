@@ -43,11 +43,11 @@ describe('OAuth2 authorization methods', function() {
     var uber = new Uber(key);
     describe('OAuth2 authorization url', function() {
         it('generate OAuth2 correct authorization url', function(done) {
-            var url = uber.getAuthorizeUrl(['profile']),
+            var url = uber.getAuthorizeUrl(['profile', 'history', 'places', 'request', 'request_receipt', 'all_trips']),
                 sampleUrl = uber.defaults.authorize_url + '?' + qs.stringify({
                     response_type: 'code',
                     redirect_uri: uber.defaults.redirect_uri,
-                    scope: ['profile'].join(','),
+                    scope: ['profile', 'history', 'places', 'request', 'request_receipt', 'all_trips'].join(' '),
                     client_id: uber.defaults.client_id
                 });
             url.should.equal(sampleUrl);
@@ -120,6 +120,23 @@ describe('OAuth2 authorization methods', function() {
 
 describe('Products Resource', function() {
     var uber = new Uber(key),
+        uberBLACKReply = {
+            "capacity": 4,
+            "description": "The original Uber",
+            "price_details": {
+                "distance_unit": "mile",
+                "cost_per_minute": 0.65,
+                "service_fees": [],
+                "minimum": 15.0,
+                "cost_per_distance": 3.75,
+                "base": 8.0,
+                "cancellation_fee": 10.0,
+                "currency_code": "USD"
+            },
+            "image": "http: //d1a3f4spazzrp4.cloudfront.net/car.jpg",
+            "display_name": "UberBLACK",
+            "product_id": "d4abaae7-f4d6-4152-91cc-77523e8165a4"
+        },
         productReply = {
             "products": [{
                 "product_id": "327f7914-cd12-4f77-9e0c-b27bac580d03",
@@ -166,6 +183,29 @@ describe('Products Resource', function() {
         it('should return error if there is no required params', function(done) {
             uber.products.getAllForLocation('', null, function(err, res) {
                 err.message.should.equal('Invalid latitude & longitude');
+                done();
+            });
+        });
+    });
+
+    describe('Product Details', function() {
+        before(function() {
+            nock('https://api.uber.com')
+                .get('/v1/products/d4abaae7-f4d6-4152-91cc-77523e8165a4?server_token=SERVERTOKENSERVERTOKENSERVERTOKENSERVERT')
+                .reply(200, uberBLACKReply);
+        });
+
+        it('should list down all the product types', function(done) {
+            uber.products.getByID('d4abaae7-f4d6-4152-91cc-77523e8165a4', function(err, res) {
+                should.not.exist(err);
+                res.should.deep.equal(uberBLACKReply);
+                done();
+            });
+        });
+
+        it('should return error if there is no required params', function(done) {
+            uber.products.getByID(null, function(err, res) {
+                err.message.should.equal('Missing product_id parameter');
                 done();
             });
         });
@@ -331,7 +371,7 @@ describe('Places Resource', function() {
                 },
                 function(err, accessToken, refreshToken) {
                     uber.access_token = '';
-                    uber.places.getHome(function(err, res) {
+                    uber.places.getWork(function(err, res) {
                         err.message.should.equal('Invalid access token');
                         done();
                     });
@@ -407,12 +447,12 @@ describe('Estimates Resource', function() {
         });
 
         it('should list all the price estimates from server', function(done) {
-            uber.estimates.getPriceForRoute(3.1357,101.6880,3.0833,101.6500,
+            uber.estimates.getPriceForRoute(3.1357, 101.6880, 3.0833, 101.6500,
                 function(err, res) {
-                should.not.exist(err);
-                res.should.deep.equal(priceReply);
-                done();
-            });
+                    should.not.exist(err);
+                    res.should.deep.equal(priceReply);
+                    done();
+                });
         });
 
         it('should return error if there is no required params', function(done) {
@@ -432,17 +472,183 @@ describe('Estimates Resource', function() {
         });
 
         it('should list all the price estimates from server', function(done) {
-            uber.estimates.getETAForLocation(3.1357,101.6880,
+            uber.estimates.getETAForLocation(3.1357, 101.6880,
                 function(err, res) {
                     should.not.exist(err);
                     res.should.deep.equal(timeReply);
                     done();
-            });
+                });
         });
 
         it('should return error if there is no required params', function(done) {
             uber.estimates.getETAForLocation(null, null, function(err, res) {
                 err.message.should.equal('Invalid latitude & longitude');
+                done();
+            });
+        });
+    });
+});
+
+describe('Reminders Resource', function() {
+    var uber = new Uber(key),
+        reminderReply = {
+            "event": {
+                "name": "Frisbee with friends",
+                "location": "Dolores Park",
+                "latitude": 37.759773,
+                "longitude": -122.427063,
+                "time": 1429294463
+            },
+            "product_id": "a1111c8c-c720-46c3-8534-2fcdd730040d",
+            "reminder_id": "def-456",
+            "reminder_time": 1429294463,
+            "reminder_status": "pending",
+            "trip_branding": {
+                "link_text": "View team roster",
+                "partner_deeplink": "partner://team/9383"
+            }
+        };
+
+
+    describe('Reminders', function() {
+        before(function() {
+            nock('https://api.uber.com')
+                .get('/v1/reminders/def-456?server_token=SERVERTOKENSERVERTOKENSERVERTOKENSERVERT')
+                .times(2)
+                .reply(200, reminderReply);
+            nock('https://api.uber.com', {
+                    reqheaders: {
+                        'Authorization': `Token ${uber.defaults.server_token}`
+                    }
+                })
+                .post('/v1/reminders')
+                .times(2)
+                .reply(200, reminderReply);
+            nock('https://api.uber.com', {
+                    reqheaders: {
+                        'Authorization': `Token ${uber.defaults.server_token}`
+                    }
+                })
+                .patch('/v1/reminders/def-456')
+                .times(2)
+                .reply(200, reminderReply);
+            nock('https://api.uber.com', {
+                    reqheaders: {
+                        'Authorization': `Token ${uber.defaults.server_token}`
+                    }
+                })
+                .delete('/v1/reminders/def-456')
+                .times(2)
+                .reply(204);
+        });
+
+        it('should create new reminder', function(done) {
+            uber.reminders.createReminder({
+                reminder_time: 1429294463,
+                phone_number: 16508420126,
+                event: {
+                    time: 1429294463,
+                    name: 'Frisbee with friends',
+                    location: 'Dolores Park',
+                    latitude: 37.759773,
+                    longitude: -122.427063,
+                    product_id: 'a1111c8c-c720-46c3-8534-2fcdd730040d'
+                },
+                trip_branding: {
+                    link_text: 'View team roster',
+                    partner_deeplink: 'partner://team/9383'
+                }
+            }, function(err, res) {
+                should.not.exist(err);
+                res.should.deep.equal(reminderReply);
+                done();
+            });
+        });
+
+        it('should return error if there is no required params for POST', function(done) {
+            uber.reminders.createReminder(null, function(err, res) {
+                err.message.should.equal('Invalid parameters');
+                done();
+            });
+        });
+
+        it('should get existing reminder by ID', function(done) {
+            uber.reminders.getReminderByID('def-456', function(err, res) {
+                should.not.exist(err);
+                res.should.deep.equal(reminderReply);
+                done();
+            });
+        });
+
+        it('should return error in case of missing reminder ID', function(done) {
+            uber.reminders.getReminderByID(null, function(err, res) {
+                err.message.should.equal('Invalid reminder_id');
+                done();
+            });
+        });
+
+        it('should patch an existing reminder by ID', function(done) {
+            uber.reminders.updateReminderByID('def-456', {
+                reminder_time: 1429294463,
+                phone_number: 16508420126,
+                event: {
+                    time: 1429294463,
+                    name: 'Frisbee with friends',
+                    location: 'Dolores Park',
+                    latitude: 37.759773,
+                    longitude: -122.427063,
+                    product_id: 'a1111c8c-c720-46c3-8534-2fcdd730040d'
+                },
+                trip_branding: {
+                    link_text: 'View team roster',
+                    partner_deeplink: 'partner://team/9383'
+                }
+            }, function(err, res) {
+                should.not.exist(err);
+                res.should.deep.equal(reminderReply);
+                done();
+            });
+        });
+
+        it('should return error in case of missing reminder ID for patch', function(done) {
+            uber.reminders.updateReminderByID(null, {
+                reminder_time: 1429294463,
+                phone_number: 16508420126,
+                event: {
+                    time: 1429294463,
+                    name: 'Frisbee with friends',
+                    location: 'Dolores Park',
+                    latitude: 37.759773,
+                    longitude: -122.427063,
+                    product_id: 'a1111c8c-c720-46c3-8534-2fcdd730040d'
+                },
+                trip_branding: {
+                    link_text: 'View team roster',
+                    partner_deeplink: 'partner://team/9383'
+                }
+            }, function(err, res) {
+                err.message.should.equal('Invalid reminder_id');
+                done();
+            });
+        });
+
+        it('should return error in case of missing parameters for patch', function(done) {
+            uber.reminders.updateReminderByID('def-456', null, function(err, res) {
+                err.message.should.equal('Invalid parameters');
+                done();
+            });
+        });
+
+        it('should delete an existing reminder by ID', function(done) {
+            uber.reminders.deleteReminderByID('def-456', function(err, res) {
+                should.not.exist(err);
+                done();
+            });
+        });
+
+        it('should return error in case of missing reminder ID for delete', function(done) {
+            uber.reminders.deleteReminderByID(null, function(err, res) {
+                err.message.should.equal('Invalid reminder_id');
                 done();
             });
         });
@@ -464,7 +670,27 @@ describe('User Resource', function() {
             "email": "developer@uber.com",
             "picture": "https://...",
             "promo_code": "teypo"
+        },
+        historyReply = {
+            "offset": 0,
+            "limit": 1,
+            "count": 5,
+            "history": [{
+                "status": "completed",
+                "distance": 1.64691465,
+                "request_time": 1428876188,
+                "start_time": 1428876374,
+                "start_city": {
+                    "display_name": "San Francisco",
+                    "latitude": 37.7749295,
+                    "longitude": -122.4194155
+                },
+                "end_time": 1428876927,
+                "request_id": "37d57a99-2647-4114-9dd2-c43bccf4c30b",
+                "product_id": "a1111c8c-c720-46c3-8534-2fcdd730040d"
+            }, ]
         };
+
 
     describe('User Profile', function() {
         before(function() {
@@ -512,6 +738,93 @@ describe('User Resource', function() {
                 function(err, accessToken, refreshToken) {
                     uber.access_token = '';
                     uber.user.getProfile(function(err, res) {
+                        err.message.should.equal('Invalid access token');
+                        done();
+                    });
+                });
+        });
+    });
+
+    describe('User History', function() {
+        before(function() {
+            nock('https://login.uber.com')
+                .post('/oauth/token')
+                .times(3)
+                .reply(200, tokenResponse);
+
+            nock('https://api.uber.com')
+                .get(function(uri) {
+                    var parts = uri.split('/v1.2/history?access_token=EE1IDxytP04tJ767GbjH7ED9PpGmYvL&offset=0&limit=');
+                    if (parts.length !== 2) {
+                        return false;
+                    }
+
+                    // range should be between 1 and 50
+                    return (parts[1] > 0 && parts[1] <= 50);
+                })
+                .times(4)
+                .reply(200, historyReply);
+        });
+
+        it('should get user activity after authentication', function(done) {
+            uber.authorization({
+                    authorization_code: 'x8Y6dF2qA6iKaTKlgzVfFvyYoNrlkp'
+                },
+                function(err, accessToken, refreshToken) {
+                    uber.user.getHistory(0, 5, function(err, res) {
+                        should.not.exist(err);
+                        res.should.deep.equal(historyReply);
+                        done();
+                    });
+                });
+        });
+
+        it('should get user activity after authentication, even with a too high limit', function(done) {
+            uber.authorization({
+                    authorization_code: 'x8Y6dF2qA6iKaTKlgzVfFvyYoNrlkp'
+                },
+                function(err, accessToken, refreshToken) {
+                    uber.user.getHistory(0, 99, function(err, res) {
+                        should.not.exist(err);
+                        res.should.deep.equal(historyReply);
+                        done();
+                    });
+                });
+        });
+
+        it('should get user activity after authentication without required parameters', function(done) {
+            uber.authorization({
+                    authorization_code: 'x8Y6dF2qA6iKaTKlgzVfFvyYoNrlkp'
+                },
+                function(err, accessToken, refreshToken) {
+                    uber.user.getHistory(null, null, function(err, res) {
+                        should.not.exist(err);
+                        res.should.deep.equal(historyReply);
+                        done();
+                    });
+                });
+        });
+
+        it('should get user activity after authentication by explicitly passing access token', function(done) {
+            uber.authorization({
+                    authorization_code: 'x8Y6dF2qA6iKaTKlgzVfFvyYoNrlkp'
+                },
+                function(err, accessToken, refreshToken) {
+                    uber.user.getHistory(0, 5, accessToken, function(err, res) {
+                            should.not.exist(err);
+                            res.should.deep.equal(historyReply);
+                            done();
+                        });
+                });
+        });
+
+        it('should return invalid access token error when no token found', function(done) {
+            uber.authorization({
+                    authorization_code: 'x8Y6dF2qA6iKaTKlgzVfFvyYoNrlkp'
+                },
+                function(err, accessToken, refreshToken) {
+                    uber.access_token = '';
+                    uber.user.getHistory(null, null, function(err, res) {
                         err.message.should.equal('Invalid access token');
                         done();
                     });
