@@ -13,7 +13,8 @@
   "author": "Shern Shiou Tan <shernshiou@gmail.com> (http://blog.shernshiou.com)",
   "contributors": [{
       "name": "Alexander Graebe",
-      "email": "alex.graebe@gmail.com"
+      "email": "alex.graebe@gmail.com",
+      "url": "https://twitter.com/agraebe"
     }],
   "license": "MIT",
   "dependencies": {
