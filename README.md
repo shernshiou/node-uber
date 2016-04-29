@@ -1,4 +1,5 @@
 [![build status](https://img.shields.io/travis/shernshiou/node-uber.svg?style=flat-square)](https://travis-ci.org/shernshiou/node-uber) [![npm version](http://img.shields.io/npm/v/gh-badges.svg?style=flat-square)](https://npmjs.org/package/gh-badges) [![Dependency Status](https://david-dm.org/shernshiou/node-uber.svg?style=flat-square)](https://david-dm.org/shernshiou/node-uber) [![devDependency Status](https://david-dm.org/shernshiou/node-uber/dev-status.svg)](https://david-dm.org/shernshiou/node-uber#info=devDependencies)
+[![Code Climate](https://codeclimate.com/github/shernshiou/node-uber/badges/gpa.svg)](https://codeclimate.com/github/shernshiou/node-uber) [![Test Coverage](https://codeclimate.com/github/shernshiou/node-uber/badges/coverage.svg)](https://codeclimate.com/github/shernshiou/node-uber/coverage)
 
 node-uber - Node.js wrapper for Uber API
 =========
