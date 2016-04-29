@@ -12,6 +12,7 @@ describe("Running all tests ...", function() {
     importTest("/Places", './places');
     importTest("/Products", './products');
     importTest("/Reminders", './reminders');
+    importTest("/Requests", './requests');
     importTest("/User", './user');
     importTest("Deprecated methods", './deprecated');
 });
