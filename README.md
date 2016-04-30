@@ -1,35 +1,42 @@
-node-uber
+[![build status](https://img.shields.io/travis/shernshiou/node-uber.svg?style=flat-square)](https://travis-ci.org/shernshiou/node-uber) [![npm version](http://img.shields.io/npm/v/gh-badges.svg?style=flat-square)](https://npmjs.org/package/gh-badges) [![Dependency Status](https://david-dm.org/shernshiou/node-uber.svg?style=flat-square)](https://david-dm.org/shernshiou/node-uber) [![devDependency Status](https://david-dm.org/shernshiou/node-uber/dev-status.svg)](https://david-dm.org/shernshiou/node-uber#info=devDependencies)
+[![Code Climate](https://codeclimate.com/github/shernshiou/node-uber/badges/gpa.svg)](https://codeclimate.com/github/shernshiou/node-uber) [![Test Coverage](https://codeclimate.com/github/shernshiou/node-uber/badges/coverage.svg)](https://codeclimate.com/github/shernshiou/node-uber/coverage)
+
+node-uber - Node.js wrapper for Uber API
 =========
-[![build status](https://img.shields.io/travis/shernshiou/node-uber.svg?style=flat-square)](https://travis-ci.org/shernshiou/node-uber) [![npm version](http://img.shields.io/npm/v/gh-badges.svg?style=flat-square)](https://npmjs.org/package/gh-badges) [![Dependency Status](https://david-dm.org/shernshiou/node-uber.svg?style=flat-square)](https://david-dm.org/shernshiou/node-uber)
 
-A Node.js wrapper for Uber API
-
-
-Version
+Version History
 -------
-0.0.9 Support Payment-Methods
-
-0.0.8 Support Places
-
-0.0.7 Support multiple scopes
-
-0.0.6 Support User History v1.2
-
-0.0.5 Support Promotions & Fixes oauth warning message
-
-0.0.4 Mocha tests
-
-0.0.3 Error handling
-
-0.0.2 Support User Profile
-
-0.0.1 Support Product Types, Time Estimates & Price Estimates
+The change-log can be found in the [Wiki: Version History](https://github.com/shernshiou/node-uber/wiki/Version-History).
 
 License
 -------
-
 MIT
 
+Implementation Status
+-------
+- [x] GET /v1/products - ``products.getAllForLocation``
+- [x] GET /v1/products/{product_id} - ``products.getByID``
+- [x] GET /v1/estimates/price - ``estimates.getPriceForRoute``
+- [x] GET /v1/estimates/time - ``estimates.getETAForLocation``
+- [x] GET /v1.2/history - ``user.getHistory``
+- [x] GET /v1/me - ``user.getProfile``
+- [x] POST /v1/requests - ``requests.createRequest``
+- [x] GET /v1/requests/current - ``requests.getCurrentRequest``
+- [x] PATCH /v1/requests/current - ``requests.updateCurrentRequest``
+- [x] DELETE /v1/requests/current - ``requests.deleteCurrentRequest``
+- [x] POST /v1/requests/estimate - ``requests.getEstimates``
+- [x] GET /v1/requests/{request_id} - ``requests.getRequestByID``
+- [x] PATCH /v1/requests/{request_id} - ``requests.updateRequestByID``
+- [x] DELETE /v1/requests/{request_id} - ``requests.deleteRequestByID``
+- [x] GET /v1/requests/{request_id}/map - ``requests.getRequestMapByID``
+- [x] GET /v1/requests/{request_id}/receipt - ``requests.getRequestReceiptByID``
+- [x] GET /v1/places/{place_id} - ``places.getHome`` and ``places.getWork``
+- [x] PUT /v1/places/{place_id} - ``places.updatePlaceByID``
+- [x] GET /v1/payment-methods - ``payment.getMethods``
+- [x] POST /v1/reminders - ``reminders.createReminder``
+- [x] GET /v1/reminders/{reminder_id} - ``reminders.getReminderByID``
+- [x] PATCH /v1/reminders/{reminder_id} - ``reminders.updateReminderByID``
+- [x] DELETE /v1/reminders/{reminder_id} - ``reminders.deleteReminderByID``
 
 Installation
 ------------
@@ -117,28 +124,6 @@ uber.products.list({ latitude: 3.1357, longitude: 101.6880 }, function (err, res
 });
 ```
 
-### Promotions
-#### Lists
-```javascript
-uber.promotions.list(params, callback);
-```
-
-##### Params
-* start_latitude
-* start_longitude
-* end_latitude
-* end_longitude
-
-##### Example
-```javascript
-uber.promotions.list({
-  start_latitude: 3.1357, start_longitude: 101.6880,
-  end_latitude: 3.0833, end_longitude: 101.6500
-}, function (err, res) {
-  if (err) console.error(err);
-  else console.log(res);
-});
-```
 
 ### Estimates
 #### Price

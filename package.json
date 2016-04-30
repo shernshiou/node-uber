@@ -1,6 +1,6 @@
 {
   "name": "node-uber",
-  "version": "0.0.7",
+  "version": "0.9.0",
   "description": "A Node.js wrapper for Uber API",
   "main": "index.js",
   "scripts": {
@@ -11,20 +11,28 @@
     "url": "git://github.com/shernshiou/node-uber.git"
   },
   "author": "Shern Shiou Tan <shernshiou@gmail.com> (http://blog.shernshiou.com)",
+  "contributors": [{
+      "name": "Alexander Graebe",
+      "email": "alex.graebe@gmail.com",
+      "url": "https://twitter.com/agraebe"
+    }],
   "license": "MIT",
   "dependencies": {
-    "oauth": "^0.9.13",
-    "request": "^2.55.0"
+    "oauth": "^0.9.14",
+    "request": "^2.72.0"
   },
   "devDependencies": {
-    "chai": "^2.3.0",
-    "gulp": "^3.8.7",
-    "gulp-mocha": "^1.0.0",
-    "gulp-util": "^3.0.0",
-    "mocha": "^1.21.4",
-    "nock": "^0.45.0",
-    "sinon": "^1.10.3",
-    "sinon-chai": "^2.7.0",
-    "superagent": "^0.18.2"
+    "chai": "^3.5.0",
+    "eslint-config-airbnb": "7.0.0",
+    "eslint-plugin-react": "^4.3.0",
+    "gulp": "^3.9.1",
+    "gulp-mocha": "^2.2.0",
+    "gulp-util": "^3.0.7",
+    "mocha": "^2.4.5",
+    "nock": "^8.0.0",
+    "sinon": "^1.17.3",
+    "sinon-chai": "^2.8.0",
+    "strict-mode": "^0.5.0",
+    "superagent": "^1.8.3"
   }
 }
