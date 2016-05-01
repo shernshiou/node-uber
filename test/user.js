@@ -95,7 +95,7 @@ var common = require("./common"),
         before(function() {
             nock('https://login.uber.com')
                 .post('/oauth/token')
-                .times(3)
+                .times(4)
                 .reply(200, tokenResponse);
 
             nock('https://api.uber.com')
