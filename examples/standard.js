@@ -9,8 +9,11 @@ var uberClient = new Uber({
   name: 'nodejs uber wrapper'
 });
 
-uberClient.authorization({ authorization_code: 'SOME AUTH CODE' }, 
+uberClient.authorization({ authorization_code: 'SOME AUTH CODE' },
   function (err, accessToken, refreshToken) {
+    if(err) {
+      return new Error(err);
+    }
     uberClient.user.profile(accessToken, function (err, res) {
       console.log(err);
       console.log(res);
