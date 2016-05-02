@@ -99,7 +99,7 @@ it('should return error if reminder time is missing for POST', function(done) {
             partner_deeplink: 'partner://team/9383'
         }
     }, function(err, res) {
-        err.message.should.equal('Missing parameter: reminder_time');
+        err.message.should.equal('Missing parameter(s). Ensure to declare: reminder_time, phone_number, event & event.time');
         done();
     });
 });
@@ -120,7 +120,7 @@ it('should return error if phone number is missing for POST', function(done) {
             partner_deeplink: 'partner://team/9383'
         }
     }, function(err, res) {
-        err.message.should.equal('Missing parameter: phone_number');
+        err.message.should.equal('Missing parameter(s). Ensure to declare: reminder_time, phone_number, event & event.time');
         done();
     });
 });
@@ -141,7 +141,7 @@ it('should return error if event object is missing for POST', function(done) {
             partner_deeplink: 'partner://team/9383'
         }
     }, function(err, res) {
-        err.message.should.equal('Missing parameter: event.time');
+        err.message.should.equal('Missing parameter(s). Ensure to declare: reminder_time, phone_number, event & event.time');
         done();
     });
 });
@@ -155,7 +155,7 @@ it('should return error if event.time is missing for POST', function(done) {
             partner_deeplink: 'partner://team/9383'
         }
     }, function(err, res) {
-        err.message.should.equal('Missing parameter: event');
+        err.message.should.equal('Missing parameter(s). Ensure to declare: reminder_time, phone_number, event & event.time');
         done();
     });
 });
