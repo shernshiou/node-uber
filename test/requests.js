@@ -139,7 +139,7 @@ describe('Current Request', function() {
 
     it('should return error for new request without authorization', function(done) {
         uber.access_token = '';
-        uber.requests.createRequest({
+        uber.requests.create({
             "product_id": "a1111c8c-c720-46c3-8534-2fcdd730040d",
             "start_latitude": 37.761492,
             "start_longitude": -122.423941,
@@ -157,7 +157,7 @@ describe('Current Request', function() {
             },
             function(err, accessToken, refreshToken) {
                 should.not.exist(err);
-                uber.requests.createRequest({
+                uber.requests.create({
                     "product_id": "a1111c8c-c720-46c3-8534-2fcdd730040d",
                     "start_latitude": 37.761492,
                     "start_longitude": -122.423941,
@@ -172,7 +172,7 @@ describe('Current Request', function() {
     });
 
     it('should return error if there is no required params for POST', function(done) {
-        uber.requests.createRequest(null, function(err, res) {
+        uber.requests.create(null, function(err, res) {
             err.message.should.equal('Invalid parameters');
             done();
         });
@@ -180,7 +180,7 @@ describe('Current Request', function() {
 
     it('should return error for getting current request without authorization', function(done) {
         uber.access_token = '';
-        uber.requests.getCurrentRequest(function(err, res) {
+        uber.requests.getCurrent(function(err, res) {
             err.message.should.equal('Invalid access token');
             done();
         });
@@ -192,7 +192,7 @@ describe('Current Request', function() {
             },
             function(err, accessToken, refreshToken) {
                 should.not.exist(err);
-                uber.requests.getCurrentRequest(function(err, res) {
+                uber.requests.getCurrent(function(err, res) {
                     should.not.exist(err);
                     res.should.deep.equal(acceptedRequestReply);
                     done();
@@ -201,21 +201,21 @@ describe('Current Request', function() {
     });
 
     it('should patch current request', function(done) {
-        uber.requests.updateCurrentRequest({}, function(err, res) {
+        uber.requests.updateCurrent({}, function(err, res) {
             should.not.exist(err);
             done();
         });
     });
 
     it('should return error in case of missing parameters for patch', function(done) {
-        uber.requests.updateCurrentRequest(null, function(err, res) {
+        uber.requests.updateCurrent(null, function(err, res) {
             err.message.should.equal('Invalid parameters');
             done();
         });
     });
 
     it('should delete current request', function(done) {
-        uber.requests.deleteCurrentRequest(function(err, res) {
+        uber.requests.deleteCurrent(function(err, res) {
             should.not.exist(err);
             done();
         });
@@ -278,7 +278,7 @@ describe('By Request ID', function() {
 
     it('should return error for getting request by ID without authorization', function(done) {
         uber.access_token = '';
-        uber.requests.getRequestByID('17cb78a7-b672-4d34-a288-a6c6e44d5315', function(err, res) {
+        uber.requests.getByID('17cb78a7-b672-4d34-a288-a6c6e44d5315', function(err, res) {
             err.message.should.equal('Invalid access token');
             done();
         });
@@ -290,7 +290,7 @@ describe('By Request ID', function() {
             },
             function(err, accessToken, refreshToken) {
                 should.not.exist(err);
-                uber.requests.getRequestByID('17cb78a7-b672-4d34-a288-a6c6e44d5315', function(err, res) {
+                uber.requests.getByID('17cb78a7-b672-4d34-a288-a6c6e44d5315', function(err, res) {
                     should.not.exist(err);
                     res.should.deep.equal(acceptedRequestReply);
                     done();
@@ -299,14 +299,14 @@ describe('By Request ID', function() {
     });
 
     it('should return error in case of missing request ID', function(done) {
-        uber.requests.getRequestByID(null, function(err, res) {
+        uber.requests.getByID(null, function(err, res) {
             err.message.should.equal('Invalid request_id');
             done();
         });
     });
 
     it('should return error in case of unknown request ID', function(done) {
-        uber.requests.getRequestByID('abcd', function(err, res) {
+        uber.requests.getByID('abcd', function(err, res) {
             should.exist(err);
             err.statusCode.should.equal(404);
             done();
@@ -315,7 +315,7 @@ describe('By Request ID', function() {
 
     it('should return error for patching an existing request without authorization', function(done) {
         uber.access_token = '';
-        uber.requests.updateRequestByID('17cb78a7-b672-4d34-a288-a6c6e44d5315', {}, function(err, res) {
+        uber.requests.updateByID('17cb78a7-b672-4d34-a288-a6c6e44d5315', {}, function(err, res) {
             err.message.should.equal('Invalid access token');
             done();
         });
@@ -327,7 +327,7 @@ describe('By Request ID', function() {
             },
             function(err, accessToken, refreshToken) {
                 should.not.exist(err);
-                uber.requests.updateRequestByID('17cb78a7-b672-4d34-a288-a6c6e44d5315', {}, function(err, res) {
+                uber.requests.updateByID('17cb78a7-b672-4d34-a288-a6c6e44d5315', {}, function(err, res) {
                     should.not.exist(err);
                     done();
                 });
@@ -335,21 +335,21 @@ describe('By Request ID', function() {
     });
 
     it('should return error in case of missing request ID for patch', function(done) {
-        uber.requests.updateRequestByID(null, {}, function(err, res) {
+        uber.requests.updateByID(null, {}, function(err, res) {
             err.message.should.equal('Invalid request_id');
             done();
         });
     });
 
     it('should return error in case of invalid request ID for patch', function(done) {
-        uber.requests.updateRequestByID('abcd', {}, function(err, res) {
+        uber.requests.updateByID('abcd', {}, function(err, res) {
             should.exist(err);
             done();
         });
     });
 
     it('should return error in case of missing parameters for patch', function(done) {
-        uber.requests.updateRequestByID('17cb78a7-b672-4d34-a288-a6c6e44d5315', null, function(err, res) {
+        uber.requests.updateByID('17cb78a7-b672-4d34-a288-a6c6e44d5315', null, function(err, res) {
             err.message.should.equal('Invalid parameters');
             done();
         });
@@ -357,7 +357,7 @@ describe('By Request ID', function() {
 
     it('should return error for deleting an existing request by ID without authorization', function(done) {
         uber.access_token = ''
-        uber.requests.deleteRequestByID('17cb78a7-b672-4d34-a288-a6c6e44d5315', function(err, res) {
+        uber.requests.deleteByID('17cb78a7-b672-4d34-a288-a6c6e44d5315', function(err, res) {
             err.message.should.equal('Invalid access token');
             done();
         });
@@ -369,7 +369,7 @@ describe('By Request ID', function() {
             },
             function(err, accessToken, refreshToken) {
                 should.not.exist(err);
-                uber.requests.deleteRequestByID('17cb78a7-b672-4d34-a288-a6c6e44d5315', function(err, res) {
+                uber.requests.deleteByID('17cb78a7-b672-4d34-a288-a6c6e44d5315', function(err, res) {
                     should.not.exist(err);
                     done();
                 });
@@ -377,7 +377,7 @@ describe('By Request ID', function() {
     });
 
     it('should return error in case of missing request ID for delete', function(done) {
-        uber.requests.deleteRequestByID(null, function(err, res) {
+        uber.requests.deleteByID(null, function(err, res) {
             err.message.should.equal('Invalid request_id');
             done();
         });
@@ -399,7 +399,7 @@ describe('By Request ID', function() {
 
         it('should return error for get map without authorization', function(done) {
             uber.access_token = ''
-            uber.requests.getRequestMapByID('17cb78a7-b672-4d34-a288-a6c6e44d5315', function(err, res) {
+            uber.requests.getMapByID('17cb78a7-b672-4d34-a288-a6c6e44d5315', function(err, res) {
                 err.message.should.equal('Invalid access token');
                 done();
             });
@@ -411,7 +411,7 @@ describe('By Request ID', function() {
                 },
                 function(err, accessToken, refreshToken) {
                     should.not.exist(err);
-                    uber.requests.getRequestMapByID('17cb78a7-b672-4d34-a288-a6c6e44d5315', function(err, res) {
+                    uber.requests.getMapByID('17cb78a7-b672-4d34-a288-a6c6e44d5315', function(err, res) {
                         should.not.exist(err);
                         res.should.deep.equal(mapReply);
                         done();
@@ -420,7 +420,7 @@ describe('By Request ID', function() {
         });
 
         it('should return error in case of missing request ID for map', function(done) {
-            uber.requests.getRequestMapByID(null, function(err, res) {
+            uber.requests.getMapByID(null, function(err, res) {
                 err.message.should.equal('Invalid request_id');
                 done();
             });
@@ -428,7 +428,7 @@ describe('By Request ID', function() {
 
         it('should return error for get receipt without authorization', function(done) {
             uber.access_token = '';
-            uber.requests.getRequestReceiptByID('17cb78a7-b672-4d34-a288-a6c6e44d5315', function(err, res) {
+            uber.requests.getReceiptByID('17cb78a7-b672-4d34-a288-a6c6e44d5315', function(err, res) {
                 err.message.should.equal('Invalid access token');
                 done();
             });
@@ -440,7 +440,7 @@ describe('By Request ID', function() {
                 },
                 function(err, accessToken, refreshToken) {
                     should.not.exist(err);
-                    uber.requests.getRequestReceiptByID('17cb78a7-b672-4d34-a288-a6c6e44d5315', function(err, res) {
+                    uber.requests.getReceiptByID('17cb78a7-b672-4d34-a288-a6c6e44d5315', function(err, res) {
                         should.not.exist(err);
                         res.should.deep.equal(receiptReply);
                         done();
@@ -449,7 +449,7 @@ describe('By Request ID', function() {
         });
 
         it('should return error in case of missing request ID for receipt', function(done) {
-            uber.requests.getRequestReceiptByID(null, function(err, res) {
+            uber.requests.getReceiptByID(null, function(err, res) {
                 err.message.should.equal('Invalid request_id');
                 done();
             });

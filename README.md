@@ -12,31 +12,43 @@ License
 -------
 MIT
 
-Implementation Status
+Quick Overview
 -------
-- [x] GET /v1/products - ``products.getAllForLocation``
-- [x] GET /v1/products/{product_id} - ``products.getByID``
-- [x] GET /v1/estimates/price - ``estimates.getPriceForRoute``
-- [x] GET /v1/estimates/time - ``estimates.getETAForLocation``
-- [x] GET /v1.2/history - ``user.getHistory``
-- [x] GET /v1/me - ``user.getProfile``
-- [x] POST /v1/requests - ``requests.createRequest``
-- [x] GET /v1/requests/current - ``requests.getCurrentRequest``
-- [x] PATCH /v1/requests/current - ``requests.updateCurrentRequest``
-- [x] DELETE /v1/requests/current - ``requests.deleteCurrentRequest``
-- [x] POST /v1/requests/estimate - ``requests.getEstimates``
-- [x] GET /v1/requests/{request_id} - ``requests.getRequestByID``
-- [x] PATCH /v1/requests/{request_id} - ``requests.updateRequestByID``
-- [x] DELETE /v1/requests/{request_id} - ``requests.deleteRequestByID``
-- [x] GET /v1/requests/{request_id}/map - ``requests.getRequestMapByID``
-- [x] GET /v1/requests/{request_id}/receipt - ``requests.getRequestReceiptByID``
-- [x] GET /v1/places/{place_id} - ``places.getHome`` and ``places.getWork``
-- [x] PUT /v1/places/{place_id} - ``places.updatePlaceByID``
-- [x] GET /v1/payment-methods - ``payment.getMethods``
-- [x] POST /v1/reminders - ``reminders.createReminder``
-- [x] GET /v1/reminders/{reminder_id} - ``reminders.getReminderByID``
-- [x] PATCH /v1/reminders/{reminder_id} - ``reminders.updateReminderByID``
-- [x] DELETE /v1/reminders/{reminder_id} - ``reminders.deleteReminderByID``
+| HTTP Method 	| Endpoint                          	| Auth Method            	| Require Scope                                   	| Method Name                       	| Method Parameters                                                                                         	|
+|-------------	|-----------------------------------	|------------------------	|-------------------------------------------------	|-----------------------------------	|-----------------------------------------------------------------------------------------------------------	|
+| GET         	| /v1/products                      	| - OAuth - server_token 	|                                                 	| products.getAllForLocation        	| - latitude - longitude - callback function                                                                	|
+| GET         	| /v1/products/{product_id}         	| - OAuth - server_token 	|                                                 	| products.getByID                  	| - product_id - callback function                                                                          	|
+| GET         	| /v1/estimates/price               	| - OAuth - server_token 	|                                                 	| estimates.getPriceForRoute        	| - start latitude - start longitude - end latitude - end longitude - seats (optional) - callback function  	|
+| GET         	| /v1/estimates/time                	| - OAuth - server_token 	|                                                 	| estimates.getETAForLocation       	| - latitude - longitude - product_id (optional) - callback function                                        	|
+| GET         	| /v1.2/history                     	| OAuth                  	| - history - history_lite                        	| user.getHistory                   	| - offset (defaults to 0) - limit (defaults to 5, max is 50) - access_token (optional) - callback function 	|
+| GET         	| /v1/me                            	| OAuth                  	| profile                                         	| user.getProfile                   	| - access_token (optional) - callback function                                                             	|
+| POST        	| /v1/requests                      	| OAuth                  	| request (privileged)                            	| requests.create                   	| - JavaScript object with parameters - callback function                                                   	|
+| GET         	| /v1/requests/current              	| OAuth                  	| - request (privileged) - all_trips (privileged) 	| requests.getCurrent               	| - callback function                                                                                       	|
+| PATCH       	| /v1/requests/current              	| OAuth                  	| request (privileged)                            	| requests.updateCurrent            	| - JavaScript object with parameters - callback function                                                   	|
+| DELETE      	| /v1/requests/current              	| OAuth                  	| request (privileged)                            	| requests.deleteCurrent            	| - callback function                                                                                       	|
+| POST        	| /v1/requests/estimate             	| OAuth                  	| request (privileged)                            	| requests.getEstimates             	| - JavaScript object with parameters - callback function                                                   	|
+| GET         	| /v1/requests/{request_id}         	| OAuth                  	| request (privileged)                            	| requests.getByID                  	| - request_id - callback function                                                                          	|
+| PATCH       	| /v1/requests/{request_id}         	| OAuth                  	| request (privileged)                            	| requests.updateByID               	| - request_id - JavaScript object with parameters - callback function                                      	|
+| DELETE      	| /v1/requests/{request_id}         	| OAuth                  	| request (privileged)                            	| requests.deleteByID               	| - request_id - callback function                                                                          	|
+| GET         	| /v1/requests/{request_id}/map     	| OAuth                  	| request (privileged)                            	| requests.getMapByID               	| - request_id - callback function                                                                          	|
+| GET         	| /v1/requests/{request_id}/receipt 	| OAuth                  	| request_receipt (privileged)                    	| requests.getReceiptByID           	| - request_id - callback function                                                                          	|
+| GET         	| /v1/places/{place_id}             	| OAuth                  	| places                                          	| - places.getHome - places.getWork 	| - callback function                                                                                       	|
+| PUT         	| /v1/places/{place_id}             	| OAuth                  	| places                                          	| places.updateByID                 	| - place_id (home or work) - address - callback function                                                   	|
+| GET         	| v1/payment-methods                	| OAuth                  	| request (privileged)                            	| payment.getMethods                	| - callback                                                                                                	|
+| POST        	| /v1/reminders                     	| server_token           	|                                                 	| reminders.create                  	| - JavaScript object with parameters - callback function                                                   	|
+| GET         	| /v1/reminders/{reminder_id}       	| server_token           	|                                                 	| reminders.getByID                 	| - reminder_id - callback function                                                                         	|
+| PATCH       	| /v1/reminders/{reminder_id}       	| server_token           	|                                                 	| reminders.updateByID              	| - reminder_id - JavaScript object with parameters - callback function                                     	|
+| DELETE      	| /v1/reminders/{reminder_id}       	| server_token           	|                                                 	| reminders.deleteByID              	| - reminder_id - callback function                                                                         	|
+
+TODOs
+------------
+- [ ] Add translations via 'Accept-Language'
+- [ ] Advance Sandbox implementation
+- [ ] Implement rate limit status
+- [ ] Leverage Surge Pricing responses
+- [ ] Checks for scopes
+- [ ] Checks for auth methods
+- [ ] Leverage Webhooks
 
 Installation
 ------------
@@ -47,6 +59,7 @@ npm install node-uber
 
 Test
 ------------
+Run all existing test using script ``test/allTests.js``. This tests include linting, code coverage, and unit tests.
 
 ```sh
 npm test

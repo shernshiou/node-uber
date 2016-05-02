@@ -54,7 +54,7 @@ before(function() {
 });
 
 it('should create new reminder', function(done) {
-    uber.reminders.createReminder({
+    uber.reminders.create({
         reminder_time: 1429294463,
         phone_number: 16508420126,
         event: {
@@ -77,14 +77,14 @@ it('should create new reminder', function(done) {
 });
 
 it('should return error if there is no required params for POST', function(done) {
-    uber.reminders.createReminder(null, function(err, res) {
+    uber.reminders.create(null, function(err, res) {
         err.message.should.equal('Invalid parameters');
         done();
     });
 });
 
 it('should return error if reminder time is missing for POST', function(done) {
-    uber.reminders.createReminder({
+    uber.reminders.create({
         phone_number: 16508420126,
         event: {
             time: 1429294463,
@@ -105,7 +105,7 @@ it('should return error if reminder time is missing for POST', function(done) {
 });
 
 it('should return error if phone number is missing for POST', function(done) {
-    uber.reminders.createReminder({
+    uber.reminders.create({
         reminder_time: 1429294463,
         event: {
             time: 1429294463,
@@ -126,7 +126,7 @@ it('should return error if phone number is missing for POST', function(done) {
 });
 
 it('should return error if event object is missing for POST', function(done) {
-    uber.reminders.createReminder({
+    uber.reminders.create({
         phone_number: 16508420126,
         reminder_time: 1429294463,
         event: {
@@ -147,7 +147,7 @@ it('should return error if event object is missing for POST', function(done) {
 });
 
 it('should return error if event.time is missing for POST', function(done) {
-    uber.reminders.createReminder({
+    uber.reminders.create({
         phone_number: 16508420126,
         reminder_time: 1429294463,
         trip_branding: {
@@ -161,7 +161,7 @@ it('should return error if event.time is missing for POST', function(done) {
 });
 
 it('should get existing reminder by ID', function(done) {
-    uber.reminders.getReminderByID('def-456', function(err, res) {
+    uber.reminders.getByID('def-456', function(err, res) {
         should.not.exist(err);
         res.should.deep.equal(reminderReply);
         done();
@@ -169,14 +169,14 @@ it('should get existing reminder by ID', function(done) {
 });
 
 it('should return error in case of missing reminder ID', function(done) {
-    uber.reminders.getReminderByID(null, function(err, res) {
+    uber.reminders.getByID(null, function(err, res) {
         err.message.should.equal('Invalid reminder_id');
         done();
     });
 });
 
 it('should patch an existing reminder by ID', function(done) {
-    uber.reminders.updateReminderByID('def-456', {
+    uber.reminders.updateByID('def-456', {
         reminder_time: 1429294463,
         phone_number: 16508420126,
         event: {
@@ -199,7 +199,7 @@ it('should patch an existing reminder by ID', function(done) {
 });
 
 it('should return error in case of missing reminder ID for patch', function(done) {
-    uber.reminders.updateReminderByID(null, {
+    uber.reminders.updateByID(null, {
         reminder_time: 1429294463,
         phone_number: 16508420126,
         event: {
@@ -221,21 +221,21 @@ it('should return error in case of missing reminder ID for patch', function(done
 });
 
 it('should return error in case of missing parameters for patch', function(done) {
-    uber.reminders.updateReminderByID('def-456', null, function(err, res) {
+    uber.reminders.updateByID('def-456', null, function(err, res) {
         err.message.should.equal('Invalid parameters');
         done();
     });
 });
 
 it('should delete an existing reminder by ID', function(done) {
-    uber.reminders.deleteReminderByID('def-456', function(err, res) {
+    uber.reminders.deleteByID('def-456', function(err, res) {
         should.not.exist(err);
         done();
     });
 });
 
 it('should return error in case of missing reminder ID for delete', function(done) {
-    uber.reminders.deleteReminderByID(null, function(err, res) {
+    uber.reminders.deleteByID(null, function(err, res) {
         err.message.should.equal('Invalid reminder_id');
         done();
     });

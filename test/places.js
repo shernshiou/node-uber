@@ -32,7 +32,7 @@ describe('Home', function() {
     });
 
     it('should return error for missing access token', function(done) {
-        uber.places.updatePlaceByID('home', '685 Market St, San Francisco, CA 94103, USA', function(err, res) {
+        uber.places.updateByID('home', '685 Market St, San Francisco, CA 94103, USA', function(err, res) {
             err.message.should.equal('Invalid access token');
             done();
         });
@@ -134,7 +134,7 @@ describe('By Place ID', function() {
             },
             function(err, accessToken, refreshToken) {
                 should.not.exist(err);
-                uber.places.updatePlaceByID('home', '685 Market St, San Francisco, CA 94103, USA', function(err, res) {
+                uber.places.updateByID('home', '685 Market St, San Francisco, CA 94103, USA', function(err, res) {
                     should.not.exist(err);
                     res.should.deep.equal(placesHomeReply);
                     done();
@@ -148,7 +148,7 @@ describe('By Place ID', function() {
             },
             function(err, accessToken, refreshToken) {
                 should.not.exist(err);
-                uber.places.updatePlaceByID('home', '685 Market St, San Francisco, CA 94103, USA', function(err, res) {
+                uber.places.updateByID('home', '685 Market St, San Francisco, CA 94103, USA', function(err, res) {
                     should.not.exist(err);
                     res.should.deep.equal(placesHomeReply);
                     done();
@@ -162,7 +162,7 @@ describe('By Place ID', function() {
             },
             function(err, accessToken, refreshToken) {
                 should.not.exist(err);
-                uber.places.getPlaceByID('shop', function(err, res) {
+                uber.places.getByID('shop', function(err, res) {
                     err.message.should.equal('place_id needs to be either "home" or "work"');
                     done();
                 });
@@ -175,7 +175,7 @@ describe('By Place ID', function() {
             },
             function(err, accessToken, refreshToken) {
                 should.not.exist(err);
-                uber.places.getPlaceByID(null, function(err, res) {
+                uber.places.getByID(null, function(err, res) {
                     err.message.should.equal('Invalid place_id');
                     done();
                 });
@@ -188,7 +188,7 @@ describe('By Place ID', function() {
             },
             function(err, accessToken, refreshToken) {
                 should.not.exist(err);
-                uber.places.updatePlaceByID('shop', '685 Market St, San Francisco, CA 94103, USA', function(err, res) {
+                uber.places.updateByID('shop', '685 Market St, San Francisco, CA 94103, USA', function(err, res) {
                     err.message.should.equal('place_id needs to be either "home" or "work"');
                     done();
                 });
@@ -201,7 +201,7 @@ describe('By Place ID', function() {
             },
             function(err, accessToken, refreshToken) {
                 should.not.exist(err);
-                uber.places.updatePlaceByID(null, '685 Market St, San Francisco, CA 94103, USA', function(err, res) {
+                uber.places.updateByID(null, '685 Market St, San Francisco, CA 94103, USA', function(err, res) {
                     err.message.should.equal('Invalid place_id');
                     done();
                 });
@@ -214,7 +214,7 @@ describe('By Place ID', function() {
             },
             function(err, accessToken, refreshToken) {
                 should.not.exist(err);
-                uber.places.updatePlaceByID('home', null, function(err, res) {
+                uber.places.updateByID('home', null, function(err, res) {
                     err.message.should.equal('Invalid address');
                     done();
                 });
