@@ -44,7 +44,7 @@ rules:
   # Best Practices
   accessor-pairs: 2
   block-scoped-var: 0
-  complexity: [2, 6]
+  complexity: [2, 12]
   consistent-return: 0
   curly: 0
   default-case: 0
@@ -57,7 +57,6 @@ rules:
   no-case-declarations: 2
   no-div-regex: 2
   no-else-return: 0
-  no-empty-label: 2
   no-empty-pattern: 2
   no-eq-null: 2
   no-eval: 2
@@ -117,7 +116,6 @@ rules:
 
   # Node.js and CommonJS
   callback-return: 2
-  global-require: 2
   handle-callback-err: 2
   no-mixed-requires: 0
   no-new-require: 0

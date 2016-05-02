@@ -3,7 +3,7 @@ var common = require("./common"),
     should = common.should,
     uber = common.uber;
 
-    var priceReply = {
+var priceReply = {
         "prices": [{
             "product_id": "08f17084-23fd-4103-aa3e-9b660223934b",
             "currency_code": "USD",
@@ -75,6 +75,13 @@ describe('Price', function() {
             });
     });
 
+    it('should return error if end point lat and lon are invalid', function(done) {
+        uber.estimates.getPriceForRoute(3.1357, 101.6880, -91.1357, 181.6880, function(err, res) {
+            err.message.should.equal('Invalid ending point latitude & longitude');
+            done();
+        });
+    });
+
     it('should return error if there is no required params', function(done) {
         uber.estimates.getPriceForRoute(null, null, null, null, function(err, res) {
             err.message.should.equal('Invalid starting point latitude & longitude');
@@ -86,13 +93,34 @@ describe('Price', function() {
 describe('Time', function() {
     before(function() {
         nock('https://api.uber.com')
-            .get('/v1/estimates/time?server_token=SERVERTOKENSERVERTOKENSERVERTOKENSERVERT&' +
-                'start_latitude=3.1357&start_longitude=101.688')
+            .get(function(uri) {
+                return uri.indexOf('v1/estimates/time?server_token=SERVERTOKENSERVERTOKENSERVERTOKENSERVERT&' +
+                    'start_latitude=3.1357&start_longitude=101.688') >= 0;
+            })
+            .times(3)
             .reply(200, timeReply);
     });
 
-    it('should list all the price estimates from server', function(done) {
+    it('should list all the price estimates for location', function(done) {
         uber.estimates.getETAForLocation(3.1357, 101.6880,
+            function(err, res) {
+                should.not.exist(err);
+                res.should.deep.equal(timeReply);
+                done();
+            });
+    });
+
+    it('should list all the price estimates for product and location', function(done) {
+        uber.estimates.getETAForLocation(3.1357, 101.6880, '327f7914-cd12-4f77-9e0c-b27bac580d03',
+            function(err, res) {
+                should.not.exist(err);
+                res.should.deep.equal(timeReply);
+                done();
+            });
+    });
+
+    it('should list all the price estimates for empty product and location', function(done) {
+        uber.estimates.getETAForLocation(3.1357, 101.6880, '',
             function(err, res) {
                 should.not.exist(err);
                 res.should.deep.equal(timeReply);

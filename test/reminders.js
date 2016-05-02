@@ -83,6 +83,83 @@ it('should return error if there is no required params for POST', function(done)
     });
 });
 
+it('should return error if reminder time is missing for POST', function(done) {
+    uber.reminders.createReminder({
+        phone_number: 16508420126,
+        event: {
+            time: 1429294463,
+            name: 'Frisbee with friends',
+            location: 'Dolores Park',
+            latitude: 37.759773,
+            longitude: -122.427063,
+            product_id: 'a1111c8c-c720-46c3-8534-2fcdd730040d'
+        },
+        trip_branding: {
+            link_text: 'View team roster',
+            partner_deeplink: 'partner://team/9383'
+        }
+    }, function(err, res) {
+        err.message.should.equal('Missing parameter: reminder_time');
+        done();
+    });
+});
+
+it('should return error if phone number is missing for POST', function(done) {
+    uber.reminders.createReminder({
+        reminder_time: 1429294463,
+        event: {
+            time: 1429294463,
+            name: 'Frisbee with friends',
+            location: 'Dolores Park',
+            latitude: 37.759773,
+            longitude: -122.427063,
+            product_id: 'a1111c8c-c720-46c3-8534-2fcdd730040d'
+        },
+        trip_branding: {
+            link_text: 'View team roster',
+            partner_deeplink: 'partner://team/9383'
+        }
+    }, function(err, res) {
+        err.message.should.equal('Missing parameter: phone_number');
+        done();
+    });
+});
+
+it('should return error if event object is missing for POST', function(done) {
+    uber.reminders.createReminder({
+        phone_number: 16508420126,
+        reminder_time: 1429294463,
+        event: {
+            name: 'Frisbee with friends',
+            location: 'Dolores Park',
+            latitude: 37.759773,
+            longitude: -122.427063,
+            product_id: 'a1111c8c-c720-46c3-8534-2fcdd730040d'
+        },
+        trip_branding: {
+            link_text: 'View team roster',
+            partner_deeplink: 'partner://team/9383'
+        }
+    }, function(err, res) {
+        err.message.should.equal('Missing parameter: event.time');
+        done();
+    });
+});
+
+it('should return error if event.time is missing for POST', function(done) {
+    uber.reminders.createReminder({
+        phone_number: 16508420126,
+        reminder_time: 1429294463,
+        trip_branding: {
+            link_text: 'View team roster',
+            partner_deeplink: 'partner://team/9383'
+        }
+    }, function(err, res) {
+        err.message.should.equal('Missing parameter: event');
+        done();
+    });
+});
+
 it('should get existing reminder by ID', function(done) {
     uber.reminders.getReminderByID('def-456', function(err, res) {
         should.not.exist(err);

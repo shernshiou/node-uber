@@ -23,10 +23,19 @@ describe('Home', function() {
             .post('/oauth/token')
             .times(3)
             .reply(200, tokenResponse);
-
         nock('https://api.uber.com')
             .get('/v1/places/home?access_token=EE1IDxytP04tJ767GbjH7ED9PpGmYvL')
             .reply(200, placesHomeReply);
+        nock('https://api.uber.com')
+            .put('/v1/places/home')
+            .reply(200, placesHomeReply);
+    });
+
+    it('should return error for missing access token', function(done) {
+        uber.places.updatePlaceByID('home', '685 Market St, San Francisco, CA 94103, USA', function(err, res) {
+            err.message.should.equal('Invalid access token');
+            done();
+        });
     });
 
     it('should list the home address after authentication', function(done) {
@@ -34,6 +43,7 @@ describe('Home', function() {
                 authorization_code: 'x8Y6dF2qA6iKaTKlgzVfFvyYoNrlkp'
             },
             function(err, accessToken, refreshToken) {
+                should.not.exist(err);
                 uber.places.getHome(function(err, res) {
                     should.not.exist(err);
                     res.should.deep.equal(placesHomeReply);
@@ -47,6 +57,7 @@ describe('Home', function() {
                 authorization_code: 'x8Y6dF2qA6iKaTKlgzVfFvyYoNrlkp'
             },
             function(err, accessToken, refreshToken) {
+                should.not.exist(err);
                 uber.access_token = '';
                 uber.places.getHome(function(err, res) {
                     err.message.should.equal('Invalid access token');
@@ -63,7 +74,6 @@ describe('Work', function() {
             .post('/oauth/token')
             .times(3)
             .reply(200, tokenResponse);
-
         nock('https://api.uber.com')
             .get('/v1/places/work?access_token=EE1IDxytP04tJ767GbjH7ED9PpGmYvL')
             .reply(200, placesWorkReply);
@@ -74,6 +84,7 @@ describe('Work', function() {
                 authorization_code: 'x8Y6dF2qA6iKaTKlgzVfFvyYoNrlkp'
             },
             function(err, accessToken, refreshToken) {
+                should.not.exist(err);
                 uber.places.getWork(function(err, res) {
                     should.not.exist(err);
                     res.should.deep.equal(placesWorkReply);
@@ -87,9 +98,124 @@ describe('Work', function() {
                 authorization_code: 'x8Y6dF2qA6iKaTKlgzVfFvyYoNrlkp'
             },
             function(err, accessToken, refreshToken) {
+                should.not.exist(err);
                 uber.access_token = '';
                 uber.places.getWork(function(err, res) {
                     err.message.should.equal('Invalid access token');
+                    done();
+                });
+            });
+    });
+});
+
+describe('By Place ID', function() {
+    before(function() {
+        nock('https://login.uber.com')
+            .post('/oauth/token')
+            .times(5)
+            .reply(200, tokenResponse);
+        nock('https://api.uber.com')
+            .put('/v1/places/home')
+            .reply(200, placesHomeReply);
+        nock('https://api.uber.com')
+            .put('/v1/places/work')
+            .reply(200, placesWorkReply);
+        nock('https://api.uber.com')
+            .put('/v1/places/shop')
+            .reply(404);
+        nock('https://api.uber.com')
+            .get('/v1/places/shop?access_token=EE1IDxytP04tJ767GbjH7ED9PpGmYvL')
+            .reply(404);
+    });
+
+    it('should be able to update the home address', function(done) {
+        uber.authorization({
+                authorization_code: 'x8Y6dF2qA6iKaTKlgzVfFvyYoNrlkp'
+            },
+            function(err, accessToken, refreshToken) {
+                should.not.exist(err);
+                uber.places.updatePlaceByID('home', '685 Market St, San Francisco, CA 94103, USA', function(err, res) {
+                    should.not.exist(err);
+                    res.should.deep.equal(placesHomeReply);
+                    done();
+                });
+            });
+    });
+
+    it('should be able to update the home address', function(done) {
+        uber.authorization({
+                authorization_code: 'x8Y6dF2qA6iKaTKlgzVfFvyYoNrlkp'
+            },
+            function(err, accessToken, refreshToken) {
+                should.not.exist(err);
+                uber.places.updatePlaceByID('home', '685 Market St, San Francisco, CA 94103, USA', function(err, res) {
+                    should.not.exist(err);
+                    res.should.deep.equal(placesHomeReply);
+                    done();
+                });
+            });
+    });
+
+    it('should return error for invalid place_id for GET', function(done) {
+        uber.authorization({
+                authorization_code: 'x8Y6dF2qA6iKaTKlgzVfFvyYoNrlkp'
+            },
+            function(err, accessToken, refreshToken) {
+                should.not.exist(err);
+                uber.places.getPlaceByID('shop', function(err, res) {
+                    err.message.should.equal('place_id needs to be either "home" or "work"');
+                    done();
+                });
+            });
+    });
+
+    it('should return error for missing place_id for GET', function(done) {
+        uber.authorization({
+                authorization_code: 'x8Y6dF2qA6iKaTKlgzVfFvyYoNrlkp'
+            },
+            function(err, accessToken, refreshToken) {
+                should.not.exist(err);
+                uber.places.getPlaceByID(null, function(err, res) {
+                    err.message.should.equal('Invalid place_id');
+                    done();
+                });
+            });
+    });
+
+    it('should return error for invalid place_id for PUT', function(done) {
+        uber.authorization({
+                authorization_code: 'x8Y6dF2qA6iKaTKlgzVfFvyYoNrlkp'
+            },
+            function(err, accessToken, refreshToken) {
+                should.not.exist(err);
+                uber.places.updatePlaceByID('shop', '685 Market St, San Francisco, CA 94103, USA', function(err, res) {
+                    err.message.should.equal('place_id needs to be either "home" or "work"');
+                    done();
+                });
+            });
+    });
+
+    it('should return error for missing place_id for PUT', function(done) {
+        uber.authorization({
+                authorization_code: 'x8Y6dF2qA6iKaTKlgzVfFvyYoNrlkp'
+            },
+            function(err, accessToken, refreshToken) {
+                should.not.exist(err);
+                uber.places.updatePlaceByID(null, '685 Market St, San Francisco, CA 94103, USA', function(err, res) {
+                    err.message.should.equal('Invalid place_id');
+                    done();
+                });
+            });
+    });
+
+    it('should return error for missing new address for PUT', function(done) {
+        uber.authorization({
+                authorization_code: 'x8Y6dF2qA6iKaTKlgzVfFvyYoNrlkp'
+            },
+            function(err, accessToken, refreshToken) {
+                should.not.exist(err);
+                uber.places.updatePlaceByID('home', null, function(err, res) {
+                    err.message.should.equal('Invalid address');
                     done();
                 });
             });

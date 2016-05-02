@@ -3,7 +3,14 @@ var common = require("./common"),
     should = common.should,
     uber = common.uber;
 
-var acceptedRequestReply = {
+var tokenResponse = {
+        "access_token": "EE1IDxytP04tJ767GbjH7ED9PpGmYvL",
+        "token_type": "Bearer",
+        "expires_in": 2592000,
+        "refresh_token": "Zx8fJ8qdSRRseIVlsGgtgQ4wnZBehr",
+        "scope": "profile history"
+    },
+    acceptedRequestReply = {
         "request_id": "17cb78a7-b672-4d34-a288-a6c6e44d5315",
         "status": "accepted",
         "location": {
@@ -76,30 +83,30 @@ var acceptedRequestReply = {
         }, {
             "name": "Distance",
             "amount": "2.75",
-            "type": "distance",
+            "type": "distance"
         }, {
             "name": "Time",
             "amount": "3.57",
-            "type": "time",
+            "type": "time"
         }],
         "surge_charge": {
             "name": "Surge x1.5",
             "amount": "4.26",
-            "type": "surge",
+            "type": "surge"
         },
         "charge_adjustments": [{
             "name": "Promotion",
             "amount": "-2.43",
-            "type": "promotion",
+            "type": "promotion"
         }, {
             "name": "Booking Fee",
             "amount": "1.00",
-            "type": "booking_fee",
+            "type": "booking_fee"
         }, {
             "name": "Rounding Down",
             "amount": "0.78",
-            "type": "rounding_down",
-        }, ],
+            "type": "rounding_down"
+        }],
         "normal_fare": "$8.52",
         "subtotal": "$12.78",
         "total_charged": "$5.92",
@@ -107,11 +114,15 @@ var acceptedRequestReply = {
         "currency_code": "USD",
         "duration": "00:11:35",
         "distance": "1.49",
-        "distance_label": "miles",
+        "distance_label": "miles"
     };
 
 describe('Current Request', function() {
     before(function() {
+        nock('https://login.uber.com')
+            .post('/oauth/token')
+            .times(2)
+            .reply(200, tokenResponse);
         nock('https://api.uber.com')
             .get('/v1/requests/current?access_token=EE1IDxytP04tJ767GbjH7ED9PpGmYvL')
             .reply(200, acceptedRequestReply);
@@ -126,11 +137,26 @@ describe('Current Request', function() {
             .reply(204);
     });
 
+    it('should return error for new request without authorization', function(done) {
+        uber.access_token = '';
+        uber.requests.createRequest({
+            "product_id": "a1111c8c-c720-46c3-8534-2fcdd730040d",
+            "start_latitude": 37.761492,
+            "start_longitude": -122.423941,
+            "end_latitude": 37.775393,
+            "end_longitude": -122.417546
+        }, function(err, res) {
+            err.message.should.equal('Invalid access token');
+            done();
+        });
+    });
+
     it('should create new request after authorization', function(done) {
         uber.authorization({
                 authorization_code: 'x8Y6dF2qA6iKaTKlgzVfFvyYoNrlkp'
             },
             function(err, accessToken, refreshToken) {
+                should.not.exist(err);
                 uber.requests.createRequest({
                     "product_id": "a1111c8c-c720-46c3-8534-2fcdd730040d",
                     "start_latitude": 37.761492,
@@ -152,12 +178,26 @@ describe('Current Request', function() {
         });
     });
 
-    it('should get current request', function(done) {
+    it('should return error for getting current request without authorization', function(done) {
+        uber.access_token = '';
         uber.requests.getCurrentRequest(function(err, res) {
-            should.not.exist(err);
-            res.should.deep.equal(acceptedRequestReply);
+            err.message.should.equal('Invalid access token');
             done();
         });
+    });
+
+    it('should get current request after authorization', function(done) {
+        uber.authorization({
+                authorization_code: 'x8Y6dF2qA6iKaTKlgzVfFvyYoNrlkp'
+            },
+            function(err, accessToken, refreshToken) {
+                should.not.exist(err);
+                uber.requests.getCurrentRequest(function(err, res) {
+                    should.not.exist(err);
+                    res.should.deep.equal(acceptedRequestReply);
+                    done();
+                });
+            });
     });
 
     it('should patch current request', function(done) {
@@ -214,12 +254,19 @@ describe('Estimate', function() {
 
 describe('By Request ID', function() {
     before(function() {
+        nock('https://login.uber.com')
+            .post('/oauth/token')
+            .times(4)
+            .reply(200, tokenResponse);
         nock('https://api.uber.com')
             .get('/v1/requests/17cb78a7-b672-4d34-a288-a6c6e44d5315?access_token=EE1IDxytP04tJ767GbjH7ED9PpGmYvL')
             .reply(200, acceptedRequestReply);
         nock('https://api.uber.com')
+            .patch('/v1/requests/abcd')
+            .reply(404);
+        nock('https://api.uber.com')
             .get('/v1/requests/abcd')
-            .reply(404, acceptedRequestReply);
+            .reply(404);
         nock('https://api.uber.com')
             .patch('/v1/requests/17cb78a7-b672-4d34-a288-a6c6e44d5315')
             .times(2)
@@ -229,12 +276,26 @@ describe('By Request ID', function() {
             .reply(204);
     });
 
-    it('should get existing request by ID', function(done) {
+    it('should return error for getting request by ID without authorization', function(done) {
+        uber.access_token = '';
         uber.requests.getRequestByID('17cb78a7-b672-4d34-a288-a6c6e44d5315', function(err, res) {
-            should.not.exist(err);
-            res.should.deep.equal(acceptedRequestReply);
+            err.message.should.equal('Invalid access token');
             done();
         });
+    });
+
+    it('should get existing request by ID after authorization', function(done) {
+        uber.authorization({
+                authorization_code: 'x8Y6dF2qA6iKaTKlgzVfFvyYoNrlkp'
+            },
+            function(err, accessToken, refreshToken) {
+                should.not.exist(err);
+                uber.requests.getRequestByID('17cb78a7-b672-4d34-a288-a6c6e44d5315', function(err, res) {
+                    should.not.exist(err);
+                    res.should.deep.equal(acceptedRequestReply);
+                    done();
+                });
+            });
     });
 
     it('should return error in case of missing request ID', function(done) {
@@ -252,16 +313,37 @@ describe('By Request ID', function() {
         });
     });
 
-    it('should patch an existing request by ID', function(done) {
+    it('should return error for patching an existing request without authorization', function(done) {
+        uber.access_token = '';
         uber.requests.updateRequestByID('17cb78a7-b672-4d34-a288-a6c6e44d5315', {}, function(err, res) {
-            should.not.exist(err);
+            err.message.should.equal('Invalid access token');
             done();
         });
+    });
+
+    it('should patch an existing request by ID after authorization', function(done) {
+        uber.authorization({
+                authorization_code: 'x8Y6dF2qA6iKaTKlgzVfFvyYoNrlkp'
+            },
+            function(err, accessToken, refreshToken) {
+                should.not.exist(err);
+                uber.requests.updateRequestByID('17cb78a7-b672-4d34-a288-a6c6e44d5315', {}, function(err, res) {
+                    should.not.exist(err);
+                    done();
+                });
+            });
     });
 
     it('should return error in case of missing request ID for patch', function(done) {
         uber.requests.updateRequestByID(null, {}, function(err, res) {
             err.message.should.equal('Invalid request_id');
+            done();
+        });
+    });
+
+    it('should return error in case of invalid request ID for patch', function(done) {
+        uber.requests.updateRequestByID('abcd', {}, function(err, res) {
+            should.exist(err);
             done();
         });
     });
@@ -273,11 +355,25 @@ describe('By Request ID', function() {
         });
     });
 
-    it('should delete an existing request by ID', function(done) {
+    it('should return error for deleting an existing request by ID without authorization', function(done) {
+        uber.access_token = ''
         uber.requests.deleteRequestByID('17cb78a7-b672-4d34-a288-a6c6e44d5315', function(err, res) {
-            should.not.exist(err);
+            err.message.should.equal('Invalid access token');
             done();
         });
+    });
+
+    it('should delete an existing request by ID after authorization', function(done) {
+        uber.authorization({
+                authorization_code: 'x8Y6dF2qA6iKaTKlgzVfFvyYoNrlkp'
+            },
+            function(err, accessToken, refreshToken) {
+                should.not.exist(err);
+                uber.requests.deleteRequestByID('17cb78a7-b672-4d34-a288-a6c6e44d5315', function(err, res) {
+                    should.not.exist(err);
+                    done();
+                });
+            });
     });
 
     it('should return error in case of missing request ID for delete', function(done) {
@@ -289,6 +385,10 @@ describe('By Request ID', function() {
 
     describe('Request Details', function() {
         before(function() {
+            nock('https://login.uber.com')
+                .post('/oauth/token')
+                .times(2)
+                .reply(200, tokenResponse);
             nock('https://api.uber.com')
                 .get('/v1/requests/17cb78a7-b672-4d34-a288-a6c6e44d5315/map?access_token=EE1IDxytP04tJ767GbjH7ED9PpGmYvL')
                 .reply(200, mapReply);
@@ -297,12 +397,26 @@ describe('By Request ID', function() {
                 .reply(200, receiptReply);
         });
 
-        it('should get map', function(done) {
+        it('should return error for get map without authorization', function(done) {
+            uber.access_token = ''
             uber.requests.getRequestMapByID('17cb78a7-b672-4d34-a288-a6c6e44d5315', function(err, res) {
-                should.not.exist(err);
-                res.should.deep.equal(mapReply);
+                err.message.should.equal('Invalid access token');
                 done();
             });
+        });
+
+        it('should get map after authorization', function(done) {
+            uber.authorization({
+                    authorization_code: 'x8Y6dF2qA6iKaTKlgzVfFvyYoNrlkp'
+                },
+                function(err, accessToken, refreshToken) {
+                    should.not.exist(err);
+                    uber.requests.getRequestMapByID('17cb78a7-b672-4d34-a288-a6c6e44d5315', function(err, res) {
+                        should.not.exist(err);
+                        res.should.deep.equal(mapReply);
+                        done();
+                    });
+                });
         });
 
         it('should return error in case of missing request ID for map', function(done) {
@@ -312,12 +426,26 @@ describe('By Request ID', function() {
             });
         });
 
-        it('should get receipt', function(done) {
+        it('should return error for get receipt without authorization', function(done) {
+            uber.access_token = '';
             uber.requests.getRequestReceiptByID('17cb78a7-b672-4d34-a288-a6c6e44d5315', function(err, res) {
-                should.not.exist(err);
-                res.should.deep.equal(receiptReply);
+                err.message.should.equal('Invalid access token');
                 done();
             });
+        });
+
+        it('should get receipt after authorization', function(done) {
+            uber.authorization({
+                    authorization_code: 'x8Y6dF2qA6iKaTKlgzVfFvyYoNrlkp'
+                },
+                function(err, accessToken, refreshToken) {
+                    should.not.exist(err);
+                    uber.requests.getRequestReceiptByID('17cb78a7-b672-4d34-a288-a6c6e44d5315', function(err, res) {
+                        should.not.exist(err);
+                        res.should.deep.equal(receiptReply);
+                        done();
+                    });
+                });
         });
 
         it('should return error in case of missing request ID for receipt', function(done) {

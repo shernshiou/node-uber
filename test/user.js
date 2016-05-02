@@ -34,7 +34,7 @@ var common = require("./common"),
                 "end_time": 1428876927,
                 "request_id": "37d57a99-2647-4114-9dd2-c43bccf4c30b",
                 "product_id": "a1111c8c-c720-46c3-8534-2fcdd730040d"
-            }, ]
+            } ]
         };
 
 
@@ -56,6 +56,7 @@ var common = require("./common"),
                     authorization_code: 'x8Y6dF2qA6iKaTKlgzVfFvyYoNrlkp'
                 },
                 function(err, accessToken, refreshToken) {
+                    should.not.exist(err);
                     uber.user.getProfile(function(err, res) {
                         should.not.exist(err);
                         res.should.deep.equal(profileReply);
@@ -69,6 +70,7 @@ var common = require("./common"),
                     authorization_code: 'x8Y6dF2qA6iKaTKlgzVfFvyYoNrlkp'
                 },
                 function(err, accessToken, refreshToken) {
+                    should.not.exist(err);
                     uber.user.getProfile(accessToken, function(err, res) {
                         should.not.exist(err);
                         res.should.deep.equal(profileReply);
@@ -82,6 +84,7 @@ var common = require("./common"),
                     authorization_code: 'x8Y6dF2qA6iKaTKlgzVfFvyYoNrlkp'
                 },
                 function(err, accessToken, refreshToken) {
+                    should.not.exist(err);
                     uber.access_token = '';
                     uber.user.getProfile(function(err, res) {
                         err.message.should.equal('Invalid access token');
@@ -95,7 +98,7 @@ var common = require("./common"),
         before(function() {
             nock('https://login.uber.com')
                 .post('/oauth/token')
-                .times(3)
+                .times(4)
                 .reply(200, tokenResponse);
 
             nock('https://api.uber.com')
@@ -117,6 +120,7 @@ var common = require("./common"),
                     authorization_code: 'x8Y6dF2qA6iKaTKlgzVfFvyYoNrlkp'
                 },
                 function(err, accessToken, refreshToken) {
+                    should.not.exist(err);
                     uber.user.getHistory(0, 5, function(err, res) {
                         should.not.exist(err);
                         res.should.deep.equal(historyReply);
@@ -130,6 +134,7 @@ var common = require("./common"),
                     authorization_code: 'x8Y6dF2qA6iKaTKlgzVfFvyYoNrlkp'
                 },
                 function(err, accessToken, refreshToken) {
+                    should.not.exist(err);
                     uber.user.getHistory(0, 99, function(err, res) {
                         should.not.exist(err);
                         res.should.deep.equal(historyReply);
@@ -143,6 +148,7 @@ var common = require("./common"),
                     authorization_code: 'x8Y6dF2qA6iKaTKlgzVfFvyYoNrlkp'
                 },
                 function(err, accessToken, refreshToken) {
+                    should.not.exist(err);
                     uber.user.getHistory(null, null, function(err, res) {
                         should.not.exist(err);
                         res.should.deep.equal(historyReply);
@@ -156,6 +162,7 @@ var common = require("./common"),
                     authorization_code: 'x8Y6dF2qA6iKaTKlgzVfFvyYoNrlkp'
                 },
                 function(err, accessToken, refreshToken) {
+                    should.not.exist(err);
                     uber.user.getHistory(0, 5, accessToken, function(err, res) {
                             should.not.exist(err);
                             res.should.deep.equal(historyReply);
@@ -169,6 +176,7 @@ var common = require("./common"),
                     authorization_code: 'x8Y6dF2qA6iKaTKlgzVfFvyYoNrlkp'
                 },
                 function(err, accessToken, refreshToken) {
+                    should.not.exist(err);
                     uber.access_token = '';
                     uber.user.getHistory(null, null, function(err, res) {
                         err.message.should.equal('Invalid access token');

@@ -14,11 +14,11 @@ var tokenResponse = {
         "payment_methods": [{
             "payment_method_id": "5f384f7d-8323-4207-a297-51c571234a8c",
             "type": "baidu_wallet",
-            "description": "***53",
+            "description": "***53"
         }, {
             "payment_method_id": "f33847de-8113-4587-c307-51c2d13a823c",
             "type": "alipay",
-            "description": "ga***@uber.com",
+            "description": "ga***@uber.com"
         }, {
             "payment_method_id": "f43847de-8113-4587-c307-51c2d13a823c",
             "type": "visa",
@@ -47,6 +47,7 @@ it('should list the payment methods after authentication', function(done) {
             authorization_code: 'x8Y6dF2qA6iKaTKlgzVfFvyYoNrlkp'
         },
         function(err, accessToken, refreshToken) {
+            should.not.exist(err);
             uber.payment.getMethods(function(err, res) {
                 should.not.exist(err);
                 res.should.deep.equal(paymentMethodsReply);
@@ -60,6 +61,7 @@ it('should return invalid access token error when no token found', function(done
             authorization_code: 'x8Y6dF2qA6iKaTKlgzVfFvyYoNrlkp'
         },
         function(err, accessToken, refreshToken) {
+            should.not.exist(err);
             uber.access_token = '';
             uber.payment.getMethods(function(err, res) {
                 err.message.should.equal('Invalid access token');
