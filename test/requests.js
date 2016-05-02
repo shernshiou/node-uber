@@ -256,7 +256,7 @@ describe('By Request ID', function() {
     before(function() {
         nock('https://login.uber.com')
             .post('/oauth/token')
-            .times(2)
+            .times(3)
             .reply(200, tokenResponse);
         nock('https://api.uber.com')
             .get('/v1/requests/17cb78a7-b672-4d34-a288-a6c6e44d5315?access_token=EE1IDxytP04tJ767GbjH7ED9PpGmYvL')
@@ -310,11 +310,25 @@ describe('By Request ID', function() {
         });
     });
 
-    it('should patch an existing request by ID', function(done) {
+    it('should return error for patching an existing request without authorization', function(done) {
+        uber.access_token = '';
         uber.requests.updateRequestByID('17cb78a7-b672-4d34-a288-a6c6e44d5315', {}, function(err, res) {
-            should.not.exist(err);
+            err.message.should.equal('Invalid access token');
             done();
         });
+    });
+
+    it('should patch an existing request by ID after authorization', function(done) {
+        uber.authorization({
+                authorization_code: 'x8Y6dF2qA6iKaTKlgzVfFvyYoNrlkp'
+            },
+            function(err, accessToken, refreshToken) {
+                should.not.exist(err);
+                uber.requests.updateRequestByID('17cb78a7-b672-4d34-a288-a6c6e44d5315', {}, function(err, res) {
+                    should.not.exist(err);
+                    done();
+                });
+            });
     });
 
     it('should return error in case of missing request ID for patch', function(done) {
@@ -331,11 +345,25 @@ describe('By Request ID', function() {
         });
     });
 
-    it('should delete an existing request by ID', function(done) {
+    it('should return error for deleting an existing request by ID without authorization', function(done) {
+        uber.access_token = ''
         uber.requests.deleteRequestByID('17cb78a7-b672-4d34-a288-a6c6e44d5315', function(err, res) {
-            should.not.exist(err);
+            err.message.should.equal('Invalid access token');
             done();
         });
+    });
+
+    it('should delete an existing request by ID after authorization', function(done) {
+        uber.authorization({
+                authorization_code: 'x8Y6dF2qA6iKaTKlgzVfFvyYoNrlkp'
+            },
+            function(err, accessToken, refreshToken) {
+                should.not.exist(err);
+                uber.requests.deleteRequestByID('17cb78a7-b672-4d34-a288-a6c6e44d5315', function(err, res) {
+                    should.not.exist(err);
+                    done();
+                });
+            });
     });
 
     it('should return error in case of missing request ID for delete', function(done) {
