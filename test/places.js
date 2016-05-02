@@ -43,6 +43,7 @@ describe('Home', function() {
                 authorization_code: 'x8Y6dF2qA6iKaTKlgzVfFvyYoNrlkp'
             },
             function(err, accessToken, refreshToken) {
+                should.not.exist(err);
                 uber.places.getHome(function(err, res) {
                     should.not.exist(err);
                     res.should.deep.equal(placesHomeReply);
@@ -56,6 +57,7 @@ describe('Home', function() {
                 authorization_code: 'x8Y6dF2qA6iKaTKlgzVfFvyYoNrlkp'
             },
             function(err, accessToken, refreshToken) {
+                should.not.exist(err);
                 uber.access_token = '';
                 uber.places.getHome(function(err, res) {
                     err.message.should.equal('Invalid access token');
@@ -82,6 +84,7 @@ describe('Work', function() {
                 authorization_code: 'x8Y6dF2qA6iKaTKlgzVfFvyYoNrlkp'
             },
             function(err, accessToken, refreshToken) {
+                should.not.exist(err);
                 uber.places.getWork(function(err, res) {
                     should.not.exist(err);
                     res.should.deep.equal(placesWorkReply);
@@ -95,6 +98,7 @@ describe('Work', function() {
                 authorization_code: 'x8Y6dF2qA6iKaTKlgzVfFvyYoNrlkp'
             },
             function(err, accessToken, refreshToken) {
+                should.not.exist(err);
                 uber.access_token = '';
                 uber.places.getWork(function(err, res) {
                     err.message.should.equal('Invalid access token');
@@ -108,7 +112,7 @@ describe('By Place ID', function() {
     before(function() {
         nock('https://login.uber.com')
             .post('/oauth/token')
-            .times(3)
+            .times(5)
             .reply(200, tokenResponse);
         nock('https://api.uber.com')
             .put('/v1/places/home')
@@ -116,6 +120,9 @@ describe('By Place ID', function() {
         nock('https://api.uber.com')
             .put('/v1/places/work')
             .reply(200, placesWorkReply);
+        nock('https://api.uber.com')
+            .put('/v1/places/shop')
+            .reply(404);
         nock('https://api.uber.com')
             .get('/v1/places/shop?access_token=EE1IDxytP04tJ767GbjH7ED9PpGmYvL')
             .reply(404);
@@ -126,6 +133,7 @@ describe('By Place ID', function() {
                 authorization_code: 'x8Y6dF2qA6iKaTKlgzVfFvyYoNrlkp'
             },
             function(err, accessToken, refreshToken) {
+                should.not.exist(err);
                 uber.places.updatePlaceByID('home', '685 Market St, San Francisco, CA 94103, USA', function(err, res) {
                     should.not.exist(err);
                     res.should.deep.equal(placesHomeReply);
@@ -139,6 +147,7 @@ describe('By Place ID', function() {
                 authorization_code: 'x8Y6dF2qA6iKaTKlgzVfFvyYoNrlkp'
             },
             function(err, accessToken, refreshToken) {
+                should.not.exist(err);
                 uber.places.updatePlaceByID('home', '685 Market St, San Francisco, CA 94103, USA', function(err, res) {
                     should.not.exist(err);
                     res.should.deep.equal(placesHomeReply);
@@ -152,6 +161,7 @@ describe('By Place ID', function() {
                 authorization_code: 'x8Y6dF2qA6iKaTKlgzVfFvyYoNrlkp'
             },
             function(err, accessToken, refreshToken) {
+                should.not.exist(err);
                 uber.places.getPlaceByID('shop', function(err, res) {
                     err.message.should.equal('place_id needs to be either "home" or "work"');
                     done();
@@ -164,6 +174,7 @@ describe('By Place ID', function() {
                 authorization_code: 'x8Y6dF2qA6iKaTKlgzVfFvyYoNrlkp'
             },
             function(err, accessToken, refreshToken) {
+                should.not.exist(err);
                 uber.places.getPlaceByID(null, function(err, res) {
                     err.message.should.equal('Invalid place_id');
                     done();
@@ -176,6 +187,7 @@ describe('By Place ID', function() {
                 authorization_code: 'x8Y6dF2qA6iKaTKlgzVfFvyYoNrlkp'
             },
             function(err, accessToken, refreshToken) {
+                should.not.exist(err);
                 uber.places.updatePlaceByID('shop', '685 Market St, San Francisco, CA 94103, USA', function(err, res) {
                     err.message.should.equal('place_id needs to be either "home" or "work"');
                     done();
@@ -188,6 +200,7 @@ describe('By Place ID', function() {
                 authorization_code: 'x8Y6dF2qA6iKaTKlgzVfFvyYoNrlkp'
             },
             function(err, accessToken, refreshToken) {
+                should.not.exist(err);
                 uber.places.updatePlaceByID(null, '685 Market St, San Francisco, CA 94103, USA', function(err, res) {
                     err.message.should.equal('Invalid place_id');
                     done();
@@ -200,6 +213,7 @@ describe('By Place ID', function() {
                 authorization_code: 'x8Y6dF2qA6iKaTKlgzVfFvyYoNrlkp'
             },
             function(err, accessToken, refreshToken) {
+                should.not.exist(err);
                 uber.places.updatePlaceByID('home', null, function(err, res) {
                     err.message.should.equal('Invalid address');
                     done();

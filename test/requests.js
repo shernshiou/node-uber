@@ -256,14 +256,17 @@ describe('By Request ID', function() {
     before(function() {
         nock('https://login.uber.com')
             .post('/oauth/token')
-            .times(3)
+            .times(4)
             .reply(200, tokenResponse);
         nock('https://api.uber.com')
             .get('/v1/requests/17cb78a7-b672-4d34-a288-a6c6e44d5315?access_token=EE1IDxytP04tJ767GbjH7ED9PpGmYvL')
             .reply(200, acceptedRequestReply);
         nock('https://api.uber.com')
+            .patch('/v1/requests/abcd')
+            .reply(404);
+        nock('https://api.uber.com')
             .get('/v1/requests/abcd')
-            .reply(404, acceptedRequestReply);
+            .reply(404);
         nock('https://api.uber.com')
             .patch('/v1/requests/17cb78a7-b672-4d34-a288-a6c6e44d5315')
             .times(2)
@@ -334,6 +337,13 @@ describe('By Request ID', function() {
     it('should return error in case of missing request ID for patch', function(done) {
         uber.requests.updateRequestByID(null, {}, function(err, res) {
             err.message.should.equal('Invalid request_id');
+            done();
+        });
+    });
+
+    it('should return error in case of invalid request ID for patch', function(done) {
+        uber.requests.updateRequestByID('abcd', {}, function(err, res) {
+            should.exist(err);
             done();
         });
     });
