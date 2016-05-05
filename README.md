@@ -1,3 +1,4 @@
+[![License](http://img.shields.io/:license-mit-blue.svg)](http://doge.mit-license.org)
 [![build status](https://img.shields.io/travis/shernshiou/node-uber.svg?style=flat-square)](https://travis-ci.org/shernshiou/node-uber) [![Dependency Status](https://david-dm.org/shernshiou/node-uber.svg?style=flat-square)](https://david-dm.org/shernshiou/node-uber) [![devDependency Status](https://david-dm.org/shernshiou/node-uber/dev-status.svg)](https://david-dm.org/shernshiou/node-uber#info=devDependencies)
 [![Code Climate](https://codeclimate.com/github/shernshiou/node-uber/badges/gpa.svg)](https://codeclimate.com/github/shernshiou/node-uber) [![Test Coverage](https://codeclimate.com/github/shernshiou/node-uber/badges/coverage.svg)](https://codeclimate.com/github/shernshiou/node-uber/coverage)
 
@@ -76,12 +77,12 @@ The URL will lead to a page where your user will be required to login and approv
 });
  ```
 
- ### Step three: Make HTTP requests to available resources
- Now that you are authenticated, you can issue requests using provided methods.
+### Step three: Make HTTP requests to available resources
+Now that you are authenticated, you can issue requests using provided methods.
 
- For instance, to obtain a list of available Uber products for a specific location, you can use ``uber.products.getAllForLocation``.
+For instance, to obtain a list of available Uber products for a specific location, you can use ``uber.products.getAllForLocation``.
 
- In case you are using Express, your route definition could look as follows:
+In case you are using Express, your route definition could look as follows:
 ```javascript
 app.get('/api/products', function(request, response) {
   // extract the query from the request URL
@@ -264,63 +265,6 @@ uber.user.getProfile(function (err, res) {
 });
 ```
 
-### Places
-The `/places/{place_id}` endpoint provides access to predefined addresses for the current user. Must have authorization with `places` scope.
-
-Right now, only home and work `place_id` is supported by the Uber API.
-
-
-
-#### Home
-```javascript
-uber.places.home(callback);
-```
-
-##### Example
-```javascript
-uber.places.home(function(err, res) {
-  if (err) {
-    console.log(err);
-  } else {
-    console.log(res);
-  }
-});
-```
-
-#### Work
-```javascript
-uber.places.work(callback);
-```
-
-##### Example
-```javascript
-uber.places.work(function(err, res) {
-  if (err) {
-    console.log(err);
-  } else {
-    console.log(res);
-  }
-});
-```
-
-### Payment-Methods
-The `/payment-methods` endpoint allows retrieving the list of the user’s available payment methods. These can be leveraged in order to supply a payment_method_id to the POST /v1/requests endpoint. Must have authorization with `request` scope.
-
-```javascript
-uber.payment.methods(callback);
-```
-
-#### Example
-```javascript
-uber.payment.methods(function(err, res) {
-  if (err) {
-    console.log(err);
-  } else {
-    console.log(res);
-  }
-});
-```
-
 Test
 ------------
 Run all existing test using script ``test/allTests.js``. These tests include linting, code coverage, and unit tests.
@@ -336,7 +280,7 @@ The change-log can be found in the [Wiki: Version History](https://github.com/sh
 TODOs
 ------------
 - [ ] Update README to cover all modified and new methods
-- [x] Add translations via 'Accept-Language'
+- [ ] Add translations via 'Accept-Language'
 - [ ] Test translation support
 - [ ] Advance Sandbox implementation
 - [ ] Implement rate limit status
@@ -344,7 +288,3 @@ TODOs
 - [ ] Checks for scopes
 - [ ] Checks for auth methods
 - [ ] Leverage Webhooks
-
-License
--------
-MIT
