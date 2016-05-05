@@ -273,7 +273,7 @@ You can execute all existing tests using script ``test/allTests.js``. These test
 npm test
 ```
 
-In case you would like to contribute to this project, please ensure that all the tests pass before you create a PR. We have a strict code style and code coverage (>= 95%) requirements.
+In case you would like to contribute to this project, please ensure that all the tests pass before you create a PR. We have strict code style and code coverage (>= 95%) requirements.
 
 Version History
 -------
