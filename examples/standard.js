@@ -1,12 +1,12 @@
 var Uber = require('node-uber');
 
-
 var uberClient = new Uber({
   client_id: 'YOUR CLIENT ID',
   client_secret: 'YOUR CLIENT SECRET',
   server_token: 'YOUR SERVER TOKEN',
   redirect_uri: 'http://localhost/callback',
-  name: 'nodejs uber wrapper'
+  name: 'nodejs uber wrapper',
+  language: 'en_US' // optional, defaults to en_US
 });
 
 uberClient.authorization({ authorization_code: 'SOME AUTH CODE' },
