@@ -267,11 +267,13 @@ uber.user.getProfile(function (err, res) {
 
 Test
 ------------
-Run all existing test using script ``test/allTests.js``. These tests include linting, code coverage, and unit tests.
+You can execute all existing tests using script ``test/allTests.js``. These tests include linting, code coverage, and unit tests.
 
 ```sh
 npm test
 ```
+
+In case you would like to contribute to this project, please ensure that all the tests pass before you create a PR. We have a strict code style and code coverage (>= 95%) requirements.
 
 Version History
 -------
