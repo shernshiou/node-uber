@@ -291,6 +291,9 @@ uber.requests.create({
 ```
 
 #### [Get current request](https://developer.uber.com/docs/v1-requests-current)
+
+> **Note**: By default, only details about trips your app requested will be returned. This endpoint can be used with the scope ``all_trips`` to get all trips irrespective of which application initiated them.
+
 ```javascript
 uber.requests.getCurrent(callback);
 ```
@@ -355,6 +358,85 @@ uber.requests.getEstimates({
   "end_longitude": -122.417546
 }, function (err, res) {
   if (err) console.error(err);
+  else console.log(res);
+});
+```
+
+#### [Get request by request_id](https://developer.uber.com/docs/v1-requests-details)
+```javascript
+uber.requests.getByID(request_id, callback);
+```
+
+##### Example
+```javascript
+uber.requests.getByID('17cb78a7-b672-4d34-a288-a6c6e44d5315', function (err, res) {
+  if (err) console.log(err);
+  else console.log(res);
+});
+```
+
+#### [Update request by request_id](https://developer.uber.com/docs/v1-requests-patch)
+```javascript
+uber.requests.updateByID(request_id, parameter, callback);
+```
+
+##### Parameter
+* JS Object with attributes to be updated (only destination-related attributes enabled)
+
+
+##### Example
+```javascript
+uber.requests.updateByID('17cb78a7-b672-4d34-a288-a6c6e44d5315', {
+  "end_latitude": 37.775393,
+  "end_longitude": -122.417546
+}, function (err, res) {
+  if (err) console.error(err);
+  else console.log(res);
+});
+```
+
+#### [Delete request by request_id](https://developer.uber.com/docs/v1-requests-cancel)
+```javascript
+uber.requests.deleteByID(request_id, callback);
+```
+
+##### Example
+```javascript
+uber.requests.deleteByID('17cb78a7-b672-4d34-a288-a6c6e44d5315', function (err, res) {
+  if (err) console.log(err);
+  else console.log(res);
+});
+```
+
+#### [Get request map by request_id](https://developer.uber.com/docs/v1-requests-map)
+```javascript
+uber.requests.getMapByID(request_id, callback);
+```
+
+Unless the referenced request is in status ``accepted``, a 404 error will be returned.
+
+##### Example
+```javascript
+uber.requests.getMapByID('17cb78a7-b672-4d34-a288-a6c6e44d5315', function (err, res) {
+  if (err) console.log(err);
+  else console.log(res);
+});
+```
+
+#### [Get request receipt by request_id](https://developer.uber.com/docs/v1-requests-receipt)
+
+> **Note**: This endpoint requires OAuth authentication with the scope ``request_receipt``
+
+```javascript
+uber.requests.getReceiptByID(request_id, callback);
+```
+
+The referenced request must be in status ``completed``.
+
+##### Example
+```javascript
+uber.requests.getReceiptByID('17cb78a7-b672-4d34-a288-a6c6e44d5315', function (err, res) {
+  if (err) console.log(err);
   else console.log(res);
 });
 ```
