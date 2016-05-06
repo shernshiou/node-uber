@@ -126,7 +126,7 @@ Method Overview
 | GET         	| /v1/requests/{request_id}/map     	| OAuth                  	| request (privileged)                            	| requests.getMapByID               	|
 | GET         	| /v1/requests/{request_id}/receipt 	| OAuth                  	| request_receipt (privileged)                    	| requests.getReceiptByID           	|
 | GET         	| /v1/places/{place_id}             	| OAuth                  	| places                                          	| places.getHome and places.getWork 	|
-| PUT         	| /v1/places/{place_id}             	| OAuth                  	| places                                          	| places.updateByID                 	|
+| PUT         	| /v1/places/{place_id}             	| OAuth                  	| places                                          	| places.updateHome and places.updateWork                 	|
 | GET         	| v1/payment-methods                	| OAuth                  	| request (privileged)                            	| payment.getMethods                	|
 | POST        	| /v1/reminders                     	| server_token           	|                                                 	| reminders.create                  	|
 | GET         	| /v1/reminders/{reminder_id}       	| server_token           	|                                                 	| reminders.getByID                 	|
@@ -444,6 +444,33 @@ uber.requests.getReceiptByID('17cb78a7-b672-4d34-a288-a6c6e44d5315', function (e
 ### /places
 The places endpoint can be accessed ONLY with an OAuth ``access_token`` authorized with the ``places`` scope.
 
+> **Note**: As of right now, only two place_ids are allowed: ``home`` and ``work``.
+
+#### [Get home address](https://developer.uber.com/docs/v1-places-get)
+```javascript
+uber.places.getHome(callback);
+```
+
+##### Example
+```javascript
+uber.places.getHome(function (err, res) {
+  if (err) console.log(err);
+  else console.log(res);
+});
+```
+
+#### [Get work address](https://developer.uber.com/docs/v1-places-get)
+```javascript
+uber.places.getWork(callback);
+```
+
+##### Example
+```javascript
+uber.places.getWork(function (err, res) {
+  if (err) console.log(err);
+  else console.log(res);
+});
+```
 
 ### /payment-methods
 The payment-methods endpoint can be accessed ONLY with an OAuth ``access_token`` authorized with the ``request`` scope.

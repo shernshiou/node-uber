@@ -32,7 +32,7 @@ describe('Home', function() {
     });
 
     it('should return error for missing access token', function(done) {
-        uber.places.updateByID('home', '685 Market St, San Francisco, CA 94103, USA', function(err, res) {
+        uber.places.updateHome('685 Market St, San Francisco, CA 94103, USA', function(err, res) {
             err.message.should.equal('Invalid access token');
             done();
         });
@@ -134,7 +134,7 @@ describe('By Place ID', function() {
             },
             function(err, accessToken, refreshToken) {
                 should.not.exist(err);
-                uber.places.updateByID('home', '685 Market St, San Francisco, CA 94103, USA', function(err, res) {
+                uber.places.updateHome('685 Market St, San Francisco, CA 94103, USA', function(err, res) {
                     should.not.exist(err);
                     res.should.deep.equal(placesHomeReply);
                     done();
@@ -142,15 +142,15 @@ describe('By Place ID', function() {
             });
     });
 
-    it('should be able to update the home address', function(done) {
+    it('should be able to update the work address', function(done) {
         uber.authorization({
                 authorization_code: 'x8Y6dF2qA6iKaTKlgzVfFvyYoNrlkp'
             },
             function(err, accessToken, refreshToken) {
                 should.not.exist(err);
-                uber.places.updateByID('home', '685 Market St, San Francisco, CA 94103, USA', function(err, res) {
+                uber.places.updateWork('1455 Market St, San Francisco, CA 94103, USA', function(err, res) {
                     should.not.exist(err);
-                    res.should.deep.equal(placesHomeReply);
+                    res.should.deep.equal(placesWorkReply);
                     done();
                 });
             });
@@ -214,7 +214,7 @@ describe('By Place ID', function() {
             },
             function(err, accessToken, refreshToken) {
                 should.not.exist(err);
-                uber.places.updateByID('home', null, function(err, res) {
+                uber.places.updateHome(null, function(err, res) {
                     err.message.should.equal('Invalid address');
                     done();
                 });
