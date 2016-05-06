@@ -472,9 +472,47 @@ uber.places.getWork(function (err, res) {
 });
 ```
 
+#### [Update home address](https://developer.uber.com/docs/v1-places-put)
+```javascript
+uber.places.updateHome(address, callback);
+```
+
+##### Example
+```javascript
+uber.places.updateHome('685 Market St, San Francisco, CA 94103, USA', function (err, res) {
+  if (err) console.log(err);
+  else console.log(res);
+});
+```
+
+#### [Update work address](https://developer.uber.com/docs/v1-places-put)
+```javascript
+uber.places.updateWork(address, callback);
+```
+
+##### Example
+```javascript
+uber.places.updateWork('1455 Market St, San Francisco, CA 94103, USA', function (err, res) {
+  if (err) console.log(err);
+  else console.log(res);
+});
+```
+
 ### /payment-methods
 The payment-methods endpoint can be accessed ONLY with an OAuth ``access_token`` authorized with the ``request`` scope.
 
+#### [Get available payment methods](https://developer.uber.com/docs/v1-payment-methods)
+```javascript
+uber.payment.getMethods(callback);
+```
+
+##### Example
+```javascript
+uber.payment.getMethods(function (err, res) {
+  if (err) console.log(err);
+  else console.log(res);
+});
+```
 
 ### /reminders
 The reminders endpoint can be accessed ONLY with a ``server_token``. No OAuth authorization is needed.
