@@ -209,7 +209,7 @@ The estimates endpoint can be accessed either with an OAuth ``access_token`` or 
 uber.estimates.getPriceForRoute(start_latitude, start_longitude, end_latitude, end_longitude [, seats], callback);
 ```
 
-``seats`` default to 2, which is also the maximum value for this parameter.
+``seats`` defaults to 2, which is also the maximum value for this parameter.
 
 ##### Example
 ```javascript
@@ -264,6 +264,111 @@ uber.user.getProfile(function (err, res) {
   else console.log(res);
 });
 ```
+
+### /requests
+The requests endpoint can be accessed ONLY with an OAuth ``access_token`` authorized with the ``request`` scope.
+
+#### [Create new request](https://developer.uber.com/docs/v1-requests)
+```javascript
+uber.requests.create(parameter, callback);
+```
+
+##### Parameter
+* JS Object with at least the following attributes: ``start_latitude`` & ``start_longitude`` OR ``start_place_id``
+
+##### Example
+```javascript
+uber.requests.create({
+  "product_id": "a1111c8c-c720-46c3-8534-2fcdd730040d",
+  "start_latitude": 37.761492,
+  "start_longitude": -122.423941,
+  "end_latitude": 37.775393,
+  "end_longitude": -122.417546
+}, function (err, res) {
+  if (err) console.error(err);
+  else console.log(res);
+});
+```
+
+#### [Get current request](https://developer.uber.com/docs/v1-requests-current)
+```javascript
+uber.requests.getCurrent(callback);
+```
+
+##### Example
+```javascript
+uber.requests.getCurrent(function (err, res) {
+  if (err) console.log(err);
+  else console.log(res);
+});
+```
+
+#### [Update current request](https://developer.uber.com/docs/v1-requests-current-patch)
+```javascript
+uber.requests.updateCurrent(parameter, callback);
+```
+
+##### Parameter
+* JS Object with attributes to be updated (only destination-related attributes enabled)
+
+
+##### Example
+```javascript
+uber.requests.updateCurrent({
+  "end_latitude": 37.775393,
+  "end_longitude": -122.417546
+}, function (err, res) {
+  if (err) console.error(err);
+  else console.log(res);
+});
+```
+
+#### [Delete current request](https://developer.uber.com/docs/v1-requests-current-delete)
+```javascript
+uber.requests.deleteCurrent(callback);
+```
+
+##### Example
+```javascript
+uber.requests.deleteCurrent(function (err, res) {
+  if (err) console.log(err);
+  else console.log(res);
+});
+```
+
+#### [Get estimates](https://developer.uber.com/docs/v1-requests-estimate)
+```javascript
+uber.requests.getEstimates(parameter, callback);
+```
+
+##### Parameter
+* JS Object with at least the following attributes: ``start_latitude`` & ``start_longitude`` OR ``start_place_id``
+
+
+##### Example
+```javascript
+uber.requests.getEstimates({
+  "product_id": "a1111c8c-c720-46c3-8534-2fcdd730040d",
+  "start_latitude": 37.761492,
+  "start_longitude": -122.423941,
+  "end_latitude": 37.775393,
+  "end_longitude": -122.417546
+}, function (err, res) {
+  if (err) console.error(err);
+  else console.log(res);
+});
+```
+
+### /places
+The places endpoint can be accessed ONLY with an OAuth ``access_token`` authorized with the ``places`` scope.
+
+
+### /payment-methods
+The payment-methods endpoint can be accessed ONLY with an OAuth ``access_token`` authorized with the ``request`` scope.
+
+
+### /reminders
+The reminders endpoint can be accessed ONLY with a ``server_token``. No OAuth authorization is needed.
 
 Test
 ------------
