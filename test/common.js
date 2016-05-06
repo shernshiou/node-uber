@@ -10,7 +10,8 @@ var key = {
     "client_secret": "CLIENTSECRETCLIENTSECRETCLIENTSECRETCLIE",
     "server_token": "SERVERTOKENSERVERTOKENSERVERTOKENSERVERT",
     "redirect_uri": "http://localhost/callback",
-    "name": "nodejs uber wrapper"
+    "name": "nodejs uber wrapper",
+    "language": "en_US"
 };
 
 var uber = new Uber(key);

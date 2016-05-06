@@ -38,6 +38,8 @@ var uber = new Uber({
 });
 ```
 
+> **Note**: For all available ``language`` options check out the [Localization page of the API](https://developer.uber.com/docs/localization).
+
 Authenticating
 -----
 To make HTTP calls, you need to create an authenticated session with the API. User-specific operations require you to use a OAuth 2 bearer token with specific [scopes](https://developer.uber.com/docs/scopes). Jump to the [method overview section](https://github.com/shernshiou/node-uber#method-overview) to identify required scopes for methods. General operations can use a simple server-token authentication.
@@ -611,8 +613,7 @@ The change-log can be found in the [Wiki: Version History](https://github.com/sh
 
 TODOs
 ------------
-- [ ] Add translations via 'Accept-Language'
-- [ ] Test translation support
+- [ ] Test translation support using ``Content-Language``
 - [ ] Advance Sandbox implementation
 - [ ] Implement rate limit status
 - [ ] Leverage Surge Pricing responses

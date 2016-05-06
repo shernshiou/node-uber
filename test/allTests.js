@@ -6,6 +6,7 @@ function importTest(name, path) {
 
 describe("Running all tests ...", function() {
     importTest("Uber client general tests", './general');
+    importTest("Localization tests", './localization');
     importTest("OAuth2 authorization methods", './oauth');
     importTest("/Estimates", './estimates');
     importTest("/Payment-Methods", './payment-methods');

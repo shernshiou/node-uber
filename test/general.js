@@ -8,11 +8,13 @@ it('should load the key from a key.json', function(done) {
     key.should.have.property('server_token');
     key.should.have.property('redirect_uri');
     key.should.have.property('name');
+    key.should.have.property('language');
     done();
 });
 
 it('should initiate Uber client with the key', function(done) {
     uber.should.have.property('defaults');
+    uber.defaults.language.should.equal(key.language);
     uber.defaults.client_id.should.equal(key.client_id);
     uber.defaults.client_secret.should.equal(key.client_secret);
     uber.defaults.server_token.should.equal(key.server_token);
