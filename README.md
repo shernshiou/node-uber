@@ -251,7 +251,7 @@ uber.user.getHistory(0, 5, function(err, res) {
 ```
 
 ### /me
-The me endpoint can be accessed ONLY with an OAuth ``access_token`` authorized with either the ``profile`` scope.
+The me endpoint can be accessed ONLY with an OAuth ``access_token`` authorized with the ``profile`` scope.
 #### [Get user profile](https://developer.uber.com/docs/v1-me)
 ```javascript
 uber.user.getProfile([access_token], callback);
