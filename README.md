@@ -517,6 +517,84 @@ uber.payment.getMethods(function (err, res) {
 ### /reminders
 The reminders endpoint can be accessed ONLY with a ``server_token``. No OAuth authorization is needed.
 
+#### [Create new reminder](https://developer.uber.com/docs/v1-reminders-post)
+```javascript
+uber.reminders.create(parameter, callback);
+```
+
+##### Parameter
+* JS Object with at least the following attributes: ``reminder_time``, ``phone_number``, ``event`` & ``event.time``
+
+##### Example
+```javascript
+uber.reminders.create({
+  reminder_time: 1429294463,
+  phone_number: 16508420126,
+  event: {
+    time: 1429294463,
+    name: 'Frisbee with friends',
+    location: 'Dolores Park',
+    latitude: 37.759773,
+    longitude: -122.427063,
+    product_id: 'a1111c8c-c720-46c3-8534-2fcdd730040d'
+  }
+}, function (err, res) {
+  if (err) console.error(err);
+  else console.log(res);
+});
+```
+
+#### [Get reminder by reminder_id](https://developer.uber.com/docs/v1-reminders-get)
+```javascript
+uber.reminders.getByID(reminder_id, callback);
+```
+
+##### Example
+```javascript
+uber.reminders.getByID('def-456', function (err, res) {
+  if (err) console.log(err);
+  else console.log(res);
+});
+```
+
+#### [Update reminder by reminder_id](https://developer.uber.com/docs/v1-reminders-patch)
+```javascript
+uber.reminders.updateByID(reminder_id, parameter, callback);
+```
+
+##### Parameter
+* JS Object with attributes to be updated
+
+##### Example
+```javascript
+uber.reminders.updateByID('def-456', {
+  event: {
+    time: 1429294463,
+    name: 'Frisbee with friends',
+    location: 'Dolores Park',
+    latitude: 37.759773,
+    longitude: -122.427063,
+    product_id: 'a1111c8c-c720-46c3-8534-2fcdd730040d'
+  }
+}, function (err, res) {
+  if (err) console.error(err);
+  else console.log(res);
+});
+```
+
+#### [Delete reminder by reminder_id](https://developer.uber.com/docs/v1-reminders-delete)
+```javascript
+uber.reminders.deleteByID(reminder_id, callback);
+```
+
+##### Example
+```javascript
+uber.reminders.deleteByID('def-456', function (err, res) {
+  if (err) console.log(err);
+  else console.log(res);
+});
+```
+
 Test
 ------------
 You can execute all existing tests using script ``test/allTests.js``. These tests include linting, code coverage, and unit tests.
@@ -533,7 +611,6 @@ The change-log can be found in the [Wiki: Version History](https://github.com/sh
 
 TODOs
 ------------
-- [ ] Update README to cover all modified and new methods
 - [ ] Add translations via 'Accept-Language'
 - [ ] Test translation support
 - [ ] Advance Sandbox implementation
