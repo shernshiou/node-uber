@@ -53,6 +53,7 @@ describe('Requests Resource', function() {
     });
 
     it('should return error for missing authentication for a new request', function(done) {
+        uber.access_token = '';
         uber.requests.requestRide({
             "product_id": "a1111c8c-c720-46c3-8534-2fcdd730040d",
             "start_latitude": 37.761492,

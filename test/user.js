@@ -98,9 +98,8 @@ var common = require("./common"),
         before(function() {
             nock('https://login.uber.com')
                 .post('/oauth/token')
-                .times(4)
+                .times(5)
                 .reply(200, tokenResponse);
-
             nock('https://api.uber.com')
                 .get(function(uri) {
                     var parts = uri.split('/v1.2/history?access_token=EE1IDxytP04tJ767GbjH7ED9PpGmYvL&offset=0&limit=');

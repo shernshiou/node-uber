@@ -16,10 +16,15 @@ var key = {
 
 var uber = new Uber(key);
 
+// uber instance for Sandbox mode
+key.sandbox = true;
+var uber_sandbox = new Uber(key);
+
 exports.chai = chai;
 exports.nock = nock;
 exports.request = request;
 exports.should = should;
 exports.qs = qs;
 exports.uber = uber;
+exports.uber_sandbox = uber_sandbox;
 exports.key = key;

@@ -34,7 +34,8 @@ var uber = new Uber({
   server_token: 'SERVER_TOKEN',
   redirect_uri: 'REDIRECT URL',
   name: 'APP_NAME',
-  language: 'en_US' // optional, defaults to en_US
+  language: 'en_US', // optional, defaults to en_US
+  sandbox: true // optional, default to false
 });
 ```
 
@@ -124,6 +125,7 @@ Method Overview
 | POST        	| /v1/requests/estimate             	| OAuth                  	| request (privileged)                            	| requests.getEstimates             	|
 | GET         	| /v1/requests/{request_id}         	| OAuth                  	| request (privileged)                            	| requests.getByID                  	|
 | PATCH       	| /v1/requests/{request_id}         	| OAuth                  	| request (privileged)                            	| requests.updateByID               	|
+| PUT         	| /v1/requests/{request_id}         	| OAuth                  	| request (privileged) in Sandbox mode            	| requests.setStatusByID             	|
 | DELETE      	| /v1/requests/{request_id}         	| OAuth                  	| request (privileged)                            	| requests.deleteByID               	|
 | GET         	| /v1/requests/{request_id}/map     	| OAuth                  	| request (privileged)                            	| requests.getMapByID               	|
 | GET         	| /v1/requests/{request_id}/receipt 	| OAuth                  	| request_receipt (privileged)                    	| requests.getReceiptByID           	|
@@ -397,6 +399,21 @@ uber.requests.updateByID('17cb78a7-b672-4d34-a288-a6c6e44d5315', {
 });
 ```
 
+#### [Set request status by request_id](https://developer.uber.com/docs/sandbox)
+```javascript
+uber.requests.setStatusByID(request_id, status, callback);
+```
+
+> **Note**: This method is only allowed in Sandbox mode. Check out the [documentation](https://developer.uber.com/docs/sandbox) for valid status properties.
+
+##### Example
+```javascript
+uber.requests.setStatusByID('17cb78a7-b672-4d34-a288-a6c6e44d5315', 'accepted', function (err, res) {
+  if (err) console.error(err);
+  else console.log(res);
+});
+```
+
 #### [Delete request by request_id](https://developer.uber.com/docs/v1-requests-cancel)
 ```javascript
 uber.requests.deleteByID(request_id, callback);
@@ -613,10 +630,17 @@ The change-log can be found in the [Wiki: Version History](https://github.com/sh
 
 TODOs
 ------------
+- [ ] Add node-geocoder to enable using street addresses
 - [ ] Test translation support using ``Content-Language``
+- [ ] Promisify using bluebird
+- [ ] Enable session handling (https://www.matthewtyler.io/handling-oauth2-with-node-js-and-angular-js-passport-to-the-rescue/)
 - [ ] Advance Sandbox implementation
 - [ ] Implement rate limit status
 - [ ] Leverage Surge Pricing responses
+- [ ] Implement access_token refresh
 - [ ] Checks for scopes
 - [ ] Checks for auth methods
 - [ ] Leverage Webhooks
+- [ ] Learn from other Uber SDKs
+- [ ] Check UberPOOL functionality (https://medium.com/uber-developers/uberpool-now-available-in-the-uber-api-35466f42a8b5#.59lmvsgje)
+  - [ ] UberPOOL requests have certain additional requirements: https://developer.uber.com/docs/tutorials-rides-api#section-uberpool

@@ -1,7 +1,8 @@
 var common = require("./common"),
     nock = common.nock,
     should = common.should,
-    uber = common.uber;
+    uber = common.uber,
+    uber_sandbox = common.uber_sandbox;
 
 var tokenResponse = {
         "access_token": "EE1IDxytP04tJ767GbjH7ED9PpGmYvL",
@@ -271,6 +272,11 @@ describe('By Request ID', function() {
             .patch('/v1/requests/17cb78a7-b672-4d34-a288-a6c6e44d5315')
             .times(2)
             .reply(204);
+        nock('https://sandbox-api.uber.com/')
+            .put('/v1/requests/17cb78a7-b672-4d34-a288-a6c6e44d5315', {
+                status: 'accepted'
+            })
+            .reply(204);
         nock('https://api.uber.com')
             .delete('/v1/requests/17cb78a7-b672-4d34-a288-a6c6e44d5315')
             .reply(204);
@@ -351,6 +357,61 @@ describe('By Request ID', function() {
     it('should return error in case of missing parameters for patch', function(done) {
         uber.requests.updateByID('17cb78a7-b672-4d34-a288-a6c6e44d5315', null, function(err, res) {
             err.message.should.equal('Invalid parameters');
+            done();
+        });
+    });
+
+    it('should return error for putting an existing request without authorization', function(done) {
+        uber_sandbox.access_token = '';
+        uber_sandbox.requests.setStatusByID('17cb78a7-b672-4d34-a288-a6c6e44d5315', 'accepted', function(err, res) {
+            err.message.should.equal('Invalid access token');
+            done();
+        });
+    });
+
+    it('should return error for putting an existing request in production mode', function(done) {
+        uber.authorization({
+                authorization_code: 'x8Y6dF2qA6iKaTKlgzVfFvyYoNrlkp'
+            },
+            function(err, accessToken, refreshToken) {
+                should.not.exist(err);
+                uber.requests.setStatusByID('17cb78a7-b672-4d34-a288-a6c6e44d5315', 'accepted', function(err, res) {
+                    err.message.should.equal('PUT method for requests is only allowed in Sandbox mode');
+                    done();
+                });
+            });
+    });
+
+    it('should accept an existing request by ID after authorization', function(done) {
+        uber_sandbox.authorization({
+                authorization_code: 'x8Y6dF2qA6iKaTKlgzVfFvyYoNrlkp'
+            },
+            function(err, accessToken, refreshToken) {
+                should.not.exist(err);
+                uber_sandbox.requests.setStatusByID('17cb78a7-b672-4d34-a288-a6c6e44d5315', 'accepted', function(err, res) {
+                    should.not.exist(err);
+                    done();
+                });
+            });
+    });
+
+    it('should return error in case of missing request ID for put', function(done) {
+        uber_sandbox.requests.setStatusByID(null, 'accepted', function(err, res) {
+            err.message.should.equal('Invalid request_id');
+            done();
+        });
+    });
+
+    it('should return error in case of invalid request ID for put', function(done) {
+        uber_sandbox.requests.setStatusByID('abcd', 'accepted', function(err, res) {
+            should.exist(err);
+            done();
+        });
+    });
+
+    it('should return error in case of missing parameters for put', function(done) {
+        uber_sandbox.requests.setStatusByID('17cb78a7-b672-4d34-a288-a6c6e44d5315', null, function(err, res) {
+            err.message.should.equal('Invalid status');
             done();
         });
     });
