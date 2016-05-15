@@ -35,7 +35,7 @@ var uber = new Uber({
   redirect_uri: 'REDIRECT URL',
   name: 'APP_NAME',
   language: 'en_US', // optional, defaults to en_US
-  sandbox: true // optional, default to false
+  sandbox: true // optional, defaults to false
 });
 ```
 
