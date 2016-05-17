@@ -75,8 +75,15 @@ describe('Price', function() {
             });
     });
 
+    it('should return error if start point lat and lon are invalid', function(done) {
+        uber.estimates.getPriceForRoute(null, null, 3.1357, 101.6880, function(err, res) {
+            err.message.should.equal('Invalid starting point latitude & longitude');
+            done();
+        });
+    });
+
     it('should return error if end point lat and lon are invalid', function(done) {
-        uber.estimates.getPriceForRoute(3.1357, 101.6880, -91.1357, 181.6880, function(err, res) {
+        uber.estimates.getPriceForRoute(3.1357, 101.6880, null, null, function(err, res) {
             err.message.should.equal('Invalid ending point latitude & longitude');
             done();
         });
