@@ -32,6 +32,7 @@ describe('Home', function() {
     });
 
     it('should return error for missing access token', function(done) {
+        uber.clearTokens();
         uber.places.updateHome('685 Market St, San Francisco, CA 94103, USA', function(err, res) {
             err.message.should.equal('Invalid access token');
             done();
@@ -53,17 +54,12 @@ describe('Home', function() {
     });
 
     it('should return invalid access token error when no token found', function(done) {
-        uber.authorization({
-                authorization_code: 'x8Y6dF2qA6iKaTKlgzVfFvyYoNrlkp'
-            },
-            function(err, accessToken, refreshToken) {
-                should.not.exist(err);
-                uber.access_token = '';
-                uber.places.getHome(function(err, res) {
-                    err.message.should.equal('Invalid access token');
-                    done();
-                });
-            });
+
+        uber.clearTokens();
+        uber.places.getHome(function(err, res) {
+            err.message.should.equal('Invalid access token');
+            done();
+        });
     });
 
 });
@@ -94,17 +90,11 @@ describe('Work', function() {
     });
 
     it('should return invalid access token error when no token found', function(done) {
-        uber.authorization({
-                authorization_code: 'x8Y6dF2qA6iKaTKlgzVfFvyYoNrlkp'
-            },
-            function(err, accessToken, refreshToken) {
-                should.not.exist(err);
-                uber.access_token = '';
-                uber.places.getWork(function(err, res) {
-                    err.message.should.equal('Invalid access token');
-                    done();
-                });
-            });
+        uber.clearTokens();
+        uber.places.getWork(function(err, res) {
+            err.message.should.equal('Invalid access token');
+            done();
+        });
     });
 });
 

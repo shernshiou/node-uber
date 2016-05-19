@@ -57,15 +57,9 @@ it('should list the payment methods after authentication', function(done) {
 });
 
 it('should return invalid access token error when no token found', function(done) {
-    uber.authorization({
-            authorization_code: 'x8Y6dF2qA6iKaTKlgzVfFvyYoNrlkp'
-        },
-        function(err, accessToken, refreshToken) {
-            should.not.exist(err);
-            uber.access_token = '';
-            uber.payment.getMethods(function(err, res) {
-                err.message.should.equal('Invalid access token');
-                done();
-            });
-        });
+    uber.clearTokens();
+    uber.payment.getMethods(function(err, res) {
+        err.message.should.equal('Invalid access token');
+        done();
+    });
 });

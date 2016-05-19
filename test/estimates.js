@@ -3,7 +3,14 @@ var common = require("./common"),
     should = common.should,
     uber = common.uber;
 
-var priceReply = {
+var tokenResponse = {
+        "access_token": "EE1IDxytP04tJ767GbjH7ED9PpGmYvL",
+        "token_type": "Bearer",
+        "expires_in": 2592000,
+        "refresh_token": "Zx8fJ8qdSRRseIVlsGgtgQ4wnZBehr",
+        "scope": "profile history"
+    },
+    priceReply = {
         "prices": [{
             "product_id": "08f17084-23fd-4103-aa3e-9b660223934b",
             "currency_code": "USD",
@@ -64,9 +71,23 @@ describe('Price', function() {
             .get('/v1/estimates/price?server_token=SERVERTOKENSERVERTOKENSERVERTOKENSERVERT&' +
                 'start_latitude=3.1357&start_longitude=101.688&end_latitude=3.0833&end_longitude=101.65&seat_count=2')
             .reply(200, priceReply);
+        nock('https://api.uber.com')
+            .get('/v1/estimates/price?access_token=EE1IDxytP04tJ767GbjH7ED9PpGmYvL&' +
+                'start_latitude=3.1357&start_longitude=101.688&end_latitude=3.0833&end_longitude=101.65&seat_count=2')
+            .reply(200, priceReply);
     });
 
     it('should list all the price estimates from server', function(done) {
+        uber.estimates.getPriceForRoute(3.1357, 101.6880, 3.0833, 101.6500,
+            function(err, res) {
+                should.not.exist(err);
+                res.should.deep.equal(priceReply);
+                done();
+            });
+    });
+
+    it('should list all the price estimates from server without access token', function(done) {
+        uber.clearTokens();
         uber.estimates.getPriceForRoute(3.1357, 101.6880, 3.0833, 101.6500,
             function(err, res) {
                 should.not.exist(err);
@@ -99,6 +120,10 @@ describe('Price', function() {
 
 describe('Time', function() {
     before(function() {
+        nock('https://login.uber.com')
+            .post('/oauth/token')
+            .times(3)
+            .reply(200, tokenResponse);
         nock('https://api.uber.com')
             .get(function(uri) {
                 return uri.indexOf('v1/estimates/time?server_token=SERVERTOKENSERVERTOKENSERVERTOKENSERVERT&' +
@@ -106,9 +131,31 @@ describe('Time', function() {
             })
             .times(3)
             .reply(200, timeReply);
+        nock('https://api.uber.com')
+            .get(function(uri) {
+                return uri.indexOf('v1/estimates/time?access_token=EE1IDxytP04tJ767GbjH7ED9PpGmYvL&' +
+                    'start_latitude=3.1357&start_longitude=101.688') >= 0;
+            })
+            .reply(200, timeReply);
     });
 
     it('should list all the price estimates for location', function(done) {
+        uber.authorization({
+                authorization_code: 'x8Y6dF2qA6iKaTKlgzVfFvyYoNrlkp'
+            },
+            function(err, accessToken, refreshToken) {
+                should.not.exist(err);
+                uber.estimates.getETAForLocation(3.1357, 101.6880,
+                    function(err, res) {
+                        should.not.exist(err);
+                        res.should.deep.equal(timeReply);
+                        done();
+                    });
+            });
+    });
+
+    it('should list all the price estimates for location without access token', function(done) {
+        uber.clearTokens();
         uber.estimates.getETAForLocation(3.1357, 101.6880,
             function(err, res) {
                 should.not.exist(err);
@@ -126,7 +173,7 @@ describe('Time', function() {
             });
     });
 
-    it('should list all the price estimates for empty product and location', function(done) {
+    it('should list all the price estimates for location but empty product', function(done) {
         uber.estimates.getETAForLocation(3.1357, 101.6880, '',
             function(err, res) {
                 should.not.exist(err);

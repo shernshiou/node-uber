@@ -55,7 +55,8 @@ describe('List', function() {
             .reply(200, productReply);
     });
 
-    it('should list down all the product types', function(done) {
+    it('should list all the product types', function(done) {
+        uber.clearTokens();
         uber.products.getAllForLocation(3.1357, 101.6880, function(err, res) {
             should.not.exist(err);
             res.should.deep.equal(productReply);
@@ -78,7 +79,7 @@ describe('Details', function() {
             .reply(200, uberBLACKReply);
     });
 
-    it('should list down all the product types', function(done) {
+    it('should list all the product types', function(done) {
         uber.products.getByID('d4abaae7-f4d6-4152-91cc-77523e8165a4', function(err, res) {
             should.not.exist(err);
             res.should.deep.equal(uberBLACKReply);

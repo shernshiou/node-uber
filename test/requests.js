@@ -139,7 +139,7 @@ describe('Current Request', function() {
     });
 
     it('should return error for new request without authorization', function(done) {
-        uber.access_token = '';
+        uber.clearTokens();
         uber.requests.create({
             "product_id": "a1111c8c-c720-46c3-8534-2fcdd730040d",
             "start_latitude": 37.761492,
@@ -180,7 +180,7 @@ describe('Current Request', function() {
     });
 
     it('should return error for getting current request without authorization', function(done) {
-        uber.access_token = '';
+        uber.clearTokens();
         uber.requests.getCurrent(function(err, res) {
             err.message.should.equal('Invalid access token');
             done();
@@ -283,7 +283,7 @@ describe('By Request ID', function() {
     });
 
     it('should return error for getting request by ID without authorization', function(done) {
-        uber.access_token = '';
+        uber.clearTokens();
         uber.requests.getByID('17cb78a7-b672-4d34-a288-a6c6e44d5315', function(err, res) {
             err.message.should.equal('Invalid access token');
             done();
@@ -320,7 +320,7 @@ describe('By Request ID', function() {
     });
 
     it('should return error for patching an existing request without authorization', function(done) {
-        uber.access_token = '';
+        uber.clearTokens();
         uber.requests.updateByID('17cb78a7-b672-4d34-a288-a6c6e44d5315', {}, function(err, res) {
             err.message.should.equal('Invalid access token');
             done();
@@ -362,7 +362,7 @@ describe('By Request ID', function() {
     });
 
     it('should return error for putting an existing request without authorization', function(done) {
-        uber_sandbox.access_token = '';
+        uber_sandbox.clearTokens();
         uber_sandbox.requests.setStatusByID('17cb78a7-b672-4d34-a288-a6c6e44d5315', 'accepted', function(err, res) {
             err.message.should.equal('Invalid access token');
             done();
@@ -417,7 +417,7 @@ describe('By Request ID', function() {
     });
 
     it('should return error for deleting an existing request by ID without authorization', function(done) {
-        uber.access_token = ''
+        uber.clearTokens();
         uber.requests.deleteByID('17cb78a7-b672-4d34-a288-a6c6e44d5315', function(err, res) {
             err.message.should.equal('Invalid access token');
             done();
@@ -459,7 +459,7 @@ describe('By Request ID', function() {
         });
 
         it('should return error for get map without authorization', function(done) {
-            uber.access_token = ''
+            uber.clearTokens();
             uber.requests.getMapByID('17cb78a7-b672-4d34-a288-a6c6e44d5315', function(err, res) {
                 err.message.should.equal('Invalid access token');
                 done();
@@ -488,7 +488,7 @@ describe('By Request ID', function() {
         });
 
         it('should return error for get receipt without authorization', function(done) {
-            uber.access_token = '';
+            uber.clearTokens();
             uber.requests.getReceiptByID('17cb78a7-b672-4d34-a288-a6c6e44d5315', function(err, res) {
                 err.message.should.equal('Invalid access token');
                 done();

@@ -53,7 +53,7 @@ describe('Requests Resource', function() {
     });
 
     it('should return error for missing authentication for a new request', function(done) {
-        uber.access_token = '';
+        uber.clearTokens();
         uber.requests.requestRide({
             "product_id": "a1111c8c-c720-46c3-8534-2fcdd730040d",
             "start_latitude": 37.761492,
@@ -155,7 +155,8 @@ describe('Products Resource', function() {
             .reply(200, productReply);
     });
 
-    it('should list down all the product types', function(done) {
+    it('should list all the product types', function(done) {
+        uber.clearTokens();
         uber.products.list({
             latitude: 3.1357,
             longitude: 101.6880
@@ -233,7 +234,7 @@ describe('Payment Resource', function() {
             },
             function(err, accessToken, refreshToken) {
                 should.not.exist(err);
-                uber.access_token = '';
+                uber.clearTokens();
                 uber.payment.methods(function(err, res) {
                     err.message.should.equal('Invalid access token');
                     done();
@@ -289,7 +290,7 @@ describe('Places Resource', function() {
                 },
                 function(err, accessToken, refreshToken) {
                     should.not.exist(err);
-                    uber.access_token = '';
+                    uber.clearTokens();
                     uber.places.home(function(err, res) {
                         err.message.should.equal('Invalid access token');
                         done();
@@ -331,7 +332,7 @@ describe('Places Resource', function() {
                 },
                 function(err, accessToken, refreshToken) {
                     should.not.exist(err);
-                    uber.access_token = '';
+                    uber.clearTokens();
                     uber.places.home(function(err, res) {
                         err.message.should.equal('Invalid access token');
                         done();
@@ -494,7 +495,6 @@ describe('User Resource', function() {
         before(function() {
             nock('https://login.uber.com')
                 .post('/oauth/token')
-                .times(3)
                 .reply(200, tokenResponse);
 
             nock('https://api.uber.com')
@@ -509,20 +509,6 @@ describe('User Resource', function() {
                 },
                 function(err, accessToken, refreshToken) {
                     should.not.exist(err);
-                    uber.user.profile(function(err, res) {
-                        should.not.exist(err);
-                        res.should.deep.equal(profileReply);
-                        done();
-                    });
-                });
-        });
-
-        it('should get user profile after authentication by explicitly passing access token', function(done) {
-            uber.authorization({
-                    authorization_code: 'x8Y6dF2qA6iKaTKlgzVfFvyYoNrlkp'
-                },
-                function(err, accessToken, refreshToken) {
-                    should.not.exist(err);
                     uber.user.profile(accessToken, function(err, res) {
                         should.not.exist(err);
                         res.should.deep.equal(profileReply);
@@ -532,17 +518,11 @@ describe('User Resource', function() {
         });
 
         it('should return invalid access token error when no token found', function(done) {
-            uber.authorization({
-                    authorization_code: 'x8Y6dF2qA6iKaTKlgzVfFvyYoNrlkp'
-                },
-                function(err, accessToken, refreshToken) {
-                    should.not.exist(err);
-                    uber.access_token = '';
-                    uber.user.profile(function(err, res) {
-                        err.message.should.equal('Invalid access token');
-                        done();
-                    });
-                });
+            uber.clearTokens();
+            uber.user.profile(null, function(err, res) {
+                err.message.should.equal('Invalid access token');
+                done();
+            });
         });
     });
 
@@ -574,13 +554,15 @@ describe('User Resource', function() {
                 function(err, accessToken, refreshToken) {
                     should.not.exist(err);
                     uber.user.activity({
-                        offset: 0,
-                        limit: 5
-                    }, function(err, res) {
-                        should.not.exist(err);
-                        res.should.deep.equal(historyReply);
-                        done();
-                    });
+                            offset: 0,
+                            limit: 5
+                        },
+                        accessToken,
+                        function(err, res) {
+                            should.not.exist(err);
+                            res.should.deep.equal(historyReply);
+                            done();
+                        });
                 });
         });
 
@@ -593,7 +575,7 @@ describe('User Resource', function() {
                     uber.user.activity({
                         offset: 0,
                         limit: 99 //should become 50
-                    }, function(err, res) {
+                    }, accessToken, function(err, res) {
                         should.not.exist(err);
                         res.should.deep.equal(historyReply);
                         done();
@@ -607,7 +589,7 @@ describe('User Resource', function() {
                 },
                 function(err, accessToken, refreshToken) {
                     should.not.exist(err);
-                    uber.user.activity({}, function(err, res) {
+                    uber.user.activity({}, accessToken, function(err, res) {
                         should.not.exist(err);
                         res.should.deep.equal(historyReply);
                         done();
@@ -621,7 +603,7 @@ describe('User Resource', function() {
                 },
                 function(err, accessToken, refreshToken) {
                     should.not.exist(err);
-                    uber.user.activity(null, function(err, res) {
+                    uber.user.activity(null, accessToken, function(err, res) {
                         should.not.exist(err);
                         res.should.deep.equal(historyReply);
                         done();
@@ -629,37 +611,12 @@ describe('User Resource', function() {
                 });
         });
 
-        it('should get user activity after authentication by explicitly passing access token', function(done) {
-            uber.authorization({
-                    authorization_code: 'x8Y6dF2qA6iKaTKlgzVfFvyYoNrlkp'
-                },
-                function(err, accessToken, refreshToken) {
-                    should.not.exist(err);
-                    uber.user.activity({
-                            offset: 0,
-                            limit: 5
-                        },
-                        accessToken,
-                        function(err, res) {
-                            should.not.exist(err);
-                            res.should.deep.equal(historyReply);
-                            done();
-                        });
-                });
-        });
-
         it('should return invalid access token error when no token found', function(done) {
-            uber.authorization({
-                    authorization_code: 'x8Y6dF2qA6iKaTKlgzVfFvyYoNrlkp'
-                },
-                function(err, accessToken, refreshToken) {
-                    should.not.exist(err);
-                    uber.access_token = '';
-                    uber.user.activity({}, function(err, res) {
-                        err.message.should.equal('Invalid access token');
-                        done();
-                    });
-                });
+            uber.clearTokens();
+            uber.user.activity({}, null, function(err, res) {
+                err.message.should.equal('Invalid access token');
+                done();
+            });
         });
     });
 });
