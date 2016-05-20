@@ -28,6 +28,24 @@ describe('OAuth2 authorization url', function() {
     });
 });
 
+describe('OAuth2 error catching', function() {
+    before(function() {
+        nock('https://login.uber.com')
+            .post('/oauth/token')
+            .reply(404);
+    });
+
+    it('should catch authorization error if uber.com not reachable', function(done) {
+        uber.authorization({
+                authorization_code: 'x8Y6dF2qA6iKaTKlgzVfFvyYoNrlkp'
+            },
+            function(err, access_token, refresh_token) {
+                should.exist(err);
+                done();
+            });
+    });
+});
+
 describe('Exchange authorization code into access token', function() {
     var tokenResponse = {
         "access_token": "EE1IDxytP04tJ767GbjH7ED9PpGmYvL",
@@ -44,7 +62,7 @@ describe('Exchange authorization code into access token', function() {
             .reply(200, tokenResponse);
     });
 
-    it('should able to get access token and refresh token using authorization code', function(done) {
+    it('should be able to get access token and refresh token using authorization code', function(done) {
         uber.authorization({
                 authorization_code: 'x8Y6dF2qA6iKaTKlgzVfFvyYoNrlkp'
             },
