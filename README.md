@@ -114,6 +114,8 @@ Method Overview
 |-------------	|-----------------------------------	|------------------------	|-------------------------------------------------	|-----------------------------------	|
 | GET         	| /v1/products                      	| OAuth or server_token 	|                                                 	| products.getAllForLocation        	|
 | GET         	| /v1/products/{product_id}         	| OAuth or server_token 	|                                                 	| products.getByID                  	|
+| PUT         	| /v1/products/{product_id}         	| OAuth or server_token   | (Sandbox mode)                                   	| products.setSurgeMultiplierByID     |
+| PUT         	| /v1/products/{product_id}         	| OAuth or server_token   | (Sandbox mode)                                   	| products.setDriversAvailabilityByID |
 | GET         	| /v1/estimates/price               	| OAuth or server_token 	|                                                 	| estimates.getPriceForRoute        	|
 | GET         	| /v1/estimates/time                	| OAuth or server_token 	|                                                 	| estimates.getETAForLocation       	|
 | GET         	| /v1.2/history                     	| OAuth                  	| history or history_lite                          	| user.getHistory                   	|
@@ -125,7 +127,7 @@ Method Overview
 | POST        	| /v1/requests/estimate             	| OAuth                  	| request (privileged)                            	| requests.getEstimates             	|
 | GET         	| /v1/requests/{request_id}         	| OAuth                  	| request (privileged)                            	| requests.getByID                  	|
 | PATCH       	| /v1/requests/{request_id}         	| OAuth                  	| request (privileged)                            	| requests.updateByID               	|
-| PUT         	| /v1/requests/{request_id}         	| OAuth                  	| request (privileged) in Sandbox mode            	| requests.setStatusByID             	|
+| PUT         	| /v1/requests/{request_id}         	| OAuth                  	| request (privileged & Sandbox mode )            	| requests.setStatusByID             	|
 | DELETE      	| /v1/requests/{request_id}         	| OAuth                  	| request (privileged)                            	| requests.deleteByID               	|
 | GET         	| /v1/requests/{request_id}/map     	| OAuth                  	| request (privileged)                            	| requests.getMapByID               	|
 | GET         	| /v1/requests/{request_id}/receipt 	| OAuth                  	| request_receipt (privileged)                    	| requests.getReceiptByID           	|
@@ -200,6 +202,42 @@ uber.products.getByID(product_id, callback);
 ##### Example
 ```javascript
 uber.products.getByID('d4abaae7-f4d6-4152-91cc-77523e8165a4', function (err, res) {
+  if (err) console.error(err);
+  else console.log(res);
+});
+```
+
+#### [Set driver's availability by product_id](https://developer.uber.com/docs/sandbox)
+```javascript
+uber.products.setDriversAvailabilityByID(product_id, availability, callback);
+```
+
+> **Note**: This method is only allowed in Sandbox mode.
+
+##### Parameter
+* availability (boolean) will force requests to return a ``no_drivers_available`` error if set to false
+
+##### Example
+```javascript
+uber.products.setDriversAvailabilityByID('d4abaae7-f4d6-4152-91cc-77523e8165a4', false, function (err, res) {
+  if (err) console.error(err);
+  else console.log(res);
+});
+```
+
+#### [Set surge multiplier by product_id](https://developer.uber.com/docs/sandbox)
+```javascript
+uber.products.setSurgeMultiplierByID(product_id, multiplier, callback);
+```
+
+> **Note**: This method is only allowed in Sandbox mode.
+
+##### Parameter
+* multiplier (float) will force two stage confirmation for requests if > 2.0
+
+##### Example
+```javascript
+uber.products.setSurgeMultiplierByID('d4abaae7-f4d6-4152-91cc-77523e8165a4', 2.2, function (err, res) {
   if (err) console.error(err);
   else console.log(res);
 });
