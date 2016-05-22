@@ -45,8 +45,12 @@ describe('Profile', function() {
             .times(3)
             .reply(200, tokenResponse);
 
-        nock('https://api.uber.com')
-            .get('/v1/me?access_token=EE1IDxytP04tJ767GbjH7ED9PpGmYvL')
+        nock('https://api.uber.com', {
+                reqheaders: {
+                    'Authorization': 'Bearer EE1IDxytP04tJ767GbjH7ED9PpGmYvL'
+                }
+            })
+            .get('/v1/me')
             .times(2)
             .reply(200, profileReply);
     });
@@ -80,9 +84,13 @@ describe('History', function() {
             .post('/oauth/token')
             .times(5)
             .reply(200, tokenResponse);
-        nock('https://api.uber.com')
+        nock('https://api.uber.com', {
+                reqheaders: {
+                    'Authorization': 'Bearer EE1IDxytP04tJ767GbjH7ED9PpGmYvL'
+                }
+            })
             .get(function(uri) {
-                var parts = uri.split('/v1.2/history?access_token=EE1IDxytP04tJ767GbjH7ED9PpGmYvL&offset=0&limit=');
+                var parts = uri.split('/v1.2/history?offset=0&limit=');
                 if (parts.length !== 2) {
                     return false;
                 }

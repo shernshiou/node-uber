@@ -23,13 +23,17 @@ var reminderReply = {
 
 
 before(function() {
-    nock('https://api.uber.com')
-        .get('/v1/reminders/def-456?server_token=SERVERTOKENSERVERTOKENSERVERTOKENSERVERT')
+    nock('https://api.uber.com', {
+            reqheaders: {
+                'Authorization': 'Token SERVERTOKENSERVERTOKENSERVERTOKENSERVERT'
+            }
+        })
+        .get('/v1/reminders/def-456')
         .times(2)
         .reply(200, reminderReply);
     nock('https://api.uber.com', {
             reqheaders: {
-                'Authorization': 'Token ' + uber.defaults.server_token
+                'Authorization': 'Token SERVERTOKENSERVERTOKENSERVERTOKENSERVERT'
             }
         })
         .post('/v1/reminders')
@@ -37,7 +41,7 @@ before(function() {
         .reply(200, reminderReply);
     nock('https://api.uber.com', {
             reqheaders: {
-                'Authorization': 'Token ' + uber.defaults.server_token
+                'Authorization': 'Token SERVERTOKENSERVERTOKENSERVERTOKENSERVERT'
             }
         })
         .patch('/v1/reminders/def-456')
@@ -45,7 +49,7 @@ before(function() {
         .reply(200, reminderReply);
     nock('https://api.uber.com', {
             reqheaders: {
-                'Authorization': 'Token ' + uber.defaults.server_token
+                'Authorization': 'Token SERVERTOKENSERVERTOKENSERVERTOKENSERVERT'
             }
         })
         .delete('/v1/reminders/def-456')

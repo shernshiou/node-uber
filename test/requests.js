@@ -124,8 +124,12 @@ describe('Current Request', function() {
             .post('/oauth/token')
             .times(2)
             .reply(200, tokenResponse);
-        nock('https://api.uber.com')
-            .get('/v1/requests/current?access_token=EE1IDxytP04tJ767GbjH7ED9PpGmYvL')
+        nock('https://api.uber.com', {
+                reqheaders: {
+                    'Authorization': 'Bearer EE1IDxytP04tJ767GbjH7ED9PpGmYvL'
+                }
+            })
+            .get('/v1/requests/current')
             .reply(200, acceptedRequestReply);
         nock('https://api.uber.com')
             .post('/v1/requests')
@@ -259,15 +263,19 @@ describe('By Request ID', function() {
             .post('/oauth/token')
             .times(4)
             .reply(200, tokenResponse);
-        nock('https://api.uber.com')
-            .get('/v1/requests/17cb78a7-b672-4d34-a288-a6c6e44d5315?access_token=EE1IDxytP04tJ767GbjH7ED9PpGmYvL')
+        nock('https://api.uber.com', {
+                reqheaders: {
+                    'Authorization': 'Bearer EE1IDxytP04tJ767GbjH7ED9PpGmYvL'
+                }
+            })
+            .get('/v1/requests/17cb78a7-b672-4d34-a288-a6c6e44d5315')
             .reply(200, acceptedRequestReply);
         nock('https://api.uber.com')
             .patch('/v1/requests/abcd')
-            .reply(404);
+            .reply(404, "Request could not be found");
         nock('https://api.uber.com')
             .get('/v1/requests/abcd')
-            .reply(404);
+            .reply(404, "Request could not be found");
         nock('https://api.uber.com')
             .patch('/v1/requests/17cb78a7-b672-4d34-a288-a6c6e44d5315')
             .times(2)
@@ -450,11 +458,19 @@ describe('By Request ID', function() {
                 .post('/oauth/token')
                 .times(2)
                 .reply(200, tokenResponse);
-            nock('https://api.uber.com')
-                .get('/v1/requests/17cb78a7-b672-4d34-a288-a6c6e44d5315/map?access_token=EE1IDxytP04tJ767GbjH7ED9PpGmYvL')
+            nock('https://api.uber.com', {
+                    reqheaders: {
+                        'Authorization': 'Bearer EE1IDxytP04tJ767GbjH7ED9PpGmYvL'
+                    }
+                })
+                .get('/v1/requests/17cb78a7-b672-4d34-a288-a6c6e44d5315/map')
                 .reply(200, mapReply);
-            nock('https://api.uber.com')
-                .get('/v1/requests/17cb78a7-b672-4d34-a288-a6c6e44d5315/receipt?access_token=EE1IDxytP04tJ767GbjH7ED9PpGmYvL')
+            nock('https://api.uber.com', {
+                    reqheaders: {
+                        'Authorization': 'Bearer EE1IDxytP04tJ767GbjH7ED9PpGmYvL'
+                    }
+                })
+                .get('/v1/requests/17cb78a7-b672-4d34-a288-a6c6e44d5315/receipt')
                 .reply(200, receiptReply);
         });
 

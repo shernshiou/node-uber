@@ -51,8 +51,12 @@ var uberBLACKReply = {
 
 describe('List', function() {
     before(function() {
-        nock('https://api.uber.com')
-            .get('/v1/products?server_token=SERVERTOKENSERVERTOKENSERVERTOKENSERVERT&latitude=3.1357&longitude=101.688')
+        nock('https://api.uber.com', {
+                reqheaders: {
+                    'Authorization': 'Token SERVERTOKENSERVERTOKENSERVERTOKENSERVERT'
+                }
+            })
+            .get('/v1/products?latitude=3.1357&longitude=101.688')
             .reply(200, productReply);
     });
 
@@ -75,8 +79,12 @@ describe('List', function() {
 
 describe('Details', function() {
     before(function() {
-        nock('https://api.uber.com')
-            .get('/v1/products/d4abaae7-f4d6-4152-91cc-77523e8165a4?server_token=SERVERTOKENSERVERTOKENSERVERTOKENSERVERT')
+        nock('https://api.uber.com', {
+                reqheaders: {
+                    'Authorization': 'Token SERVERTOKENSERVERTOKENSERVERTOKENSERVERT'
+                }
+            })
+            .get('/v1/products/d4abaae7-f4d6-4152-91cc-77523e8165a4')
             .reply(200, uberBLACKReply);
     });
 

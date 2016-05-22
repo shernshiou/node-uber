@@ -37,8 +37,12 @@ before(function() {
         .times(3)
         .reply(200, tokenResponse);
 
-    nock('https://api.uber.com')
-        .get('/v1/payment-methods?access_token=EE1IDxytP04tJ767GbjH7ED9PpGmYvL')
+    nock('https://api.uber.com', {
+            reqheaders: {
+                'Authorization': 'Bearer EE1IDxytP04tJ767GbjH7ED9PpGmYvL'
+            }
+        })
+        .get('/v1/payment-methods')
         .reply(200, paymentMethodsReply);
 });
 

@@ -67,13 +67,19 @@ var tokenResponse = {
 
 describe('Price', function() {
     before(function() {
-        nock('https://api.uber.com')
-            .get('/v1/estimates/price?server_token=SERVERTOKENSERVERTOKENSERVERTOKENSERVERT&' +
-                'start_latitude=3.1357&start_longitude=101.688&end_latitude=3.0833&end_longitude=101.65&seat_count=2')
+        nock('https://api.uber.com', {
+                reqheaders: {
+                    'Authorization': 'Token SERVERTOKENSERVERTOKENSERVERTOKENSERVERT'
+                }
+            })
+            .get('/v1/estimates/price?start_latitude=3.1357&start_longitude=101.688&end_latitude=3.0833&end_longitude=101.65&seat_count=2')
             .reply(200, priceReply);
-        nock('https://api.uber.com')
-            .get('/v1/estimates/price?access_token=EE1IDxytP04tJ767GbjH7ED9PpGmYvL&' +
-                'start_latitude=3.1357&start_longitude=101.688&end_latitude=3.0833&end_longitude=101.65&seat_count=2')
+        nock('https://api.uber.com', {
+                reqheaders: {
+                    'Authorization': 'Token SERVERTOKENSERVERTOKENSERVERTOKENSERVERT'
+                }
+            })
+            .get('/v1/estimates/price?start_latitude=3.1357&start_longitude=101.688&end_latitude=3.0833&end_longitude=101.65&seat_count=2')
             .reply(200, priceReply);
     });
 
@@ -124,18 +130,15 @@ describe('Time', function() {
             .post('/oauth/token')
             .times(3)
             .reply(200, tokenResponse);
-        nock('https://api.uber.com')
-            .get(function(uri) {
-                return uri.indexOf('v1/estimates/time?server_token=SERVERTOKENSERVERTOKENSERVERTOKENSERVERT&' +
-                    'start_latitude=3.1357&start_longitude=101.688') >= 0;
+        nock('https://api.uber.com', {
+                reqheaders: {
+                    'Authorization': 'Token SERVERTOKENSERVERTOKENSERVERTOKENSERVERT'
+                }
             })
-            .times(3)
-            .reply(200, timeReply);
-        nock('https://api.uber.com')
             .get(function(uri) {
-                return uri.indexOf('v1/estimates/time?access_token=EE1IDxytP04tJ767GbjH7ED9PpGmYvL&' +
-                    'start_latitude=3.1357&start_longitude=101.688') >= 0;
+                return uri.indexOf('v1/estimates/time?start_latitude=3.1357&start_longitude=101.688') >= 0;
             })
+            .times(4)
             .reply(200, timeReply);
     });
 

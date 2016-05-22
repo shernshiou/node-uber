@@ -150,8 +150,12 @@ describe('Products Resource', function() {
     };
 
     before(function() {
-        nock('https://api.uber.com')
-            .get('/v1/products?server_token=SERVERTOKENSERVERTOKENSERVERTOKENSERVERT&latitude=3.1357&longitude=101.688')
+        nock('https://api.uber.com', {
+                reqheaders: {
+                    'Authorization': 'Token SERVERTOKENSERVERTOKENSERVERTOKENSERVERT'
+                }
+            })
+            .get('/v1/products?latitude=3.1357&longitude=101.688')
             .reply(200, productReply);
     });
 
@@ -209,8 +213,12 @@ describe('Payment Resource', function() {
             .post('/oauth/token')
             .times(3)
             .reply(200, tokenResponse);
-        nock('https://api.uber.com')
-            .get('/v1/payment-methods?access_token=EE1IDxytP04tJ767GbjH7ED9PpGmYvL')
+        nock('https://api.uber.com', {
+                reqheaders: {
+                    'Authorization': 'Bearer EE1IDxytP04tJ767GbjH7ED9PpGmYvL'
+                }
+            })
+            .get('/v1/payment-methods')
             .reply(200, paymentMethodsReply);
     });
 
@@ -265,8 +273,12 @@ describe('Places Resource', function() {
                 .times(3)
                 .reply(200, tokenResponse);
 
-            nock('https://api.uber.com')
-                .get('/v1/places/home?access_token=EE1IDxytP04tJ767GbjH7ED9PpGmYvL')
+            nock('https://api.uber.com', {
+                    reqheaders: {
+                        'Authorization': 'Bearer EE1IDxytP04tJ767GbjH7ED9PpGmYvL'
+                    }
+                })
+                .get('/v1/places/home')
                 .reply(200, placesHomeReply);
         });
 
@@ -307,8 +319,12 @@ describe('Places Resource', function() {
                 .times(3)
                 .reply(200, tokenResponse);
 
-            nock('https://api.uber.com')
-                .get('/v1/places/work?access_token=EE1IDxytP04tJ767GbjH7ED9PpGmYvL')
+            nock('https://api.uber.com', {
+                    reqheaders: {
+                        'Authorization': 'Bearer EE1IDxytP04tJ767GbjH7ED9PpGmYvL'
+                    }
+                })
+                .get('/v1/places/work')
                 .reply(200, placesWorkReply);
         });
 
@@ -401,9 +417,12 @@ describe('Estimates Resource', function() {
 
     describe('Price Estimates', function() {
         before(function() {
-            nock('https://api.uber.com')
-                .get('/v1/estimates/price?server_token=SERVERTOKENSERVERTOKENSERVERTOKENSERVERT&' +
-                    'start_latitude=3.1357&start_longitude=101.688&end_latitude=3.0833&end_longitude=101.65&seat_count=2')
+            nock('https://api.uber.com', {
+                    reqheaders: {
+                        'Authorization': 'Token SERVERTOKENSERVERTOKENSERVERTOKENSERVERT'
+                    }
+                })
+                .get('/v1/estimates/price?start_latitude=3.1357&start_longitude=101.688&end_latitude=3.0833&end_longitude=101.65&seat_count=2')
                 .reply(200, priceReply);
         });
 
@@ -430,9 +449,12 @@ describe('Estimates Resource', function() {
 
     describe('Time Estimates', function() {
         before(function() {
-            nock('https://api.uber.com')
-                .get('/v1/estimates/time?server_token=SERVERTOKENSERVERTOKENSERVERTOKENSERVERT&' +
-                    'start_latitude=3.1357&start_longitude=101.688')
+            nock('https://api.uber.com', {
+                    reqheaders: {
+                        'Authorization': 'Token SERVERTOKENSERVERTOKENSERVERTOKENSERVERT'
+                    }
+                })
+                .get('/v1/estimates/time?start_latitude=3.1357&start_longitude=101.688')
                 .reply(200, timeReply);
         });
 
@@ -497,8 +519,12 @@ describe('User Resource', function() {
                 .post('/oauth/token')
                 .reply(200, tokenResponse);
 
-            nock('https://api.uber.com')
-                .get('/v1/me?access_token=EE1IDxytP04tJ767GbjH7ED9PpGmYvL')
+            nock('https://api.uber.com', {
+                    reqheaders: {
+                        'Authorization': 'Bearer EE1IDxytP04tJ767GbjH7ED9PpGmYvL'
+                    }
+                })
+                .get('/v1/me')
                 .times(2)
                 .reply(200, profileReply);
         });
@@ -533,9 +559,13 @@ describe('User Resource', function() {
                 .times(3)
                 .reply(200, tokenResponse);
 
-            nock('https://api.uber.com')
+            nock('https://api.uber.com', {
+                    reqheaders: {
+                        'Authorization': 'Bearer EE1IDxytP04tJ767GbjH7ED9PpGmYvL'
+                    }
+                })
                 .get(function(uri) {
-                    var parts = uri.split('/v1.2/history?access_token=EE1IDxytP04tJ767GbjH7ED9PpGmYvL&offset=0&limit=');
+                    var parts = uri.split('/v1.2/history?offset=0&limit=');
                     if (parts.length !== 2) {
                         return false;
                     }

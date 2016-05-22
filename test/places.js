@@ -23,8 +23,12 @@ describe('Home', function() {
             .post('/oauth/token')
             .times(3)
             .reply(200, tokenResponse);
-        nock('https://api.uber.com')
-            .get('/v1/places/home?access_token=EE1IDxytP04tJ767GbjH7ED9PpGmYvL')
+        nock('https://api.uber.com', {
+                reqheaders: {
+                    'Authorization': 'Bearer EE1IDxytP04tJ767GbjH7ED9PpGmYvL'
+                }
+            })
+            .get('/v1/places/home')
             .reply(200, placesHomeReply);
         nock('https://api.uber.com')
             .put('/v1/places/home')
@@ -70,8 +74,12 @@ describe('Work', function() {
             .post('/oauth/token')
             .times(3)
             .reply(200, tokenResponse);
-        nock('https://api.uber.com')
-            .get('/v1/places/work?access_token=EE1IDxytP04tJ767GbjH7ED9PpGmYvL')
+        nock('https://api.uber.com', {
+                reqheaders: {
+                    'Authorization': 'Bearer EE1IDxytP04tJ767GbjH7ED9PpGmYvL'
+                }
+            })
+            .get('/v1/places/work')
             .reply(200, placesWorkReply);
     });
 
@@ -113,8 +121,12 @@ describe('By Place ID', function() {
         nock('https://api.uber.com')
             .put('/v1/places/shop')
             .reply(404);
-        nock('https://api.uber.com')
-            .get('/v1/places/shop?access_token=EE1IDxytP04tJ767GbjH7ED9PpGmYvL')
+        nock('https://api.uber.com', {
+                reqheaders: {
+                    'Authorization': 'Bearer EE1IDxytP04tJ767GbjH7ED9PpGmYvL'
+                }
+            })
+            .get('/v1/places/shop')
             .reply(404);
     });
 
