@@ -671,8 +671,6 @@ TODOs
 - [ ] Add node-geocoder to enable using street addresses
 - [ ] Test translation support using ``Content-Language``
 - [ ] Promisify using bluebird
-- [ ] Enable session handling (https://www.matthewtyler.io/handling-oauth2-with-node-js-and-angular-js-passport-to-the-rescue/)
-- [ ] Advance Sandbox implementation
 - [ ] Implement rate limit status
 - [ ] Leverage Surge Pricing responses
 - [ ] Implement access_token refresh
@@ -680,5 +678,4 @@ TODOs
 - [ ] Checks for auth methods
 - [ ] Leverage Webhooks
 - [ ] Learn from other Uber SDKs
-- [ ] Check UberPOOL functionality (https://medium.com/uber-developers/uberpool-now-available-in-the-uber-api-35466f42a8b5#.59lmvsgje)
-  - [ ] UberPOOL requests have certain additional requirements: https://developer.uber.com/docs/tutorials-rides-api#section-uberpool
+- [ ] Check UberPOOL compatibility (https://developer.uber.com/docs/tutorials-rides-api#section-uberpool)
