@@ -107,7 +107,7 @@ describe('Details', function() {
 describe('Set surge multiplier in Sandbox mode', function() {
     before(function() {
         nock('https://sandbox-api.uber.com/')
-            .put('/v1/products/d4abaae7-f4d6-4152-91cc-77523e8165a4', {
+            .put('/v1/sandbox/products/d4abaae7-f4d6-4152-91cc-77523e8165a4', {
                 surge_multiplier: 2.2
             })
             .reply(204);
@@ -145,7 +145,7 @@ describe('Set surge multiplier in Sandbox mode', function() {
 describe('Set driver`s availability in Sandbox mode', function() {
     before(function() {
         nock('https://sandbox-api.uber.com/')
-            .put('/v1/products/d4abaae7-f4d6-4152-91cc-77523e8165a4', {
+            .put('/v1/sandbox/products/d4abaae7-f4d6-4152-91cc-77523e8165a4', {
                 drivers_available: false
             })
             .reply(204);

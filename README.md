@@ -279,7 +279,7 @@ The history endpoint can be accessed ONLY with an OAuth ``access_token`` authori
 
 #### [Get user activity](https://developer.uber.com/docs/v12-history)
 ```javascript
-uber.user.getHistory(offset, limit [, access_token], callback);
+uber.user.getHistory(offset, limit, callback);
 ```
 
 ``offset`` defaults to 0 and ``limit`` defaults to 5 with a maximum value of 50.
@@ -296,7 +296,7 @@ uber.user.getHistory(0, 5, function(err, res) {
 The me endpoint can be accessed ONLY with an OAuth ``access_token`` authorized with the ``profile`` scope.
 #### [Get user profile](https://developer.uber.com/docs/v1-me)
 ```javascript
-uber.user.getProfile([access_token], callback);
+uber.user.getProfile(callback);
 ```
 
 ##### Example

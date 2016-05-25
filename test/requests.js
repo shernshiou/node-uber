@@ -281,7 +281,7 @@ describe('By Request ID', function() {
             .times(2)
             .reply(204);
         nock('https://sandbox-api.uber.com/')
-            .put('/v1/requests/17cb78a7-b672-4d34-a288-a6c6e44d5315', {
+            .put('/v1/sandbox/requests/17cb78a7-b672-4d34-a288-a6c6e44d5315', {
                 status: 'accepted'
             })
             .reply(204);
