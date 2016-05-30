@@ -4,6 +4,8 @@
 
 Uber Rides Node.js Wrapper
 =========
+
+[![Join the chat at https://gitter.im/shernshiou/node-uber](https://badges.gitter.im/shernshiou/node-uber.svg)](https://gitter.im/shernshiou/node-uber?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 This projects helps you to make HTTP requests to the Uber Rides API.
 
 
