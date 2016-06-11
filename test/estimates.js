@@ -124,6 +124,81 @@ describe('Price', function() {
     });
 });
 
+describe('Price Async', function() {
+    before(function() {
+        nock('https://api.uber.com', {
+                reqheaders: {
+                    'Authorization': 'Token SERVERTOKENSERVERTOKENSERVERTOKENSERVERT'
+                }
+            })
+            .get('/v1/estimates/price?start_latitude=3.1357&start_longitude=101.688&end_latitude=3.0833&end_longitude=101.65&seat_count=2')
+            .reply(200, priceReply);
+        nock('https://api.uber.com', {
+                reqheaders: {
+                    'Authorization': 'Token SERVERTOKENSERVERTOKENSERVERTOKENSERVERT'
+                }
+            })
+            .get('/v1/estimates/price?start_latitude=3.1357&start_longitude=101.688&end_latitude=3.0833&end_longitude=101.65&seat_count=2')
+            .reply(200, priceReply);
+    });
+
+    it('should list all the price estimates from server', function(done) {
+        uber.estimates.getPriceForRouteAsync(3.1357, 101.6880, 3.0833, 101.6500)
+            .then(function(res) {
+                res.should.deep.equal(priceReply);
+            })
+            .error(function(err) {
+                should.not.exist(err);
+            });
+        done();
+    });
+
+    it('should list all the price estimates from server without access token', function(done) {
+        uber.clearTokens();
+        uber.estimates.getPriceForRouteAsync(3.1357, 101.6880, 3.0833, 101.6500)
+            .then(function(res) {
+                res.should.deep.equal(priceReply);
+            })
+            .error(function(err) {
+                should.not.exist(err);
+            });
+        done();
+    });
+
+    it('should return error if start point lat and lon are invalid', function(done) {
+        uber.estimates.getPriceForRouteAsync(null, null, 3.1357, 101.6880)
+            .then(function(res) {
+                should.not.exist(res);
+            })
+            .error(function(err) {
+                err.message.should.equal('Invalid starting point latitude & longitude');
+            });
+        done();
+    });
+
+    it('should return error if end point lat and lon are invalid', function(done) {
+        uber.estimates.getPriceForRouteAsync(3.1357, 101.6880, null, null)
+            .then(function(res) {
+                should.not.exist(res);
+            })
+            .error(function(err) {
+                err.message.should.equal('Invalid ending point latitude & longitude');
+            });
+        done();
+    });
+
+    it('should return error if there is no required params', function(done) {
+        uber.estimates.getPriceForRouteAsync(null, null, null, null)
+            .then(function(res) {
+                should.not.exist(res);
+            })
+            .error(function(err) {
+                err.message.should.equal('Invalid starting point latitude & longitude');
+            });
+        done();
+    });
+});
+
 describe('Time', function() {
     before(function() {
         nock('https://login.uber.com')
@@ -190,5 +265,86 @@ describe('Time', function() {
             err.message.should.equal('Invalid latitude & longitude');
             done();
         });
+    });
+});
+
+describe('Time Async', function() {
+    before(function() {
+        nock('https://login.uber.com')
+            .post('/oauth/token')
+            .times(3)
+            .reply(200, tokenResponse);
+        nock('https://api.uber.com', {
+                reqheaders: {
+                    'Authorization': 'Token SERVERTOKENSERVERTOKENSERVERTOKENSERVERT'
+                }
+            })
+            .get(function(uri) {
+                return uri.indexOf('v1/estimates/time?start_latitude=3.1357&start_longitude=101.688') >= 0;
+            })
+            .times(4)
+            .reply(200, timeReply);
+    });
+
+    it('should list all the price estimates for location', function(done) {
+        uber.authorization({
+                authorization_code: 'x8Y6dF2qA6iKaTKlgzVfFvyYoNrlkp'
+            },
+            function(err, accessToken, refreshToken) {
+                should.not.exist(err);
+                uber.estimates.getETAForLocationAsync(3.1357, 101.6880)
+                    .then(function(res) {
+                        res.should.deep.equal(timeReply);
+                    })
+                    .error(function(err) {
+                        should.not.exist(err);
+                    });
+            });
+        done();
+    });
+
+    it('should list all the price estimates for location without access token', function(done) {
+        uber.clearTokens();
+        uber.estimates.getETAForLocationAsync(3.1357, 101.6880)
+            .then(function(res) {
+                res.should.deep.equal(timeReply);
+            })
+            .error(function(err) {
+                should.not.exist(err);
+            });
+        done();
+    });
+
+    it('should list all the price estimates for product and location', function(done) {
+        uber.estimates.getETAForLocationAsync(3.1357, 101.6880, '327f7914-cd12-4f77-9e0c-b27bac580d03')
+            .then(function(res) {
+                res.should.deep.equal(timeReply);
+            })
+            .error(function(err) {
+                should.not.exist(err);
+            });
+        done();
+    });
+
+    it('should list all the price estimates for location but empty product', function(done) {
+        uber.estimates.getETAForLocationAsync(3.1357, 101.6880, '')
+            .then(function(res) {
+                res.should.deep.equal(timeReply);
+            })
+            .error(function(err) {
+                should.not.exist(err);
+            });
+        done();
+    });
+
+    it('should return error if there is no required params', function(done) {
+        uber.estimates.getETAForLocationAsync(null, null)
+            .then(function(res) {
+                should.not.exist(res);
+            })
+            .error(function(err) {
+                err.message.should.equal('Invalid latitude & longitude');
+            });
+        done();
     });
 });

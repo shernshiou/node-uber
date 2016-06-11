@@ -67,3 +67,31 @@ it('should return invalid access token error when no token found', function(done
         done();
     });
 });
+
+it('should list the payment methods after async authentication', function(done) {
+    uber.authorizationAsync({
+            authorization_code: 'x8Y6dF2qA6iKaTKlgzVfFvyYoNrlkp'
+        })
+        .then(function(accessToken, refreshToken) {
+            uber.payment.getMethodsAsync()
+                .then(function(res) {
+                    res.should.deep.equal(paymentMethodsReply);
+                });
+        })
+        .error(function(err) {
+            should.not.exist(err);
+        });
+    done();
+});
+
+it('should return invalid access token error when no token found (async)', function(done) {
+    uber.clearTokens();
+    uber.payment.getMethodsAsync()
+        .then(function(res) {
+            should.not.exist(res);
+        })
+        .error(function(err) {
+            err.message.should.equal('Invalid access token');
+        });
+    done();
+});
