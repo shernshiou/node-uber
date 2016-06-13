@@ -1,3 +1,4 @@
+[![Join the chat at https://gitter.im/shernshiou/node-uber](https://badges.gitter.im/shernshiou/node-uber.svg)](https://gitter.im/shernshiou/node-uber?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![License](http://img.shields.io/:license-mit-blue.svg)](http://doge.mit-license.org)
 [![build status](https://img.shields.io/travis/shernshiou/node-uber.svg?style=flat-square)](https://travis-ci.org/shernshiou/node-uber) [![Dependency Status](https://david-dm.org/shernshiou/node-uber.svg?style=flat-square)](https://david-dm.org/shernshiou/node-uber) [![devDependency Status](https://david-dm.org/shernshiou/node-uber/dev-status.svg)](https://david-dm.org/shernshiou/node-uber#info=devDependencies)
 [![Code Climate](https://codeclimate.com/github/shernshiou/node-uber/badges/gpa.svg)](https://codeclimate.com/github/shernshiou/node-uber) [![Test Coverage](https://codeclimate.com/github/shernshiou/node-uber/badges/coverage.svg)](https://codeclimate.com/github/shernshiou/node-uber/coverage)
@@ -649,8 +650,12 @@ TODOs
 ------------
 - [ ] Add node-geocoder to enable using street addresses
 - [ ] Test translation support using ``Content-Language``
+<<<<<<< HEAD
 - [ ] Enable session handling (https://www.matthewtyler.io/handling-oauth2-with-node-js-and-angular-js-passport-to-the-rescue/)
 - [ ] Advance Sandbox implementation
+=======
+- [ ] Promisify using bluebird
+>>>>>>> master
 - [ ] Implement rate limit status
 - [ ] Leverage Surge Pricing responses
 - [ ] Implement access_token refresh
@@ -658,5 +663,4 @@ TODOs
 - [ ] Checks for auth methods
 - [ ] Leverage Webhooks
 - [ ] Learn from other Uber SDKs
-- [ ] Check UberPOOL functionality (https://medium.com/uber-developers/uberpool-now-available-in-the-uber-api-35466f42a8b5#.59lmvsgje)
-  - [ ] UberPOOL requests have certain additional requirements: https://developer.uber.com/docs/tutorials-rides-api#section-uberpool
+- [ ] Check UberPOOL compatibility (https://developer.uber.com/docs/tutorials-rides-api#section-uberpool)
