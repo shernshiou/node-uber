@@ -46,24 +46,31 @@ before(function() {
         .reply(200, paymentMethodsReply);
 });
 
+
 it('should list the payment methods after authentication', function(done) {
-    uber.authorization({
+    uber.authorizationAsync({
             authorization_code: 'x8Y6dF2qA6iKaTKlgzVfFvyYoNrlkp'
-        },
-        function(err, accessToken, refreshToken) {
+        })
+        .then(function(accessToken, refreshToken) {
+            return uber.payment.getMethodsAsync();
+        })
+        .then(function(res) {
+            res.should.deep.equal(paymentMethodsReply);
+        })
+        .error(function(err) {
             should.not.exist(err);
-            uber.payment.getMethods(function(err, res) {
-                should.not.exist(err);
-                res.should.deep.equal(paymentMethodsReply);
-                done();
-            });
         });
+    done();
 });
 
 it('should return invalid access token error when no token found', function(done) {
     uber.clearTokens();
-    uber.payment.getMethods(function(err, res) {
-        err.message.should.equal('Invalid access token');
-        done();
-    });
+    uber.payment.getMethodsAsync()
+        .then(function(res) {
+            should.not.exist(res);
+        })
+        .error(function(err) {
+            err.message.should.equal('Invalid access token');
+        });
+    done();
 });

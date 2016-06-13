@@ -84,43 +84,59 @@ describe('Price', function() {
     });
 
     it('should list all the price estimates from server', function(done) {
-        uber.estimates.getPriceForRoute(3.1357, 101.6880, 3.0833, 101.6500,
-            function(err, res) {
-                should.not.exist(err);
+        uber.estimates.getPriceForRouteAsync(3.1357, 101.6880, 3.0833, 101.6500)
+            .then(function(res) {
                 res.should.deep.equal(priceReply);
-                done();
+            })
+            .error(function(err) {
+                should.not.exist(err);
             });
+        done();
     });
 
     it('should list all the price estimates from server without access token', function(done) {
         uber.clearTokens();
-        uber.estimates.getPriceForRoute(3.1357, 101.6880, 3.0833, 101.6500,
-            function(err, res) {
-                should.not.exist(err);
+        uber.estimates.getPriceForRouteAsync(3.1357, 101.6880, 3.0833, 101.6500)
+            .then(function(res) {
                 res.should.deep.equal(priceReply);
-                done();
+            })
+            .error(function(err) {
+                should.not.exist(err);
             });
+        done();
     });
 
     it('should return error if start point lat and lon are invalid', function(done) {
-        uber.estimates.getPriceForRoute(null, null, 3.1357, 101.6880, function(err, res) {
-            err.message.should.equal('Invalid starting point latitude & longitude');
-            done();
-        });
+        uber.estimates.getPriceForRouteAsync(null, null, 3.1357, 101.6880)
+            .then(function(res) {
+                should.not.exist(res);
+            })
+            .error(function(err) {
+                err.message.should.equal('Invalid starting point latitude & longitude');
+            });
+        done();
     });
 
     it('should return error if end point lat and lon are invalid', function(done) {
-        uber.estimates.getPriceForRoute(3.1357, 101.6880, null, null, function(err, res) {
-            err.message.should.equal('Invalid ending point latitude & longitude');
-            done();
-        });
+        uber.estimates.getPriceForRouteAsync(3.1357, 101.6880, null, null)
+            .then(function(res) {
+                should.not.exist(res);
+            })
+            .error(function(err) {
+                err.message.should.equal('Invalid ending point latitude & longitude');
+            });
+        done();
     });
 
     it('should return error if there is no required params', function(done) {
-        uber.estimates.getPriceForRoute(null, null, null, null, function(err, res) {
-            err.message.should.equal('Invalid starting point latitude & longitude');
-            done();
-        });
+        uber.estimates.getPriceForRouteAsync(null, null, null, null)
+            .then(function(res) {
+                should.not.exist(res);
+            })
+            .error(function(err) {
+                err.message.should.equal('Invalid starting point latitude & longitude');
+            });
+        done();
     });
 });
 
@@ -143,52 +159,62 @@ describe('Time', function() {
     });
 
     it('should list all the price estimates for location', function(done) {
-        uber.authorization({
+        uber.authorizationAsync({
                 authorization_code: 'x8Y6dF2qA6iKaTKlgzVfFvyYoNrlkp'
-            },
-            function(err, accessToken, refreshToken) {
+            }).then(function(res) {
+                return uber.estimates.getETAForLocationAsync(3.1357, 101.6880);
+            })
+            .then(function(res) {
+                res.should.deep.equal(timeReply);
+            })
+            .error(function(err) {
                 should.not.exist(err);
-                uber.estimates.getETAForLocation(3.1357, 101.6880,
-                    function(err, res) {
-                        should.not.exist(err);
-                        res.should.deep.equal(timeReply);
-                        done();
-                    });
             });
+        done();
     });
 
     it('should list all the price estimates for location without access token', function(done) {
         uber.clearTokens();
-        uber.estimates.getETAForLocation(3.1357, 101.6880,
-            function(err, res) {
-                should.not.exist(err);
+        uber.estimates.getETAForLocationAsync(3.1357, 101.6880)
+            .then(function(res) {
                 res.should.deep.equal(timeReply);
-                done();
+            })
+            .error(function(err) {
+                should.not.exist(err);
             });
+        done();
     });
 
     it('should list all the price estimates for product and location', function(done) {
-        uber.estimates.getETAForLocation(3.1357, 101.6880, '327f7914-cd12-4f77-9e0c-b27bac580d03',
-            function(err, res) {
-                should.not.exist(err);
+        uber.estimates.getETAForLocationAsync(3.1357, 101.6880, '327f7914-cd12-4f77-9e0c-b27bac580d03')
+            .then(function(res) {
                 res.should.deep.equal(timeReply);
-                done();
+            })
+            .error(function(err) {
+                should.not.exist(err);
             });
+        done();
     });
 
     it('should list all the price estimates for location but empty product', function(done) {
-        uber.estimates.getETAForLocation(3.1357, 101.6880, '',
-            function(err, res) {
-                should.not.exist(err);
+        uber.estimates.getETAForLocationAsync(3.1357, 101.6880, '')
+            .then(function(res) {
                 res.should.deep.equal(timeReply);
-                done();
+            })
+            .error(function(err) {
+                should.not.exist(err);
             });
+        done();
     });
 
     it('should return error if there is no required params', function(done) {
-        uber.estimates.getETAForLocation(null, null, function(err, res) {
-            err.message.should.equal('Invalid latitude & longitude');
-            done();
-        });
+        uber.estimates.getETAForLocationAsync(null, null)
+            .then(function(res) {
+                should.not.exist(res);
+            })
+            .error(function(err) {
+                err.message.should.equal('Invalid latitude & longitude');
+            });
+        done();
     });
 });
