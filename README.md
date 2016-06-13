@@ -99,7 +99,7 @@ app.get('/api/products', function(request, response) {
     .then(function(res) {
         response.json(res);
     })
-    .catch(function(err) {
+    .error(function(err) {
       console.error(err);
       response.sendStatus(500);
     });
@@ -170,12 +170,8 @@ uber.authorizationAsync(parameter);
 ##### Example: Just access_token
 ```javascript
 uber.authorizationAsync({ refresh_token: 'REFRESH_TOKEN' })
-  .then(function(access_token) {
-    console.log(access_token);
-  })
-  .error(function(err) {
-    console.error(err);
-  });
+  .then(function(access_token) { console.log(access_token); })
+  .error(function(err) { console.error(err); });
 });
 ```
 
@@ -184,10 +180,8 @@ uber.authorizationAsync({ refresh_token: 'REFRESH_TOKEN' })
 uber.authorizationAsync({ refresh_token: 'REFRESH_TOKEN' })
   .spread(function(access_token, refresh_token) {
     console.log(access_token, refresh_token);
-  })
-  .error(function(err) {
-    console.error(err);
-  });
+})
+  .error(function(err) { console.error(err); });
 });
 ```
 
@@ -202,9 +196,8 @@ uber.products.getAllForLocationAsync(latitude, longitude);
 ##### Example
 ```javascript
 uber.products.getAllForLocationAsync(3.1357, 101.6880)
-.then(function(res) {
-  console.log(res);
-});
+.then(function(res) { console.log(res); })
+.error(function(err) { console.error(err); });
 ```
 
 #### [Get product details by product_id](https://developer.uber.com/docs/v1-products-details)
@@ -215,9 +208,8 @@ uber.products.getByIDAsync(product_id);
 ##### Example
 ```javascript
 uber.products.getByIDAsync('d4abaae7-f4d6-4152-91cc-77523e8165a4')
-.then(function(res) {
-  console.log(res);
-});
+.then(function(res) { console.log(res); })
+.error(function(err) { console.error(err); });
 ```
 
 #### [Set driver's availability by product_id](https://developer.uber.com/docs/sandbox)
@@ -233,9 +225,8 @@ uber.products.setDriversAvailabilityByIDAsync(product_id, availability);
 ##### Example
 ```javascript
 uber.products.setDriversAvailabilityByIDAsync('d4abaae7-f4d6-4152-91cc-77523e8165a4', false)
-.then(function(res) {
-  console.log(res);
-});
+.then(function(res) { console.log(res); })
+.error(function(err) { console.error(err); });
 ```
 
 #### [Set surge multiplier by product_id](https://developer.uber.com/docs/sandbox)
@@ -251,9 +242,8 @@ uber.products.setSurgeMultiplierByIDAsync(product_id, multiplier);
 ##### Example
 ```javascript
 uber.products.setSurgeMultiplierByIDAsync('d4abaae7-f4d6-4152-91cc-77523e8165a4', 2.2)
-.then(function(res) {
-  console.log(res);
-});
+.then(function(res) { console.log(res); })
+.error(function(err) { console.error(err); });
 ```
 
 ### /estimates
@@ -269,9 +259,8 @@ uber.estimates.getPriceForRouteAsync(start_latitude, start_longitude, end_latitu
 ##### Example
 ```javascript
 uber.estimates.getPriceForRoute(3.1357, 101.6880, 3.0833, 101.6500)
-.then(function(res) {
-  console.log(res);
-});
+.then(function(res) { console.log(res); })
+.error(function(err) { console.error(err); });
 ```
 
 #### [Get ETA for location](https://developer.uber.com/docs/v1-estimates-time)
@@ -282,9 +271,8 @@ uber.estimates.getETAForLocationAsync(latitude, longitude [, product_id]);
 ##### Example
 ```javascript
 uber.estimates.getETAForLocationAsync(3.1357, 101.6880)
-.then(function(res) {
-  console.log(res);
-});
+.then(function(res) { console.log(res); })
+.error(function(err) { console.error(err); });
 ```
 
 ### /history
@@ -300,9 +288,8 @@ uber.user.getHistoryAsync(offset, limit);
 ##### Example
 ```javascript
 uber.user.getHistoryAsync(0, 5)
-.then(function(res) {
-  console.log(res);
-});
+.then(function(res) { console.log(res); })
+.error(function(err) { console.error(err); });
 ```
 
 ### /me
@@ -315,9 +302,8 @@ uber.user.getProfileAsync();
 ##### Example
 ```javascript
 uber.user.getProfileAsync()
-.then(function(res) {
-  console.log(res);
-});
+.then(function(res) { console.log(res); })
+.error(function(err) { console.error(err); });
 ```
 
 ### /requests
@@ -340,9 +326,8 @@ uber.requests.createAsync({
   "end_latitude": 37.775393,
   "end_longitude": -122.417546
 })
-.then(function(res) {
-  console.log(res);
-});
+.then(function(res) { console.log(res); })
+.error(function(err) { console.error(err); });
 ```
 
 #### [Get current request](https://developer.uber.com/docs/v1-requests-current)
@@ -356,9 +341,8 @@ uber.requests.getCurrentAsync();
 ##### Example
 ```javascript
 uber.requests.getCurrentAsync()
-.then(function(res) {
-  console.log(res);
-});
+.then(function(res) { console.log(res); })
+.error(function(err) { console.error(err); });
 ```
 
 #### [Update current request](https://developer.uber.com/docs/v1-requests-current-patch)
@@ -376,9 +360,8 @@ uber.requests.updateCurrentAsync({
   "end_latitude": 37.775393,
   "end_longitude": -122.417546
 })
-.then(function (res) {
-  console.log(res);
-});
+.then(function(res) { console.log(res); })
+.error(function(err) { console.error(err); });
 ```
 
 #### [Delete current request](https://developer.uber.com/docs/v1-requests-current-delete)
@@ -389,9 +372,8 @@ uber.requests.deleteCurrentAsync();
 ##### Example
 ```javascript
 uber.requests.deleteCurrentAsync()
-.then(function(res) {
-  console.log(res);
-});
+.then(function(res) { console.log(res); })
+.error(function(err) { console.error(err); });
 ```
 
 #### [Get estimates](https://developer.uber.com/docs/v1-requests-estimate)
@@ -412,9 +394,8 @@ uber.requests.getEstimatesAsync({
   "end_latitude": 37.775393,
   "end_longitude": -122.417546
 })
-.then(function(res) {
-  console.log(res);
-});
+.then(function(res) { console.log(res); })
+.error(function(err) { console.error(err); });
 ```
 
 #### [Get request by request_id](https://developer.uber.com/docs/v1-requests-details)
@@ -425,9 +406,8 @@ uber.requests.getByIDAsync(request_id);
 ##### Example
 ```javascript
 uber.requests.getByIDAsync('17cb78a7-b672-4d34-a288-a6c6e44d5315')
-.then(function(res) {
-  console.log(res);
-});
+.then(function(res) { console.log(res); })
+.error(function(err) { console.error(err); });
 ```
 
 #### [Update request by request_id](https://developer.uber.com/docs/v1-requests-patch)
@@ -445,9 +425,8 @@ uber.requests.updateByIDAsync('17cb78a7-b672-4d34-a288-a6c6e44d5315', {
   "end_latitude": 37.775393,
   "end_longitude": -122.417546
 })
-.then(function(res) {
-  console.log(res);
-});
+.then(function(res) { console.log(res); })
+.error(function(err) { console.error(err); });
 ```
 
 #### [Set request status by request_id](https://developer.uber.com/docs/sandbox)
@@ -460,9 +439,8 @@ uber.requests.setStatusByIDAsync(request_id, status);
 ##### Example
 ```javascript
 uber.requests.setStatusByIDAsync('17cb78a7-b672-4d34-a288-a6c6e44d5315', 'accepted')
-.then(function(res) {
-  console.log(res);
-});
+.then(function(res) { console.log(res); })
+.error(function(err) { console.error(err); });
 ```
 
 #### [Delete request by request_id](https://developer.uber.com/docs/v1-requests-cancel)
@@ -473,9 +451,8 @@ uber.requests.deleteByIDAsync(request_id);
 ##### Example
 ```javascript
 uber.requests.deleteByIDAsync('17cb78a7-b672-4d34-a288-a6c6e44d5315')
-.then(function(res) {
-  console.log(res);
-});
+.then(function(res) { console.log(res); })
+.error(function(err) { console.error(err); });
 ```
 
 #### [Get request map by request_id](https://developer.uber.com/docs/v1-requests-map)
@@ -488,9 +465,8 @@ Unless the referenced request is in status ``accepted``, a 404 error will be ret
 ##### Example
 ```javascript
 uber.requests.getMapByIDAsync('17cb78a7-b672-4d34-a288-a6c6e44d5315')
-.then(function(res) {
-  console.log(res);
-});
+.then(function(res) { console.log(res); })
+.error(function(err) { console.error(err); });
 ```
 
 #### [Get request receipt by request_id](https://developer.uber.com/docs/v1-requests-receipt)
@@ -506,9 +482,8 @@ The referenced request must be in status ``completed``.
 ##### Example
 ```javascript
 uber.requests.getReceiptByIDAsync('17cb78a7-b672-4d34-a288-a6c6e44d5315')
-.then(function(res) {
-  console.log(res);
-});
+.then(function(res) { console.log(res); })
+.error(function(err) { console.error(err); });
 ```
 
 ### /places
@@ -524,9 +499,8 @@ uber.places.getHomeAsync();
 ##### Example
 ```javascript
 uber.places.getHomeAsync()
-.then(function(res) {
-  console.log(res);
-});
+.then(function(res) { console.log(res); })
+.error(function(err) { console.error(err); });
 ```
 
 #### [Get work address](https://developer.uber.com/docs/v1-places-get)
@@ -537,9 +511,8 @@ uber.places.getWorkAsync();
 ##### Example
 ```javascript
 uber.places.getWorkAsync()
-.then(function(res) {
-  console.log(res);
-});
+.then(function(res) { console.log(res); })
+.error(function(err) { console.error(err); });
 ```
 
 #### [Update home address](https://developer.uber.com/docs/v1-places-put)
@@ -550,9 +523,8 @@ uber.places.updateHomeAsync(address);
 ##### Example
 ```javascript
 uber.places.updateHomeAsync('685 Market St, San Francisco, CA 94103, USA')
-.then(function(res) {
-  console.log(res);
-});
+.then(function(res) { console.log(res); })
+.error(function(err) { console.error(err); });
 ```
 
 #### [Update work address](https://developer.uber.com/docs/v1-places-put)
@@ -563,9 +535,8 @@ uber.places.updateWorkAsync(address);
 ##### Example
 ```javascript
 uber.places.updateWorkAsync('1455 Market St, San Francisco, CA 94103, USA')
-.then(function(res) {
-  console.log(res);
-});
+.then(function(res) { console.log(res); })
+.error(function(err) { console.error(err); });
 ```
 
 ### /payment-methods
@@ -579,9 +550,8 @@ uber.payment.getMethodsAsync();
 ##### Example
 ```javascript
 uber.payment.getMethodsAsync()
-.then(function(res) {
-  console.log(res);
-});
+.then(function(res) { console.log(res); })
+.error(function(err) { console.error(err); });
 ```
 
 ### /reminders
@@ -609,9 +579,8 @@ uber.reminders.createAsync({
     product_id: 'a1111c8c-c720-46c3-8534-2fcdd730040d'
   }
 })
-.then(function(res) {
-  console.log(res);
-});
+.then(function(res) { console.log(res); })
+.error(function(err) { console.error(err); });
 ```
 
 #### [Get reminder by reminder_id](https://developer.uber.com/docs/v1-reminders-get)
@@ -622,9 +591,8 @@ uber.reminders.getByIDAsync(reminder_id);
 ##### Example
 ```javascript
 uber.reminders.getByIDAsync('def-456')
-.then(function(res) {
-  console.log(res);
-});
+.then(function(res) { console.log(res); })
+.error(function(err) { console.error(err); });
 ```
 
 #### [Update reminder by reminder_id](https://developer.uber.com/docs/v1-reminders-patch)
@@ -647,9 +615,8 @@ uber.reminders.updateByIDAsync('def-456', {
     product_id: 'a1111c8c-c720-46c3-8534-2fcdd730040d'
   }
 })
-.then(function(res) {
-  console.log(res);
-});
+.then(function(res) { console.log(res); })
+.error(function(err) { console.error(err); });
 ```
 
 #### [Delete reminder by reminder_id](https://developer.uber.com/docs/v1-reminders-delete)
@@ -660,9 +627,8 @@ uber.reminders.deleteByIDAsync(reminder_id);
 ##### Example
 ```javascript
 uber.reminders.deleteByIDAsync('def-456')
-.then(function(res) {
-  console.log(res);
-});
+.then(function(res) { console.log(res); })
+.error(function(err) { console.error(err); });
 ```
 
 Test
