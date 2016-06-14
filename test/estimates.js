@@ -68,23 +68,29 @@ var tokenResponse = {
 describe('Price', function() {
     before(function() {
         nock('https://api.uber.com', {
-                reqheaders: {
-                    'Authorization': 'Token SERVERTOKENSERVERTOKENSERVERTOKENSERVERT'
-                }
-            })
-            .get('/v1/estimates/price?start_latitude=3.1357&start_longitude=101.688&end_latitude=3.0833&end_longitude=101.65&seat_count=2')
+            reqheaders: {
+                'Authorization': 'Token SERVERTOKENSERVERTOKENSERVERTOKENSERVERT'
+            }
+        })
+
+        .get('/v1/estimates/price?start_latitude=3.1357169&start_longitude=101.6881501&end_latitude=3.0831659&end_longitude=101.6505078&seat_count=2')
+            .times(2)
             .reply(200, priceReply);
         nock('https://api.uber.com', {
                 reqheaders: {
                     'Authorization': 'Token SERVERTOKENSERVERTOKENSERVERTOKENSERVERT'
                 }
             })
-            .get('/v1/estimates/price?start_latitude=3.1357&start_longitude=101.688&end_latitude=3.0833&end_longitude=101.65&seat_count=2')
+            .get('/v1/estimates/price?start_latitude=3.1357169&start_longitude=101.6881501&end_latitude=3.0831659&end_longitude=101.6505078&seat_count=2')
+            .times(2)
             .reply(200, priceReply);
     });
 
-    it('should list all the price estimates from server', function(done) {
-        uber.estimates.getPriceForRoute(3.1357, 101.6880, 3.0833, 101.6500,
+    it('should list all the price estimates by address', function(done) {
+        uber.estimates.getPriceForRouteByAddress(
+            'Convention & Entertaiment Centre, Kuala Lumpur Sentral, ' +
+            '50470 Kuala Lumpur, Wilayah Persekutuan Kuala Lumpur, Malaysia',
+            '39, Jalan 1/4, Seksyen 1, 46000 Petaling Jaya, Selangor, Malaysia',
             function(err, res) {
                 should.not.exist(err);
                 res.should.deep.equal(priceReply);
@@ -92,28 +98,93 @@ describe('Price', function() {
             });
     });
 
-    it('should list all the price estimates from server without access token', function(done) {
-        uber.clearTokens();
-        uber.estimates.getPriceForRoute(3.1357, 101.6880, 3.0833, 101.6500,
+
+    it('should list all the price estimates', function(done) {
+        uber.estimates.getPriceForRoute(3.1357169, 101.6881501, 3.0831659, 101.6505078,
             function(err, res) {
                 should.not.exist(err);
                 res.should.deep.equal(priceReply);
+                done();
+            });
+    });
+
+
+    it('should list all the price estimates by address without access token', function(done) {
+        uber.clearTokens();
+        uber.estimates.getPriceForRouteByAddress(
+            'Convention & Entertaiment Centre, Kuala Lumpur Sentral, ' +
+            '50470 Kuala Lumpur, Wilayah Persekutuan Kuala Lumpur, Malaysia',
+            '39, Jalan 1/4, Seksyen 1, 46000 Petaling Jaya, Selangor, Malaysia',
+            function(err, res) {
+                should.not.exist(err);
+                res.should.deep.equal(priceReply);
+                done();
+            });
+    });
+
+    it('should list all the price estimates without access token', function(done) {
+        uber.clearTokens();
+        uber.estimates.getPriceForRoute(3.1357169, 101.6881501, 3.0831659, 101.6505078,
+            function(err, res) {
+                should.not.exist(err);
+                res.should.deep.equal(priceReply);
+                done();
+            });
+    });
+
+    it('should return error if start address is invalid', function(done) {
+        uber.estimates.getPriceForRouteByAddress(
+            ' ',
+            '39, Jalan 1/4, Seksyen 1, 46000 Petaling Jaya, Selangor, Malaysia',
+            function(err, res) {
+                err.message.should.equal('No coordinates found for: " "');
                 done();
             });
     });
 
     it('should return error if start point lat and lon are invalid', function(done) {
-        uber.estimates.getPriceForRoute(null, null, 3.1357, 101.6880, function(err, res) {
+        uber.estimates.getPriceForRoute(null, null, 3.1357169, 101.6881501, function(err, res) {
             err.message.should.equal('Invalid starting point latitude & longitude');
             done();
         });
     });
 
+    it('should return error if end address is invalid', function(done) {
+        uber.estimates.getPriceForRouteByAddress(
+            'Convention & Entertaiment Centre, Kuala Lumpur Sentral, ' +
+            '50470 Kuala Lumpur, Wilayah Persekutuan Kuala Lumpur, Malaysia',
+            null,
+            function(err, res) {
+                err.message.should.equal('Geocoder.geocode requires a location.');
+                done();
+            });
+    });
+
     it('should return error if end point lat and lon are invalid', function(done) {
-        uber.estimates.getPriceForRoute(3.1357, 101.6880, null, null, function(err, res) {
+        uber.estimates.getPriceForRoute(3.1357169, 101.6881501, null, null, function(err, res) {
             err.message.should.equal('Invalid ending point latitude & longitude');
             done();
         });
+    });
+
+    it('should return error if both addresses are null', function(done) {
+        uber.estimates.getPriceForRouteByAddress(
+            null,
+            null,
+            function(err, res) {
+                err.message.should.equal('Geocoder.geocode requires a location.');
+                done();
+            });
+    });
+
+    it('should return error if both addresses are invalid', function(done) {
+        uber.estimates.getPriceForRouteByAddress(
+            ' ',
+            ' ',
+            function(err, res) {
+                err.message.should.equal('No coordinates found for: " "');
+                done();
+            });
     });
 
     it('should return error if there is no required params', function(done) {
@@ -136,9 +207,9 @@ describe('Time', function() {
                 }
             })
             .get(function(uri) {
-                return uri.indexOf('v1/estimates/time?start_latitude=3.1357&start_longitude=101.688') >= 0;
+                return uri.indexOf('v1/estimates/time?start_latitude=3.1357169&start_longitude=101.6881501') >= 0;
             })
-            .times(4)
+            .times(8)
             .reply(200, timeReply);
     });
 
@@ -148,7 +219,24 @@ describe('Time', function() {
             },
             function(err, accessToken, refreshToken) {
                 should.not.exist(err);
-                uber.estimates.getETAForLocation(3.1357, 101.6880,
+                uber.estimates.getETAForLocation(3.1357169, 101.6881501,
+                    function(err, res) {
+                        should.not.exist(err);
+                        res.should.deep.equal(timeReply);
+                        done();
+                    });
+            });
+    });
+
+    it('should list all the price estimates for address', function(done) {
+        uber.authorization({
+                authorization_code: 'x8Y6dF2qA6iKaTKlgzVfFvyYoNrlkp'
+            },
+            function(err, accessToken, refreshToken) {
+                should.not.exist(err);
+                uber.estimates.getETAForAddress(
+                    'Convention & Entertaiment Centre, Kuala Lumpur Sentral, ' +
+                    '50470 Kuala Lumpur, Wilayah Persekutuan Kuala Lumpur, Malaysia',
                     function(err, res) {
                         should.not.exist(err);
                         res.should.deep.equal(timeReply);
@@ -159,7 +247,18 @@ describe('Time', function() {
 
     it('should list all the price estimates for location without access token', function(done) {
         uber.clearTokens();
-        uber.estimates.getETAForLocation(3.1357, 101.6880,
+        uber.estimates.getETAForLocation(3.1357169, 101.6881501,
+            function(err, res) {
+                should.not.exist(err);
+                res.should.deep.equal(timeReply);
+                done();
+            });
+    });
+
+    it('should list all the price estimates for address without access token', function(done) {
+        uber.estimates.getETAForAddress(
+            'Convention & Entertaiment Centre, Kuala Lumpur Sentral, ' +
+            '50470 Kuala Lumpur, Wilayah Persekutuan Kuala Lumpur, Malaysia',
             function(err, res) {
                 should.not.exist(err);
                 res.should.deep.equal(timeReply);
@@ -168,7 +267,7 @@ describe('Time', function() {
     });
 
     it('should list all the price estimates for product and location', function(done) {
-        uber.estimates.getETAForLocation(3.1357, 101.6880, '327f7914-cd12-4f77-9e0c-b27bac580d03',
+        uber.estimates.getETAForLocation(3.1357169, 101.6881501, '327f7914-cd12-4f77-9e0c-b27bac580d03',
             function(err, res) {
                 should.not.exist(err);
                 res.should.deep.equal(timeReply);
@@ -176,8 +275,32 @@ describe('Time', function() {
             });
     });
 
-    it('should list all the price estimates for location but empty product', function(done) {
-        uber.estimates.getETAForLocation(3.1357, 101.6880, '',
+    it('should list all the price estimates for product and address', function(done) {
+        uber.estimates.getETAForAddress(
+            'Convention & Entertaiment Centre, Kuala Lumpur Sentral, ' +
+            '50470 Kuala Lumpur, Wilayah Persekutuan Kuala Lumpur, Malaysia',
+            '327f7914-cd12-4f77-9e0c-b27bac580d03',
+            function(err, res) {
+                should.not.exist(err);
+                res.should.deep.equal(timeReply);
+                done();
+            });
+    });
+
+    it('should list all the price estimates for location with empty product', function(done) {
+        uber.estimates.getETAForLocation(3.1357169, 101.6881501, '',
+            function(err, res) {
+                should.not.exist(err);
+                res.should.deep.equal(timeReply);
+                done();
+            });
+    });
+
+    it('should list all the price estimates for address with empty product', function(done) {
+        uber.estimates.getETAForAddress(
+            'Convention & Entertaiment Centre, Kuala Lumpur Sentral, ' +
+            '50470 Kuala Lumpur, Wilayah Persekutuan Kuala Lumpur, Malaysia',
+            '',
             function(err, res) {
                 should.not.exist(err);
                 res.should.deep.equal(timeReply);
@@ -188,6 +311,20 @@ describe('Time', function() {
     it('should return error if there is no required params', function(done) {
         uber.estimates.getETAForLocation(null, null, function(err, res) {
             err.message.should.equal('Invalid latitude & longitude');
+            done();
+        });
+    });
+
+    it('should return error if there is no valid address', function(done) {
+        uber.estimates.getETAForAddress(' ', function(err, res) {
+            err.message.should.equal('No coordinates found for: " "');
+            done();
+        });
+    });
+
+    it('should return error if there is no required params', function(done) {
+        uber.estimates.getETAForAddress(null, function(err, res) {
+            err.message.should.equal('Geocoder.geocode requires a location.');
             done();
         });
     });

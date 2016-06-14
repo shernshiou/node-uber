@@ -155,15 +155,15 @@ describe('Products Resource', function() {
                     'Authorization': 'Token SERVERTOKENSERVERTOKENSERVERTOKENSERVERT'
                 }
             })
-            .get('/v1/products?latitude=3.1357&longitude=101.688')
+            .get('/v1/products?latitude=3.1357169&longitude=101.6881501')
             .reply(200, productReply);
     });
 
     it('should list all the product types', function(done) {
         uber.clearTokens();
         uber.products.list({
-            latitude: 3.1357,
-            longitude: 101.6880
+            latitude: 3.1357169,
+            longitude: 101.6881501
         }, function(err, res) {
             should.not.exist(err);
             res.should.deep.equal(productReply);
@@ -422,14 +422,14 @@ describe('Estimates Resource', function() {
                         'Authorization': 'Token SERVERTOKENSERVERTOKENSERVERTOKENSERVERT'
                     }
                 })
-                .get('/v1/estimates/price?start_latitude=3.1357&start_longitude=101.688&end_latitude=3.0833&end_longitude=101.65&seat_count=2')
+                .get('/v1/estimates/price?start_latitude=3.1357169&start_longitude=101.6881501&end_latitude=3.0833&end_longitude=101.65&seat_count=2')
                 .reply(200, priceReply);
         });
 
         it('should list all the price estimates from server', function(done) {
             uber.estimates.price({
-                start_latitude: 3.1357,
-                start_longitude: 101.6880,
+                start_latitude: 3.1357169,
+                start_longitude: 101.6881501,
                 end_latitude: 3.0833,
                 end_longitude: 101.6500
             }, function(err, res) {
@@ -454,14 +454,14 @@ describe('Estimates Resource', function() {
                         'Authorization': 'Token SERVERTOKENSERVERTOKENSERVERTOKENSERVERT'
                     }
                 })
-                .get('/v1/estimates/time?start_latitude=3.1357&start_longitude=101.688')
+                .get('/v1/estimates/time?start_latitude=3.1357169&start_longitude=101.6881501')
                 .reply(200, timeReply);
         });
 
         it('should list all the price estimates from server', function(done) {
             uber.estimates.time({
-                start_latitude: 3.1357,
-                start_longitude: 101.6880
+                start_latitude: 3.1357169,
+                start_longitude: 101.6881501
             }, function(err, res) {
                 should.not.exist(err);
                 res.should.deep.equal(timeReply);

@@ -94,11 +94,14 @@ Method Overview
 
 | HTTP Method 	| Endpoint                          	| Auth Method            	| Required Scope                                   	| Methods                            	|
 |-------------	|-----------------------------------	|------------------------	|-------------------------------------------------	|-----------------------------------	|
+| GET         	| /v1/products                      	| OAuth or server_token 	|                                                 	| products.getAllForAddress        	|
 | GET         	| /v1/products                      	| OAuth or server_token 	|                                                 	| products.getAllForLocation        	|
 | GET         	| /v1/products/{product_id}         	| OAuth or server_token 	|                                                 	| products.getByID                  	|
 | PUT         	| /v1/products/{product_id}         	| OAuth or server_token   | (Sandbox mode)                                   	| products.setSurgeMultiplierByID     |
 | PUT         	| /v1/products/{product_id}         	| OAuth or server_token   | (Sandbox mode)                                   	| products.setDriversAvailabilityByID |
 | GET         	| /v1/estimates/price               	| OAuth or server_token 	|                                                 	| estimates.getPriceForRoute        	|
+| GET         	| /v1/estimates/price               	| OAuth or server_token 	|                                                 	| estimates.getPriceForRouteByAddress        	|
+| GET         	| /v1/estimates/time                	| OAuth or server_token 	|                                                 	| estimates.getETAForAddress       	|
 | GET         	| /v1/estimates/time                	| OAuth or server_token 	|                                                 	| estimates.getETAForLocation       	|
 | GET         	| /v1.2/history                     	| OAuth                  	| history or history_lite                          	| user.getHistory                   	|
 | GET         	| /v1/me                            	| OAuth                  	| profile                                         	| user.getProfile                   	|
@@ -164,6 +167,23 @@ uber.authorization({ refresh_token: 'REFRESH_TOKEN' },
 ### /products
 The product endpoint can be accessed either with an OAuth ``access_token`` or simply with the ``server_token`` because it is not user-specific. It has, therefore, no required scope for access.
 
+#### [Get available products for address](https://developer.uber.com/docs/v1-products)
+This method utilizes [geocoder](https://github.com/wyattdanger/geocoder) to retrieve the coordinates for an address using Google as the provider. It uses the first element of the response. In other words, the coordinates represent what the Google algorithm provides with most confidence value.
+
+> **Note**: To ensure correct coordinates you should provide the complete address, including city, ZIP code, state, and country.
+
+```javascript
+uber.products.getAllForAddress(address, callback);
+```
+
+##### Example
+```javascript
+uber.products.getAllForAddress('1455 Market St, San Francisco, CA 94103, US', function (err, res) {
+  if (err) console.error(err);
+  else console.log(res);
+});
+```
+
 #### [Get available products for location](https://developer.uber.com/docs/v1-products)
 ```javascript
 uber.products.getAllForLocation(latitude, longitude, callback);
@@ -171,7 +191,7 @@ uber.products.getAllForLocation(latitude, longitude, callback);
 
 ##### Example
 ```javascript
-uber.products.getAllForLocation(3.1357, 101.6880, function (err, res) {
+uber.products.getAllForLocation(3.1357169, 101.6881501, function (err, res) {
   if (err) console.error(err);
   else console.log(res);
 });
@@ -229,6 +249,27 @@ uber.products.setSurgeMultiplierByID('d4abaae7-f4d6-4152-91cc-77523e8165a4', 2.2
 ### /estimates
 The estimates endpoint can be accessed either with an OAuth ``access_token`` or simply with the ``server_token`` because it is not user-specific. It has, therefore, no required scope for access.
 
+#### [Get price estimates for specific address](https://developer.uber.com/docs/v1-estimates-price)
+This method utilizes [geocoder](https://github.com/wyattdanger/geocoder) to retrieve the coordinates for an address using Google as the provider. It uses the first element of the response. In other words, the coordinates represent what the Google algorithm provides with most confidence value.
+
+> **Note**: To ensure correct coordinates you should provide the complete address, including city, ZIP code, state, and country.
+```javascript
+uber.estimates.getPriceForRouteByAddress(start_address, end_address, [, seats], callback);
+```
+
+``seats`` defaults to 2, which is also the maximum value for this parameter.
+
+##### Example
+```javascript
+uber.estimates.getPriceForRouteByAddress(
+  '1455 Market St, San Francisco, CA 94103, US',
+  '2675 Middlefield Rd, Palo Alto, CA 94306, US',
+  function (err, res) {
+  if (err) console.error(err);
+  else console.log(res);
+});
+```
+
 #### [Get price estimates for specific route](https://developer.uber.com/docs/v1-estimates-price)
 ```javascript
 uber.estimates.getPriceForRoute(start_latitude, start_longitude, end_latitude, end_longitude [, seats], callback);
@@ -238,7 +279,24 @@ uber.estimates.getPriceForRoute(start_latitude, start_longitude, end_latitude, e
 
 ##### Example
 ```javascript
-uber.estimates.getPriceForRoute(3.1357, 101.6880, 3.0833, 101.6500, function (err, res) {
+uber.estimates.getPriceForRoute(3.1357169, 101.6881501, 3.0833, 101.6500, function (err, res) {
+  if (err) console.error(err);
+  else console.log(res);
+});
+```
+
+#### [Get ETA for address](https://developer.uber.com/docs/v1-estimates-time)
+This method utilizes [geocoder](https://github.com/wyattdanger/geocoder) to retrieve the coordinates for an address using Google as the provider. It uses the first element of the response. In other words, the coordinates represent what the Google algorithm provides with most confidence value.
+
+> **Note**: To ensure correct coordinates you should provide the complete address, including city, ZIP code, state, and country.
+
+```javascript
+uber.estimates.getETAForAddress(address, [, product_id], callback);
+```
+
+##### Example
+```javascript
+uber.estimates.getETAForAddress('455 Market St, San Francisco, CA 94103, US', function (err, res) {
   if (err) console.error(err);
   else console.log(res);
 });
@@ -251,7 +309,7 @@ uber.estimates.getETAForLocation(latitude, longitude [, product_id], callback);
 
 ##### Example
 ```javascript
-uber.estimates.getETAForLocation(3.1357, 101.6880, function (err, res) {
+uber.estimates.getETAForLocation(3.1357169, 101.6881501, function (err, res) {
   if (err) console.error(err);
   else console.log(res);
 });

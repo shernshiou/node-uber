@@ -23,7 +23,7 @@ uber.authorizationAsync({ authorization_code: 'YOUR AUTH CODE' })
     console.log('Your refresh_token is: ' + refresh_token);
 
     // chain the promise to retrive all products for location
-    return uber.products.getAllForLocationAsync(3.1357, 101.6880);
+    return uber.products.getAllForLocationAsync(3.1357169, 101.6881501);
   })
   .then(function(res) {
     // response with all products

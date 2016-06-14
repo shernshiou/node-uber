@@ -25,7 +25,7 @@ uber.authorization({
         console.log('Your access_token is: ' + access_token);
         console.log('Your refresh_token is: ' + refresh_token);
 
-        uber.products.getAllForLocation(3.1357, 101.6880, function(err, res) {
+        uber.products.getAllForLocation(3.1357169, 101.6881501, function(err, res) {
             if (err) console.error(err);
             else console.log(res);
         });

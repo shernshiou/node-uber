@@ -56,15 +56,45 @@ describe('List', function() {
                     'Authorization': 'Token SERVERTOKENSERVERTOKENSERVERTOKENSERVERT'
                 }
             })
-            .get('/v1/products?latitude=3.1357&longitude=101.688')
+            .get('/v1/products?latitude=3.1357169&longitude=101.6881501')
+            .times(2)
             .reply(200, productReply);
     });
 
     it('should list all the product types', function(done) {
         uber.clearTokens();
-        uber.products.getAllForLocation(3.1357, 101.6880, function(err, res) {
+        uber.products.getAllForLocation(3.1357169, 101.6881501, function(err, res) {
             should.not.exist(err);
             res.should.deep.equal(productReply);
+            done();
+        });
+    });
+
+    it('should list all the product types by address', function(done) {
+        uber.clearTokens();
+        uber.products.getAllForAddress('Convention & Entertaiment Centre, ' +
+            'Kuala Lumpur Sentral, 50470 Kuala Lumpur, ' +
+            'Wilayah Persekutuan Kuala Lumpur, Malaysia', function(err, res) {
+            should.not.exist(err);
+            res.should.deep.equal(productReply);
+            done();
+        });
+    });
+
+    it('should return error if address is empty', function(done) {
+        uber.clearTokens();
+        uber.products.getAllForAddress(' ', function(err, res) {
+            should.not.exist(res);
+            err.message.should.equal('No coordinates found for: " "');
+            done();
+        });
+    });
+
+    it('should return error if address is null', function(done) {
+        uber.clearTokens();
+        uber.products.getAllForAddress(null, function(err, res) {
+            should.not.exist(res);
+            err.message.should.equal('Geocoder.geocode requires a location.');
             done();
         });
     });
