@@ -1,0 +1,27 @@
+{
+    "products": [{
+        "product_id": "327f7914-cd12-4f77-9e0c-b27bac580d03",
+        "description": "The original Uber",
+        "display_name": "UberBLACK",
+        "capacity": 4,
+        "image": "http://..."
+    }, {
+        "product_id": "955b92da-2b90-4f32-9586-f766cee43b99",
+        "description": "Room for everyone",
+        "display_name": "UberSUV",
+        "capacity": 6,
+        "image": "http://..."
+    }, {
+        "product_id": "622237e-c1e4-4523-b6e7-e1ac53f625ed",
+        "description": "Taxi without the hassle",
+        "display_name": "uberTAXI",
+        "capacity": 4,
+        "image": "http://..."
+    }, {
+        "product_id": "b5e74e96-5d27-4caf-83e9-54c030cd6ac5",
+        "description": "The low-cost Uber",
+        "display_name": "uberX",
+        "capacity": 4,
+        "image": "http://..."
+    }]
+}

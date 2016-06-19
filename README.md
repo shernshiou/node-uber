@@ -61,14 +61,18 @@ app.get('/api/login', function(request, response) {
 The URL will lead to a page where your user will be required to login and approve access to his/her Uber account. In case that step was successful, Uber will issue an HTTP 302 redirect to the redirect_uri defined in the [Uber developer dashboard](https://developer.uber.com/dashboard). On that redirect, you will receive an authorization code, which is single use and expires in 10 minutes.
 
 ### Step two: Receive redirect and get an access token
- To complete the authorization you now need to receive the callback and convert the given authorization code into an OAuth access token. You can accomplish that using ``uber.authorizationAsync``. This method will retrieve and store the access token within the uber object for consecutive requests.
+ To complete the authorization you now need to receive the callback and convert the given authorization code into an OAuth access token. You can accomplish that using ``uber.authorizationAsync``. This method will retrieve and store the access_token, refresh_token, authorized scopes, and token expiration date within the uber object for consecutive requests.
 
  Using Express, you could achieve that as follows:
  ```javascript
  app.get('/api/callback', function(request, response) {
     uber.authorizationAsync({authorization_code: request.query.code})
-    .spread(function(access_token, refresh_token) {
-      // store the user id and associated access_token & refresh_token
+    .spread(function(access_token, refresh_token, authorizedScopes, tokenExpiration) {
+      // store the user id and associated access_token, refresh_token, scopes and token expiration date
+      console.log('New access_token retrieved: ' + access_token);
+      console.log('... token allows access to scopes: ' + authorizedScopes);
+      console.log('... token is valid until: ' + tokenExpiration);
+      console.log('... after token expiration, re-authorize using refresh_token: ' + refresh_token);
 
       // redirect the user back to your actual app
       response.redirect('/web/index.html');
@@ -179,11 +183,15 @@ uber.authorizationAsync({ refresh_token: 'REFRESH_TOKEN' })
 });
 ```
 
-##### Example: access_token and refresh_token
+##### Example: All properties
 ```javascript
 uber.authorizationAsync({ refresh_token: 'REFRESH_TOKEN' })
-  .spread(function(access_token, refresh_token) {
-    console.log(access_token, refresh_token);
+.spread(function(access_token, refresh_token, authorizedScopes, tokenExpiration) {
+  // store the user id and associated access_token, refresh_token, scopes and token expiration date
+  console.log('New access_token retrieved: ' + access_token);
+  console.log('... token allows access to scopes: ' + authorizedScopes);
+  console.log('... token is valid until: ' + tokenExpiration);
+  console.log('... after token expiration, re-authorize using refresh_token: ' + refresh_token);
 })
   .error(function(err) { console.error(err); });
 });
@@ -372,6 +380,9 @@ uber.requests.createAsync(parameter);
 
 ##### Parameter
 * JS Object with at least the following attributes: ``start_latitude`` & ``start_longitude`` OR ``start_place_id``
+* You can provide ``startAddress`` instead of ``start_latitude`` & ``start_longitude`` and ``endAddress`` instead of ``end_latitude`` & ``end_longitude`` thanks to [geocoder](https://github.com/wyattdanger/geocoder)
+
+> **Note**: To ensure correct coordinates you should provide the complete address, including city, ZIP code, state, and country.
 
 ##### Example
 ```javascript
@@ -408,6 +419,9 @@ uber.requests.updateCurrentAsync(parameter);
 
 ##### Parameter
 * JS Object with attributes to be updated (only destination-related attributes enabled)
+* You can provide ``startAddress`` instead of ``start_latitude`` & ``start_longitude`` and ``endAddress`` instead of ``end_latitude`` & ``end_longitude`` thanks to [geocoder](https://github.com/wyattdanger/geocoder)
+
+> **Note**: To ensure correct coordinates you should provide the complete address, including city, ZIP code, state, and country.
 
 
 ##### Example
@@ -439,6 +453,9 @@ uber.requests.getEstimatesAsync(parameter);
 
 ##### Parameter
 * JS Object with at least the following attributes: ``start_latitude`` & ``start_longitude`` OR ``start_place_id``
+* You can provide ``startAddress`` instead of ``start_latitude`` & ``start_longitude`` and ``endAddress`` instead of ``end_latitude`` & ``end_longitude`` thanks to [geocoder](https://github.com/wyattdanger/geocoder)
+
+> **Note**: To ensure correct coordinates you should provide the complete address, including city, ZIP code, state, and country.
 
 
 ##### Example
@@ -473,6 +490,9 @@ uber.requests.updateByIDAsync(request_id, parameter);
 
 ##### Parameter
 * JS Object with attributes to be updated (only destination-related attributes enabled)
+* You can provide ``startAddress`` instead of ``start_latitude`` & ``start_longitude`` and ``endAddress`` instead of ``end_latitude`` & ``end_longitude`` thanks to [geocoder](https://github.com/wyattdanger/geocoder)
+
+> **Note**: To ensure correct coordinates you should provide the complete address, including city, ZIP code, state, and country.
 
 
 ##### Example
@@ -620,6 +640,8 @@ uber.reminders.createAsync(parameter);
 
 ##### Parameter
 * JS Object with at least the following attributes: ``reminder_time``, ``phone_number``, ``event`` & ``event.time``
+* You can provide ``event.address`` instead of ``event.latitude`` & ``event.longitude`` thanks to [geocoder](https://github.com/wyattdanger/geocoder)
+> **Note**: To ensure correct coordinates you should provide the complete address, including city, ZIP code, state, and country.
 
 ##### Example
 ```javascript
@@ -630,8 +652,7 @@ uber.reminders.createAsync({
     time: 1429294463,
     name: 'Frisbee with friends',
     location: 'Dolores Park',
-    latitude: 37.759773,
-    longitude: -122.427063,
+    address: '532-564 Dolores St, San Francisco, CA 94114, USA',
     product_id: 'a1111c8c-c720-46c3-8534-2fcdd730040d'
   }
 })
@@ -658,6 +679,8 @@ uber.reminders.updateByIDAsync(reminder_id, parameter);
 
 ##### Parameter
 * JS Object with attributes to be updated
+* You can provide ``event.address`` instead of ``event.latitude`` & ``event.longitude`` thanks to [geocoder](https://github.com/wyattdanger/geocoder)
+> **Note**: To ensure correct coordinates you should provide the complete address, including city, ZIP code, state, and country.
 
 ##### Example
 ```javascript
@@ -666,8 +689,7 @@ uber.reminders.updateByIDAsync('def-456', {
     time: 1429294463,
     name: 'Frisbee with friends',
     location: 'Dolores Park',
-    latitude: 37.759773,
-    longitude: -122.427063,
+    address: '532-564 Dolores St, San Francisco, CA 94114, USA',
     product_id: 'a1111c8c-c720-46c3-8534-2fcdd730040d'
   }
 })
@@ -708,8 +730,6 @@ TODOs
 - [ ] Implement rate limit status
 - [ ] Leverage Surge Pricing responses
 - [ ] Implement access_token refresh
-- [ ] Checks for scopes
-- [ ] Checks for auth methods
 - [ ] Leverage Webhooks
 - [ ] Learn from other Uber SDKs
 - [ ] Check UberPOOL compatibility (https://developer.uber.com/docs/tutorials-rides-api#section-uberpool)

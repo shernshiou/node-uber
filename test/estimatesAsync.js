@@ -1,220 +1,237 @@
 var common = require("./common"),
-    nock = common.nock,
     should = common.should,
-    uber = common.uber;
-
-var tokenResponse = {
-        "access_token": "EE1IDxytP04tJ767GbjH7ED9PpGmYvL",
-        "token_type": "Bearer",
-        "expires_in": 2592000,
-        "refresh_token": "Zx8fJ8qdSRRseIVlsGgtgQ4wnZBehr",
-        "scope": "profile history"
-    },
-    priceReply = {
-        "prices": [{
-            "product_id": "08f17084-23fd-4103-aa3e-9b660223934b",
-            "currency_code": "USD",
-            "display_name": "UberBLACK",
-            "estimate": "$23-29",
-            "low_estimate": 23,
-            "high_estimate": 29,
-            "surge_multiplier": 1
-        }, {
-            "product_id": "9af0174c-8939-4ef6-8e91-1a43a0e7c6f6",
-            "currency_code": "USD",
-            "display_name": "UberSUV",
-            "estimate": "$36-44",
-            "low_estimate": 36,
-            "high_estimate": 44,
-            "surge_multiplier": 1.25
-        }, {
-            "product_id": "aca52cea-9701-4903-9f34-9a2395253acb",
-            "currency_code": null,
-            "display_name": "uberTAXI",
-            "estimate": "Metered",
-            "low_estimate": null,
-            "high_estimate": null,
-            "surge_multiplier": 1
-        }, {
-            "product_id": "a27a867a-35f4-4253-8d04-61ae80a40df5",
-            "currency_code": "USD",
-            "display_name": "uberX",
-            "estimate": "$15",
-            "low_estimate": 15,
-            "high_estimate": 15,
-            "surge_multiplier": 1
-        }]
-    },
-    timeReply = {
-        "times": [{
-            "product_id": "5f41547d-805d-4207-a297-51c571cf2a8c",
-            "display_name": "UberBLACK",
-            "estimate": 410
-        }, {
-            "product_id": "694558c9-b34b-4836-855d-821d68a4b944",
-            "display_name": "UberSUV",
-            "estimate": 535
-        }, {
-            "product_id": "65af3521-a04f-4f80-8ce2-6d88fb6648bc",
-            "display_name": "uberTAXI",
-            "estimate": 294
-        }, {
-            "product_id": "17b011d3-65be-421d-adf6-a5480a366453",
-            "display_name": "uberX",
-            "estimate": 288
-        }]
-    };
+    uber = common.uber,
+    reply = common.jsonReply,
+    ac = common.authCode;
 
 describe('Price', function() {
-    before(function() {
-        nock('https://api.uber.com', {
-                reqheaders: {
-                    'Authorization': 'Token SERVERTOKENSERVERTOKENSERVERTOKENSERVERT'
-                }
-            })
-            .get('/v1/estimates/price?start_latitude=3.1357169&start_longitude=101.6881501&end_latitude=3.0833&end_longitude=101.65&seat_count=2')
-            .reply(200, priceReply);
-        nock('https://api.uber.com', {
-                reqheaders: {
-                    'Authorization': 'Token SERVERTOKENSERVERTOKENSERVERTOKENSERVERT'
-                }
-            })
-            .get('/v1/estimates/price?start_latitude=3.1357169&start_longitude=101.6881501&end_latitude=3.0833&end_longitude=101.65&seat_count=2')
-            .reply(200, priceReply);
+    it('should list all the price estimates by address', function(done) {
+        uber.estimates.getPriceForRouteByAddressAsync('A', 'B')
+        .then(function(res) {
+                res.should.deep.equal(reply('price'));
+                done();
+            });
+    });
+
+    it('should list all the price estimates by address with invalid seats count', function(done) {
+        uber.estimates.getPriceForRouteByAddressAsync('A', 'B', '')
+        .then(function(res) {
+                res.should.deep.equal(reply('price'));
+                done();
+            });
     });
 
     it('should list all the price estimates from server', function(done) {
-        uber.estimates.getPriceForRouteAsync(3.1357169, 101.6881501, 3.0833, 101.6500)
+        uber.estimates.getPriceForRouteAsync(3.1357169, 101.6881501, 3.0831659, 101.6505078)
             .then(function(res) {
-                res.should.deep.equal(priceReply);
-            })
-            .error(function(err) {
-                should.not.exist(err);
+                res.should.deep.equal(reply('price'));
+                done();
             });
-        done();
+    });
+
+    it('should list all the price estimates from server with invalid seats count', function(done) {
+        uber.estimates.getPriceForRouteAsync(3.1357169, 101.6881501, 3.0831659, 101.6505078, '')
+            .then(function(res) {
+                res.should.deep.equal(reply('price'));
+                done();
+            });
+    });
+
+    it('should list all the price estimates by address without access token', function(done) {
+        uber.clearTokens();
+        uber.estimates.getPriceForRouteByAddressAsync('A', 'B')
+        .then(function(res) {
+                res.should.deep.equal(reply('price'));
+                done();
+            });
     });
 
     it('should list all the price estimates from server without access token', function(done) {
         uber.clearTokens();
-        uber.estimates.getPriceForRouteAsync(3.1357169, 101.6881501, 3.0833, 101.6500)
+        uber.estimates.getPriceForRouteAsync(3.1357169, 101.6881501, 3.0831659, 101.6505078)
             .then(function(res) {
-                res.should.deep.equal(priceReply);
-            })
-            .error(function(err) {
-                should.not.exist(err);
+                res.should.deep.equal(reply('price'));
+                done();
             });
-        done();
+    });
+
+    it('should return error if start address is invalid', function(done) {
+        uber.estimates.getPriceForRouteByAddressAsync(' ', 'B')
+        .error(function(err) {
+                err.message.should.equal('No coordinates found for: " "');
+                done();
+            });
+    });
+
+    it('should return error if start address is invalid with seats', function(done) {
+        uber.estimates.getPriceForRouteByAddressAsync(' ', 'B', 2)
+        .error(function(err) {
+                err.message.should.equal('No coordinates found for: " "');
+                done();
+            });
     });
 
     it('should return error if start point lat and lon are invalid', function(done) {
         uber.estimates.getPriceForRouteAsync(null, null, 3.1357169, 101.6881501)
-            .then(function(res) {
-                should.not.exist(res);
-            })
             .error(function(err) {
                 err.message.should.equal('Invalid starting point latitude & longitude');
+                done();
             });
-        done();
+    });
+
+    it('should return error if end address is invalid', function(done) {
+        uber.estimates.getPriceForRouteByAddressAsync('A', null)
+        .error(function(err) {
+                err.message.should.equal('Geocoder.geocode requires a location.');
+                done();
+            });
+    });
+
+    it('should return error if end address is invalid with seats', function(done) {
+        uber.estimates.getPriceForRouteByAddressAsync('A', null, 2)
+        .error(function(err) {
+                err.message.should.equal('Geocoder.geocode requires a location.');
+                done();
+            });
     });
 
     it('should return error if end point lat and lon are invalid', function(done) {
         uber.estimates.getPriceForRouteAsync(3.1357169, 101.6881501, null, null)
-            .then(function(res) {
-                should.not.exist(res);
-            })
             .error(function(err) {
                 err.message.should.equal('Invalid ending point latitude & longitude');
+                done();
             });
-        done();
+    });
+
+    it('should return error if both addresses are null', function(done) {
+        uber.estimates.getPriceForRouteByAddressAsync(null, null)
+        .error(function(err) {
+                err.message.should.equal('Geocoder.geocode requires a location.');
+                done();
+            });
+    });
+
+    it('should return error if both addresses are invalid', function(done) {
+        uber.estimates.getPriceForRouteByAddressAsync(' ', ' ')
+        .error(function(err) {
+                err.message.should.equal('No coordinates found for: " "');
+                done();
+            });
     });
 
     it('should return error if there is no required params', function(done) {
         uber.estimates.getPriceForRouteAsync(null, null, null, null)
-            .then(function(res) {
-                should.not.exist(res);
-            })
             .error(function(err) {
                 err.message.should.equal('Invalid starting point latitude & longitude');
+                done();
             });
-        done();
     });
 });
 
 describe('Time', function() {
-    before(function() {
-        nock('https://login.uber.com')
-            .post('/oauth/token')
-            .times(3)
-            .reply(200, tokenResponse);
-        nock('https://api.uber.com', {
-                reqheaders: {
-                    'Authorization': 'Token SERVERTOKENSERVERTOKENSERVERTOKENSERVERT'
-                }
-            })
-            .get(function(uri) {
-                return uri.indexOf('v1/estimates/time?start_latitude=3.1357169&start_longitude=101.6881501') >= 0;
-            })
-            .times(4)
-            .reply(200, timeReply);
-    });
-
     it('should list all the price estimates for location', function(done) {
         uber.authorizationAsync({
-                authorization_code: 'x8Y6dF2qA6iKaTKlgzVfFvyYoNrlkp'
+                authorization_code: ac
             }).then(function(res) {
                 return uber.estimates.getETAForLocationAsync(3.1357169, 101.6881501);
             })
             .then(function(res) {
-                res.should.deep.equal(timeReply);
-            })
-            .error(function(err) {
-                should.not.exist(err);
+                res.should.deep.equal(reply('time'));
+                done();
             });
-        done();
+    });
+
+    it('should list all the price estimates for address', function(done) {
+        uber.authorizationAsync({
+                authorization_code: ac
+            }).then(function(res) {
+                return uber.estimates.getETAForAddressAsync('A');
+            })
+            .then(function(res) {
+                res.should.deep.equal(reply('time'));
+                done();
+            });
     });
 
     it('should list all the price estimates for location without access token', function(done) {
         uber.clearTokens();
         uber.estimates.getETAForLocationAsync(3.1357169, 101.6881501)
             .then(function(res) {
-                res.should.deep.equal(timeReply);
-            })
-            .error(function(err) {
-                should.not.exist(err);
+                res.should.deep.equal(reply('time'));
+                done();
             });
-        done();
+    });
+
+    it('should list all the price estimates for adddress without access token', function(done) {
+        uber.clearTokens();
+        uber.estimates.getETAForAddressAsync('A')
+            .then(function(res) {
+                res.should.deep.equal(reply('time'));
+                done();
+            });
     });
 
     it('should list all the price estimates for product and location', function(done) {
         uber.estimates.getETAForLocationAsync(3.1357169, 101.6881501, '327f7914-cd12-4f77-9e0c-b27bac580d03')
             .then(function(res) {
-                res.should.deep.equal(timeReply);
-            })
-            .error(function(err) {
-                should.not.exist(err);
+                res.should.deep.equal(reply('time'));
+                done();
             });
-        done();
+    });
+
+    it('should list all the price estimates for product and address', function(done) {
+        uber.estimates.getETAForAddressAsync('A', '327f7914-cd12-4f77-9e0c-b27bac580d03')
+            .then(function(res) {
+                res.should.deep.equal(reply('time'));
+                done();
+            });
     });
 
     it('should list all the price estimates for location but empty product', function(done) {
         uber.estimates.getETAForLocationAsync(3.1357169, 101.6881501, '')
             .then(function(res) {
-                res.should.deep.equal(timeReply);
-            })
-            .error(function(err) {
-                should.not.exist(err);
+                res.should.deep.equal(reply('time'));
+                done();
             });
-        done();
+    });
+
+    it('should list all the price estimates for address but empty product', function(done) {
+        uber.estimates.getETAForAddressAsync('A', '')
+            .then(function(res) {
+                res.should.deep.equal(reply('time'));
+                done();
+            });
     });
 
     it('should return error if there is no required params', function(done) {
         uber.estimates.getETAForLocationAsync(null, null)
-            .then(function(res) {
-                should.not.exist(res);
-            })
             .error(function(err) {
                 err.message.should.equal('Invalid latitude & longitude');
             });
         done();
+    });
+
+    it('should return error if there is no valid address', function(done) {
+        uber.estimates.getETAForAddressAsync(' ')
+        .error(function(err) {
+            err.message.should.equal('No coordinates found for: " "');
+            done();
+        });
+    });
+
+    it('should return error if there is no valid address but product_id', function(done) {
+        uber.estimates.getETAForAddressAsync(' ', '327f7914-cd12-4f77-9e0c-b27bac580d03')
+        .error(function(err) {
+            err.message.should.equal('No coordinates found for: " "');
+            done();
+        });
+    });
+
+    it('should return error if there is no required params', function(done) {
+        uber.estimates.getETAForAddressAsync(null)
+        .error(function(err) {
+            err.message.should.equal('Geocoder.geocode requires a location.');
+            done();
+        });
     });
 });

@@ -1,8 +1,9 @@
 var common = require("./common"),
-    nock = common.nock,
     should = common.should,
     qs = common.qs,
-    uber = common.uber;
+    uber = common.uber,
+    reply = common.jsonReply,
+    ac = common.authCode;
 
 describe('OAuth2 authorization url', function() {
     it('generate OAuth2 correct authorization url', function(done) {
@@ -28,50 +29,17 @@ describe('OAuth2 authorization url', function() {
     });
 });
 
-describe('OAuth2 error catching', function() {
-    before(function() {
-        nock('https://login.uber.com')
-            .post('/oauth/token')
-            .reply(404);
-    });
-
-    it('should catch authorization error if uber.com not reachable', function(done) {
-        uber.authorization({
-                authorization_code: 'x8Y6dF2qA6iKaTKlgzVfFvyYoNrlkp'
-            },
-            function(err, access_token, refresh_token) {
-                should.exist(err);
-                done();
-            });
-    });
-});
-
 describe('Exchange authorization code into access token', function() {
-    var tokenResponse = {
-        "access_token": "EE1IDxytP04tJ767GbjH7ED9PpGmYvL",
-        "token_type": "Bearer",
-        "expires_in": 2592000,
-        "refresh_token": "Zx8fJ8qdSRRseIVlsGgtgQ4wnZBehr",
-        "scope": "profile history"
-    };
-
-    before(function() {
-        nock('https://login.uber.com')
-            .post('/oauth/token')
-            .times(2)
-            .reply(200, tokenResponse);
-    });
-
     it('should be able to get access token and refresh token using authorization code', function(done) {
         uber.authorization({
-                authorization_code: 'x8Y6dF2qA6iKaTKlgzVfFvyYoNrlkp'
+                authorization_code: ac
             },
             function(err, res) {
                 should.not.exist(err);
-                res[0].should.equal(tokenResponse.access_token);
-                res[1].should.equal(tokenResponse.refresh_token);
-                uber.access_token.should.equal(tokenResponse.access_token);
-                uber.refresh_token.should.equal(tokenResponse.refresh_token);
+                res[0].should.equal(reply('token').access_token);
+                res[1].should.equal(reply('token').refresh_token);
+                uber.access_token.should.equal(reply('token').access_token);
+                uber.refresh_token.should.equal(reply('token').refresh_token);
                 done();
             });
     });
@@ -82,10 +50,10 @@ describe('Exchange authorization code into access token', function() {
             },
             function(err, res) {
                 should.not.exist(err);
-                res[0].should.equal(tokenResponse.access_token);
-                res[1].should.equal(tokenResponse.refresh_token);
-                uber.access_token.should.equal(tokenResponse.access_token);
-                uber.refresh_token.should.equal(tokenResponse.refresh_token);
+                res[0].should.equal(reply('token').access_token);
+                res[1].should.equal(reply('token').refresh_token);
+                uber.access_token.should.equal(reply('token').access_token);
+                uber.refresh_token.should.equal(reply('token').refresh_token);
                 done();
             });
     });

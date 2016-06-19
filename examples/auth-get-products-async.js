@@ -12,23 +12,28 @@ var uber = new Uber({
 });
 
 // get authorization URL
-var authURL = uber.getAuthorizeUrl(['history','profile', 'request', 'places']);
+var authURL = uber.getAuthorizeUrl(['history', 'profile', 'request', 'places']);
 
 // redirect user to the authURL
 
 // the authorizarion_code will be provided via the callback after logging in using the authURL
-uber.authorizationAsync({ authorization_code: 'YOUR AUTH CODE' })
-  .spread(function(access_token, refresh_token) {
-    console.log('Your access_token is: ' + access_token);
-    console.log('Your refresh_token is: ' + refresh_token);
+uber.authorizationAsync({
+        authorization_code: 'YOUR AUTH CODE'
+    })
+    .spread(function(access_token, refresh_token, authorizedScopes, tokenExpiration) {
+        // store the user id and associated access_token, refresh_token, scopes and token expiration date
+        console.log('New access_token retrieved: ' + access_token);
+        console.log('... token allows access to scopes: ' + authorizedScopes);
+        console.log('... token is valid until: ' + tokenExpiration);
+        console.log('... after token expiration, re-authorize using refresh_token: ' + refresh_token);
 
-    // chain the promise to retrive all products for location
-    return uber.products.getAllForLocationAsync(3.1357169, 101.6881501);
-  })
-  .then(function(res) {
-    // response with all products
-    console.log(res);
-  })
-  .error(function(err) {
-    console.error(err);
-});
+        // chain the promise to retrive all products for location
+        return uber.products.getAllForLocationAsync(3.1357169, 101.6881501);
+    })
+    .then(function(res) {
+        // response with all products
+        console.log(res);
+    })
+    .error(function(err) {
+        console.error(err);
+    });
