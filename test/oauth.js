@@ -64,4 +64,13 @@ describe('Exchange authorization code into access token', function() {
             done();
         });
     });
+
+    it('should return error if uber auth service not reachable', function(done) {
+        uber.authorization({
+                authorization_code: ''
+            }, function(err, access_token, refresh_token) {
+            err.statusCode.should.equal(500);
+            done();
+        });
+    });
 });

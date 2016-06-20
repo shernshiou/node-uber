@@ -3,7 +3,8 @@ var common = require("./common"),
     uber = common.uber,
     uber_sandbox = common.uber_sandbox,
     reply = common.jsonReply,
-    ac = common.authCode;
+    ac = common.authCode,
+    acNR = common.authCodeNoRequest;
 
 describe('Current Request', function() {
     it('should return error for new request without authorization', function(done) {
@@ -117,6 +118,19 @@ describe('Current Request', function() {
             })
             .then(function(res) {
                 res.should.deep.equal(reply('requestAccept'));
+                done();
+            });
+    });
+
+    it('should return error for current request with missing scope', function(done) {
+        uber.authorizationAsync({
+                authorization_code: acNR
+            })
+            .then(function() {
+                return uber.requests.getCurrentAsync();
+            })
+            .error(function(err) {
+                err.message.should.equal('Required scope not found');
                 done();
             });
     });

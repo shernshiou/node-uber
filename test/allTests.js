@@ -1,8 +1,12 @@
 var common = require("./common"),
     nock = common.nock,
     jp = common.jsonReplyPath,
-    key = common.key
-jr = common.jsonReply;
+    key = common.key,
+    jr = common.jsonReply,
+    ac = common.authCode,
+    acNP = common.authCodeNoProfile,
+    acNPl = common.authCodeNoPlaces,
+    acNR = common.authCodeNoRequest;
 
 function importTest(name, path) {
     describe(name, function() {
@@ -38,8 +42,30 @@ defineNocks = function() {
     // Login
     nock('https://login.uber.com')
         .persist()
-        .post('/oauth/token')
-        .replyWithFile(200, jp('token'));
+        .post('/oauth/token', {
+            code: ''
+        })
+        .reply(500)
+        .post('/oauth/token', {
+            code: ac
+        })
+        .replyWithFile(200, jp('token'))
+        .post('/oauth/token', {
+            refresh_token: ac
+        })
+        .replyWithFile(200, jp('token'))
+        .post('/oauth/token', {
+            code: acNP
+        })
+        .replyWithFile(200, jp('tokenNoProfile'))
+        .post('/oauth/token', {
+            code: acNPl
+        })
+        .replyWithFile(200, jp('tokenNoPlaces'))
+        .post('/oauth/token', {
+            code: acNR
+        })
+        .replyWithFile(200, jp('tokenNoRequest'));
 
     // Endpoints accessible with OAuth2 Token
     nock('https://api.uber.com', {

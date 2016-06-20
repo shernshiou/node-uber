@@ -43,3 +43,6 @@ exports.key = key;
 exports.jsonReplyPath = jsonReplyPath;
 exports.jsonReply = jsonReply;
 exports.authCode = 'x8Y6dF2qA6iKaTKlgzVfFvyYoNrlkp';
+exports.authCodeNoProfile = 'h6Y6dF2qA6iKaTKlgzVfFvyYoNrLK3';
+exports.authCodeNoPlaces = 'j1P6dF2qA6iKaTKlgzVfFvyYoNrhU1';
+exports.authCodeNoRequest = 'a0P6dK3oA6iKaTKlgzVfFvyYoNrfG5';

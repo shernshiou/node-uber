@@ -2,7 +2,8 @@ var common = require("./common"),
     should = common.should,
     uber = common.uber,
     reply = common.jsonReply,
-    ac = common.authCode;
+    ac = common.authCode,
+    acNP = common.authCodeNoProfile;
 
 describe('Profile', function() {
     it('should return invalid access token error when no token found', function(done) {
@@ -22,6 +23,19 @@ describe('Profile', function() {
                 uber.user.getProfile(function(err, res) {
                     should.not.exist(err);
                     res.should.deep.equal(reply('profile'));
+                    done();
+                });
+            });
+    });
+
+    it('should return error for user profile with missing profile scope', function(done) {
+        uber.authorization({
+                authorization_code: acNP
+            },
+            function(err, accessToken, refreshToken) {
+                should.not.exist(err);
+                uber.user.getProfile(function(err, res) {
+                    err.message.should.equal('Required scope not found');
                     done();
                 });
             });

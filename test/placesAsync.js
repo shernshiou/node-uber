@@ -2,7 +2,8 @@ var common = require("./common"),
     should = common.should,
     uber = common.uber,
     reply = common.jsonReply,
-    ac = common.authCode;
+    ac = common.authCode,
+    acNPl = common.authCodeNoPlaces;
 
 describe('Home', function() {
     it('should return error for missing access token', function(done) {
@@ -84,6 +85,18 @@ describe('By Place ID', function() {
             })
             .error(function(err) {
                 should.not.exist(err);
+            });
+        done();
+    });
+
+    it('should return error for update of home address with missing scope', function(done) {
+        uber.authorizationAsync({
+                authorization_code: acNPl
+            }).then(function(access_token) {
+                return uber.places.updateHomeAsync('685 Market St, San Francisco, CA 94103, USA');
+            })
+            .error(function(err) {
+                err.message.should.equal('Required scope not found');
             });
         done();
     });
