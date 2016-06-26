@@ -115,8 +115,8 @@ Method Overview
 |-------------	|-----------------------------------	|------------------------	|-------------------------------------------------	|-----------------------------------	|
 | GET         	| /v1/products                      	| OAuth or server_token 	|                                                 	| products.getAllForLocation        	|
 | GET         	| /v1/products/{product_id}         	| OAuth or server_token 	|                                                 	| products.getByID                  	|
-| PUT         	| /v1/products/{product_id}         	| OAuth or server_token   | (Sandbox mode)                                   	| products.setSurgeMultiplierByID     |
-| PUT         	| /v1/products/{product_id}         	| OAuth or server_token   | (Sandbox mode)                                   	| products.setDriversAvailabilityByID |
+| PUT         	| /v1/sandbox/products/{product_id}         	| OAuth or server_token   | (Sandbox mode)                                   	| products.setSurgeMultiplierByID     |
+| PUT         	| /v1/sandbox/products/{product_id}         	| OAuth or server_token   | (Sandbox mode)                                   	| products.setDriversAvailabilityByID |
 | GET         	| /v1/estimates/price               	| OAuth or server_token 	|                                                 	| estimates.getPriceForRoute        	|
 | GET         	| /v1/estimates/time                	| OAuth or server_token 	|                                                 	| estimates.getETAForLocation       	|
 | GET         	| /v1.2/history                     	| OAuth                  	| history or history_lite                          	| user.getHistory                   	|
@@ -128,8 +128,9 @@ Method Overview
 | POST        	| /v1/requests/estimate             	| OAuth                  	| request (privileged)                            	| requests.getEstimates             	|
 | GET         	| /v1/requests/{request_id}         	| OAuth                  	| request (privileged)                            	| requests.getByID                  	|
 | PATCH       	| /v1/requests/{request_id}         	| OAuth                  	| request (privileged)                            	| requests.updateByID               	|
-| PUT         	| /v1/requests/{request_id}         	| OAuth                  	| request (privileged & Sandbox mode )            	| requests.setStatusByID             	|
+| PUT         	| /v1/sandbox/requests/{request_id}         	| OAuth                  	| request (privileged & Sandbox mode )            	| requests.setStatusByID             	|
 | DELETE      	| /v1/requests/{request_id}         	| OAuth                  	| request (privileged)                            	| requests.deleteByID               	|
+| DELETE      	| /v1/requests/current         	| OAuth                  	| request (privileged)                            	| requests.deleteCurrent               	|
 | GET         	| /v1/requests/{request_id}/map     	| OAuth                  	| request (privileged)                            	| requests.getMapByID               	|
 | GET         	| /v1/requests/{request_id}/receipt 	| OAuth                  	| request_receipt (privileged)                    	| requests.getReceiptByID           	|
 | GET         	| /v1/places/{place_id}             	| OAuth                  	| places                                          	| places.getHome and places.getWork 	|
