@@ -588,7 +588,7 @@ uber.reminders.create(parameter, callback);
 ```javascript
 uber.reminders.create({
   reminder_time: 1429294463,
-  phone_number: 16508420126,
+  phone_number: '+10000000000',
   event: {
     time: 1429294463,
     name: 'Frisbee with friends',
