@@ -47,4 +47,6 @@ exports.authCodeNoProfile = 'h6Y6dF2qA6iKaTKlgzVfFvyYoNrLK3';
 exports.authCodeNoPlaces = 'j1P6dF2qA6iKaTKlgzVfFvyYoNrhU1';
 exports.authCodeNoRequest = 'a0P6dK3oA6iKaTKlgzVfFvyYoNrfG5';
 exports.authCodeTokenExpired = 'h0P6dK3aA6iKaTK4gzVfFvyYoNrfG5';
+exports.authCodeTokenNoRefresh = 'm0P6dK3aTPiKaTK4gzVfFvyYoNrfG5';
+exports.authCodeRefreshTokenError = 'Zxkcv8qdSRRseIVlshydoQ4wnZBehr';
 exports.authCodeTokenRefresh = 'Zx8fJ8qdSRRseIVlsGgtgQ4wnZBehr';

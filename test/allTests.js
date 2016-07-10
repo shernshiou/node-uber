@@ -8,7 +8,9 @@ var common = require("./common"),
     acNPl = common.authCodeNoPlaces,
     acNR = common.authCodeNoRequest,
     acTE = common.authCodeTokenExpired,
-    acTR = common.authCodeTokenRefresh;
+    acTR = common.authCodeTokenRefresh,
+    acTNR = common.authCodeTokenNoRefresh,
+    acRTE = common.authCodeRefreshTokenError;
 function importTest(name, path) {
     describe(name, function() {
         before(function() {
@@ -74,7 +76,15 @@ defineNocks = function() {
         .post('/oauth/token', {
             refresh_token: acTR
         })
-        .replyWithFile(200, jp('tokenRefreshed'));
+        .replyWithFile(200, jp('tokenRefreshed'))
+        .post('/oauth/token', {
+            code: acTNR
+        })
+        .replyWithFile(200, jp('tokenNoRefresh'))
+        .post('/oauth/token', {
+            refresh_token: acRTE
+        })
+        .reply(500);
 
     // Endpoints accessible with OAuth2 Token
     nock('https://api.uber.com', {

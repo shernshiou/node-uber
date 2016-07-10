@@ -4,7 +4,8 @@ var common = require("./common"),
     uber = common.uber,
     reply = common.jsonReply,
     ac = common.authCode,
-    acTE = common.authCodeTokenExpired;
+    acTE = common.authCodeTokenExpired,
+    acTNR = common.authCodeTokenNoRefresh;
 
 
 describe('OAuth2 authorization url', function() {
@@ -97,5 +98,25 @@ describe('Auto refresh token whenever it is expired', function(){
                done();
            });
        });
+    });
+    it('should return an error if the uber server is not available while refreshing token', function(done) {
+        uber.authorization({
+            authorization_code : acTNR
+        }, function(err, access_token, refresh_token) {
+            // now we got an expired token. try and make a call to book a cab
+            should.not.exist(err);
+            uber.requests.create({
+                "product_id": "a1111c8c-c720-46c3-8534-2fcdd730040d",
+                "start_latitude": 37.761492,
+                "start_longitude": -122.423941,
+                "end_latitude": 37.775393,
+                "end_longitude": -122.417546
+            }, function(err, res) {
+                // ensure that token is refreshed
+                should.exist(err);
+                err.statusCode.should.equal(500);
+                done();
+            });
+        });
     });
 });
