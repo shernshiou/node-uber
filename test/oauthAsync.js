@@ -51,24 +51,24 @@ describe('Exchange authorization code into access token', function() {
     });
 });
 
-// describe('Auto refresh token whenever it is expired', function() {
-//     it ('should be able to recognize an expired token and then auto refresh the token ', function(done) {
-//         uber.authorizationAsync({
-//             authorization_code: acTE
-//         })
-//             .then(function() {
-//                 return uber.requests.createAsync({
-//                     "product_id": "a1111c8c-c720-46c3-8534-2fcdd730040d",
-//                     "start_latitude": 37.761492,
-//                     "start_longitude": -122.423941,
-//                     "end_latitude": 37.775393,
-//                     "end_longitude": -122.417546
-//                 });
-//             })
-//             .then(function(res) {
-//                 res.should.deep.equal(reply('requestCreate'));
-//                 uber.tokenExpiration.should.be.above(new Date());
-//                 done();
-//             });
-//     });
-// });
+describe('Auto refresh token whenever it is expired', function() {
+    it ('should be able to recognize an expired token and then auto refresh the token ', function(done) {
+        uber.authorizationAsync({
+            authorization_code: acTE
+        })
+            .then(function() {
+                return uber.requests.createAsync({
+                    "product_id": "a1111c8c-c720-46c3-8534-2fcdd730040d",
+                    "start_latitude": 37.761492,
+                    "start_longitude": -122.423941,
+                    "end_latitude": 37.775393,
+                    "end_longitude": -122.417546
+                });
+            })
+            .then(function(res) {
+                res.should.deep.equal(reply('requestCreate'));
+                uber.tokenExpiration.should.be.above(new Date());
+                done();
+            });
+    });
+});

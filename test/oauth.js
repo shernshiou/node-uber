@@ -6,6 +6,7 @@ var common = require("./common"),
     ac = common.authCode,
     acTE = common.authCodeTokenExpired;
 
+
 describe('OAuth2 authorization url', function() {
     it('generate OAuth2 correct authorization url', function(done) {
         var url = uber.getAuthorizeUrl(['profile', 'history', 'places', 'request', 'request_receipt', 'all_trips']),
@@ -91,6 +92,7 @@ describe('Auto refresh token whenever it is expired', function(){
                "end_longitude": -122.417546
            }, function(err, res) {
                // ensure that token is refreshed
+               should.not.exist(err);
                uber.tokenExpiration.should.be.above(new Date());
                done();
            });
