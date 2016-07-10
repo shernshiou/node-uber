@@ -82,8 +82,7 @@ describe('Auto refresh token whenever it is expired', function(){
     it ('should be able to recognize an expired token and then auto refresh the token ', function(done) {
        uber.authorization({
            authorization_code : acTE
-       }, function(err, access_token, refresh_token) {
-           // now we got an expired token. try and make a call to book a cab
+       }, function(err, res) {
            should.not.exist(err);
            uber.requests.create({
                "product_id": "a1111c8c-c720-46c3-8534-2fcdd730040d",
@@ -92,7 +91,6 @@ describe('Auto refresh token whenever it is expired', function(){
                "end_latitude": 37.775393,
                "end_longitude": -122.417546
            }, function(err, res) {
-               // ensure that token is refreshed
                should.not.exist(err);
                uber.tokenExpiration.should.be.above(new Date());
                done();
@@ -102,8 +100,7 @@ describe('Auto refresh token whenever it is expired', function(){
     it('should return an error if the uber server is not available while refreshing token', function(done) {
         uber.authorization({
             authorization_code : acTNR
-        }, function(err, access_token, refresh_token) {
-            // now we got an expired token. try and make a call to book a cab
+        }, function(err, res) {
             should.not.exist(err);
             uber.requests.create({
                 "product_id": "a1111c8c-c720-46c3-8534-2fcdd730040d",
@@ -112,7 +109,6 @@ describe('Auto refresh token whenever it is expired', function(){
                 "end_latitude": 37.775393,
                 "end_longitude": -122.417546
             }, function(err, res) {
-                // ensure that token is refreshed
                 should.exist(err);
                 err.statusCode.should.equal(500);
                 done();
