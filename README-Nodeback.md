@@ -101,8 +101,8 @@ Method Overview
 | GET         	| /v1/products                      	| OAuth or server_token 	|                                                 	| products.getAllForAddress        	|
 | GET         	| /v1/products                      	| OAuth or server_token 	|                                                 	| products.getAllForLocation        	|
 | GET         	| /v1/products/{product_id}         	| OAuth or server_token 	|                                                 	| products.getByID                  	|
-| PUT         	| /v1/products/{product_id}         	| OAuth or server_token   | (Sandbox mode)                                   	| products.setSurgeMultiplierByID     |
-| PUT         	| /v1/products/{product_id}         	| OAuth or server_token   | (Sandbox mode)                                   	| products.setDriversAvailabilityByID |
+| PUT         	| /v1/sandbox/products/{product_id}         	| OAuth or server_token   | (Sandbox mode)                                   	| products.setSurgeMultiplierByID     |
+| PUT         	| /v1/sandbox/products/{product_id}         	| OAuth or server_token   | (Sandbox mode)                                   	| products.setDriversAvailabilityByID |
 | GET         	| /v1/estimates/price               	| OAuth or server_token 	|                                                 	| estimates.getPriceForRoute        	|
 | GET         	| /v1/estimates/price               	| OAuth or server_token 	|                                                 	| estimates.getPriceForRouteByAddress        	|
 | GET         	| /v1/estimates/time                	| OAuth or server_token 	|                                                 	| estimates.getETAForAddress       	|
@@ -116,7 +116,7 @@ Method Overview
 | POST        	| /v1/requests/estimate             	| OAuth                  	| request (privileged)                            	| requests.getEstimates             	|
 | GET         	| /v1/requests/{request_id}         	| OAuth                  	| request (privileged)                            	| requests.getByID                  	|
 | PATCH       	| /v1/requests/{request_id}         	| OAuth                  	| request (privileged)                            	| requests.updateByID               	|
-| PUT         	| /v1/requests/{request_id}         	| OAuth                  	| request (privileged & Sandbox mode )            	| requests.setStatusByID             	|
+| PUT         	| /v1/sandbox/requests/{request_id}         	| OAuth                  	| request (privileged & Sandbox mode )            	| requests.setStatusByID             	|
 | DELETE      	| /v1/requests/{request_id}         	| OAuth                  	| request (privileged)                            	| requests.deleteByID               	|
 | GET         	| /v1/requests/{request_id}/map     	| OAuth                  	| request (privileged)                            	| requests.getMapByID               	|
 | GET         	| /v1/requests/{request_id}/receipt 	| OAuth                  	| request_receipt (privileged)                    	| requests.getReceiptByID           	|
@@ -650,7 +650,7 @@ uber.reminders.create(parameter, callback);
 ```javascript
 uber.reminders.create({
   reminder_time: 1429294463,
-  phone_number: 16508420126,
+  phone_number: '+10000000000',
   event: {
     time: 1429294463,
     name: 'Frisbee with friends',

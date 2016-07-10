@@ -121,8 +121,8 @@ Method Overview
 | GET         	| /v1/products                      	| OAuth or server_token 	|                                                 	| products.getAllForAddressAsync        	|
 | GET         	| /v1/products                      	| OAuth or server_token 	|                                                 	| products.getAllForLocationAsync        	|
 | GET         	| /v1/products/{product_id}         	| OAuth or server_token 	|                                                 	| products.getByIDAsync                  	|
-| PUT         	| /v1/products/{product_id}         	| OAuth or server_token   | (Sandbox mode)                                   	| products.setSurgeMultiplierByIDAsync     |
-| PUT         	| /v1/products/{product_id}         	| OAuth or server_token   | (Sandbox mode)                                   	| products.setDriversAvailabilityByIDAsync |
+| PUT         	| /v1/sandbox/products/{product_id}         	| OAuth or server_token   | (Sandbox mode)                                   	| products.setSurgeMultiplierByIDAsync     |
+| PUT         	| /v1/sandbox/products/{product_id}         	| OAuth or server_token   | (Sandbox mode)                                   	| products.setDriversAvailabilityByIDAsync |
 | GET         	| /v1/estimates/price               	| OAuth or server_token 	|                                                 	| estimates.getPriceForRouteAsync        	|
 | GET         	| /v1/estimates/price               	| OAuth or server_token 	|                                                 	| estimates.getPriceForRouteByAddressAsync        	|
 | GET         	| /v1/estimates/time                	| OAuth or server_token 	|                                                 	| estimates.getETAForAddressAsync       	|
@@ -136,7 +136,7 @@ Method Overview
 | POST        	| /v1/requests/estimate             	| OAuth                  	| request (privileged)                            	| requests.getEstimatesAsync             	|
 | GET         	| /v1/requests/{request_id}         	| OAuth                  	| request (privileged)                            	| requests.getByIDAsync                  	|
 | PATCH       	| /v1/requests/{request_id}         	| OAuth                  	| request (privileged)                            	| requests.updateByIDAsync               	|
-| PUT         	| /v1/requests/{request_id}         	| OAuth                  	| request (privileged & Sandbox mode )            	| requests.setStatusByIDAsync             	|
+| PUT         	| /v1/sandbox/requests/{request_id}         	| OAuth                  	| request (privileged & Sandbox mode )            	| requests.setStatusByIDAsync             	|
 | DELETE      	| /v1/requests/{request_id}         	| OAuth                  	| request (privileged)                            	| requests.deleteByIDAsync               	|
 | GET         	| /v1/requests/{request_id}/map     	| OAuth                  	| request (privileged)                            	| requests.getMapByIDAsync               	|
 | GET         	| /v1/requests/{request_id}/receipt 	| OAuth                  	| request_receipt (privileged)                    	| requests.getReceiptByIDAsync           	|
@@ -647,7 +647,7 @@ uber.reminders.createAsync(parameter);
 ```javascript
 uber.reminders.createAsync({
   reminder_time: 1429294463,
-  phone_number: 16508420126,
+  phone_number: '+10000000000',
   event: {
     time: 1429294463,
     name: 'Frisbee with friends',
