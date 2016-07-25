@@ -4,13 +4,16 @@ var common = require("./common"),
     uber_sandbox = common.uber_sandbox,
     reply = common.jsonReply,
     ac = common.authCode,
-    acNR = common.authCodeNoRequest;
-
+    acNR = common.authCodeNoRequest,
+    rPA = common.requestProductCreate,
+    rPS = common.requestProductSurge,
+    rSC = common.requestSurgeConfirmationID,
+    rPSOE = common.requestProductSomeOtherError;
 describe('Current Request', function() {
     it('should return error for new request without authorization', function(done) {
         uber.clearTokens();
         uber.requests.create({
-            "product_id": "a1111c8c-c720-46c3-8534-2fcdd730040d",
+            "product_id": rPA,
             "start_latitude": 37.761492,
             "start_longitude": -122.423941,
             "end_latitude": 37.775393,
@@ -28,7 +31,7 @@ describe('Current Request', function() {
             function(err, accessToken, refreshToken) {
                 should.not.exist(err);
                 uber.requests.create({
-                    "product_id": "a1111c8c-c720-46c3-8534-2fcdd730040d",
+                    "product_id": rPA,
                     "start_latitude": 37.761492,
                     "start_longitude": -122.423941,
                     "end_latitude": 37.775393,
@@ -48,7 +51,7 @@ describe('Current Request', function() {
             function(err, accessToken, refreshToken) {
                 should.not.exist(err);
                 uber.requests.create({
-                    "product_id": "a1111c8c-c720-46c3-8534-2fcdd730040d",
+                    "product_id": rPA,
                     "startAddress": 'A',
                     "endAddress": 'B'
                 }, function(err, res) {
@@ -66,7 +69,7 @@ describe('Current Request', function() {
             function(err, accessToken, refreshToken) {
                 should.not.exist(err);
                 uber.requests.create({
-                    "product_id": "a1111c8c-c720-46c3-8534-2fcdd730040d",
+                    "product_id": rPA,
                     "startAddress": ' ',
                     "endAddress": 'B'
                 }, function(err, res) {
@@ -83,7 +86,7 @@ describe('Current Request', function() {
             function(err, accessToken, refreshToken) {
                 should.not.exist(err);
                 uber.requests.create({
-                    "product_id": "a1111c8c-c720-46c3-8534-2fcdd730040d",
+                    "product_id": rPA,
                     "startAddress": 'A',
                     "endAddress": ' '
                 }, function(err, res) {
@@ -93,6 +96,58 @@ describe('Current Request', function() {
             });
     });
 
+    it ('should return surge confirmation details if surge pricing is active', function(done) {
+        uber.authorization({
+                authorization_code: ac
+            },
+            function(err, accessToken, refreshToken) {
+                should.not.exist(err);
+                uber.requests.create({
+                    "product_id": rPS,
+                    "startAddress": 'A',
+                    "endAddress": 'B'
+                }, function(err, res, surge) {
+                    should.exist(err);
+                    should.exist(surge);
+                    surge.should.have.property('href');
+                    surge.should.have.property('surge_confirmation_id');
+                    surge.should.have.property('multiplier');
+                    done();
+                });
+            });
+    });
+    it ('should create ride request after user has accepted surge pricing', function(done) {
+        uber.authorization({
+                authorization_code: ac
+            },
+            function(err, accessToken, refreshToken) {
+                should.not.exist(err);
+                uber.requests.create({
+                    "surge_confirmation_id" : rSC
+                }, function(err, res, surge) {
+                    should.not.exist(err);
+                    res.should.deep.equal(reply('requestCreate'));
+                    done();
+                });
+            });
+    });
+    it ('should return an error if there is a blocker other than surge conflict', function(done) {
+        uber.authorization({
+                authorization_code: ac
+            },
+            function(err, accessToken, refreshToken) {
+                should.not.exist(err);
+                uber.requests.create({
+                    "product_id": rPSOE,
+                    "startAddress": 'A',
+                    "endAddress": 'B'
+                }, function(err, res, surge) {
+                    should.exist(err);
+                    should.not.exist(surge);
+                    done();
+                });
+            });
+    });
     it('should return error if there is no required params for POST', function(done) {
         uber.requests.create(null, function(err, res) {
             err.message.should.equal('Invalid parameters');
@@ -170,7 +225,7 @@ describe('Current Request', function() {
 describe('Estimate', function() {
     it('should get estimates', function(done) {
         uber.requests.getEstimates({
-            "product_id": "a1111c8c-c720-46c3-8534-2fcdd730040d",
+            "product_id": rPA,
             "start_latitude": 37.761492,
             "start_longitude": -122.423941,
             "end_latitude": 37.775393,
@@ -184,7 +239,7 @@ describe('Estimate', function() {
 
     it('should get estimates for address', function(done) {
         uber.requests.getEstimates({
-            "product_id": "a1111c8c-c720-46c3-8534-2fcdd730040d",
+            "product_id": rPA,
             "startAddress": 'A',
             "endAddress": 'B'
         }, function(err, res) {
@@ -196,7 +251,7 @@ describe('Estimate', function() {
 
     it('should return error for estimates for invalid start address', function(done) {
         uber.requests.getEstimates({
-            "product_id": "a1111c8c-c720-46c3-8534-2fcdd730040d",
+            "product_id": rPA,
             "startAddress": ' ',
             "endAddress": 'B'
         }, function(err, res) {
@@ -207,7 +262,7 @@ describe('Estimate', function() {
 
     it('should return error for estimates for invalid start address', function(done) {
         uber.requests.getEstimates({
-            "product_id": "a1111c8c-c720-46c3-8534-2fcdd730040d",
+            "product_id": rPA,
             "startAddress": 'A',
             "endAddress": ' '
         }, function(err, res) {
