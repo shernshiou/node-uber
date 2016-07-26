@@ -7,7 +7,6 @@ var common = require("./common"),
     acNR = common.authCodeNoRequest,
     rPA = common.requestProductCreate,
     rPS = common.requestProductSurge,
-    rSC = common.requestSurgeConfirmationID,
     rPSOE = common.requestProductSomeOtherError;
 describe('Current Request', function() {
     it('should return error for new request without authorization', function(done) {
@@ -96,7 +95,7 @@ describe('Current Request', function() {
             });
     });
 
-    it ('should return surge confirmation details if surge pricing is active', function(done) {
+    it ('should return an error along with surge confirmation details if surge pricing is active', function(done) {
         uber.authorization({
                 authorization_code: ac
             },
@@ -106,12 +105,12 @@ describe('Current Request', function() {
                     "product_id": rPS,
                     "startAddress": 'A',
                     "endAddress": 'B'
-                }, function(err, res, surge) {
+                }, function(err, res) {
                     should.exist(err);
-                    should.exist(surge);
-                    surge.should.have.property('href');
-                    surge.should.have.property('surge_confirmation_id');
-                    surge.should.have.property('multiplier');
+                    uber.isSurge(err).should.deep.equal(true);
+                    err.surge_confirmation.should.have.property('href');
+                    err.surge_confirmation.should.have.property('surge_confirmation_id');
+                    err.surge_confirmation.should.have.property('multiplier');
                     done();
                 });
             });
@@ -123,11 +122,18 @@ describe('Current Request', function() {
             function(err, accessToken, refreshToken) {
                 should.not.exist(err);
                 uber.requests.create({
-                    "surge_confirmation_id" : rSC
-                }, function(err, res, surge) {
-                    should.not.exist(err);
-                    res.should.deep.equal(reply('requestCreate'));
-                    done();
+                    "product_id": rPS,
+                    "startAddress": 'A',
+                    "endAddress": 'B'
+                }, function(err, res) {
+                    should.exist(err);
+                    uber.isSurge(err).should.deep.equal(true);
+                    should.exist(uber.currentRequestParameters.surge_confirmation_id);
+                    uber.requests.acceptSurgeForLastRequest(function (err, res) {
+                        should.not.exist(err);
+                        res.should.deep.equal(reply('requestCreate'));
+                        done();
+                    });
                 });
             });
     });
@@ -141,13 +147,27 @@ describe('Current Request', function() {
                     "product_id": rPSOE,
                     "startAddress": 'A',
                     "endAddress": 'B'
-                }, function(err, res, surge) {
+                }, function(err, res) {
                     should.exist(err);
-                    should.not.exist(surge);
+                    uber.isSurge(err).should.deep.equal(false);
                     done();
                 });
             });
     });
+
+    it('should return an error if there is no active surge request to accept', function(done) {
+        uber.authorization({
+                authorization_code: ac
+            },
+            function(err, accessToken, refreshToken) {
+                should.not.exist(err);
+                uber.requests.acceptSurgeForLastRequest(function(err, res) {
+                    should.exist(err);
+                    done();
+                });
+            });
+    });
+
     it('should return error if there is no required params for POST', function(done) {
         uber.requests.create(null, function(err, res) {
             err.message.should.equal('Invalid parameters');
@@ -189,7 +209,6 @@ describe('Current Request', function() {
                 });
             });
     });
-
 
     it('should patch current request', function(done) {
         uber.requests.updateCurrent({}, function(err, res) {

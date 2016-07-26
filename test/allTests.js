@@ -133,6 +133,11 @@ defineNocks = function() {
         })
         .replyWithFile(200, jp('requestCreate'))
         .post('/v1/requests', {
+            product_id : rPS,
+            surge_confirmation_id : rSC
+        })
+        .replyWithFile(200, jp('requestCreate'))
+        .post('/v1/requests', {
             product_id : rPS
         })
         .replyWithFile(409, jp('requestSurge'))
@@ -140,10 +145,6 @@ defineNocks = function() {
             product_id : rPSOE
         })
         .replyWithFile(409, jp('requestFareExpired'))
-        .post('/v1/requests', {
-            surge_confirmation_id : rSC
-        })
-        .replyWithFile(200, jp('requestCreate'))
         .patch('/v1/requests/current')
         .reply(204)
         .delete('/v1/requests/current')
