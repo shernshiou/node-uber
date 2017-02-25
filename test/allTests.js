@@ -10,7 +10,11 @@ var common = require("./common"),
     acTE = common.authCodeTokenExpired,
     acTR = common.authCodeTokenRefresh,
     acTNR = common.authCodeTokenNoRefresh,
-    acRTE = common.authCodeRefreshTokenError;
+    acRTE = common.authCodeRefreshTokenError,
+    rPC = common.requestProductCreate,
+    rPS = common.requestProductSurge,
+    rSC = common.requestSurgeConfirmationID,
+    rPSOE = common.requestProductSomeOtherError;
 function importTest(name, path) {
     describe(name, function() {
         before(function() {
@@ -124,8 +128,23 @@ defineNocks = function() {
         // Requests
         .get('/v1/requests/current')
         .replyWithFile(200, jp('requestAccept'))
-        .post('/v1/requests')
+        .post('/v1/requests', {
+            product_id : rPC
+        })
         .replyWithFile(200, jp('requestCreate'))
+        .post('/v1/requests', {
+            product_id : rPS,
+            surge_confirmation_id : rSC
+        })
+        .replyWithFile(200, jp('requestCreate'))
+        .post('/v1/requests', {
+            product_id : rPS
+        })
+        .replyWithFile(409, jp('requestSurge'))
+        .post('/v1/requests', {
+            product_id : rPSOE
+        })
+        .replyWithFile(409, jp('requestFareExpired'))
         .patch('/v1/requests/current')
         .reply(204)
         .delete('/v1/requests/current')

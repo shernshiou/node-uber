@@ -1,0 +1,14 @@
+{
+  "meta": {
+    "fare_expired": {
+
+    }
+  },
+  "errors":[
+    {
+      "status": 409,
+      "code": "fare_expired",
+      "title": "The fare has expired for the requested product."
+    }
+  ]
+}
