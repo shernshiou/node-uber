@@ -116,3 +116,28 @@ describe('Auto refresh token whenever it is expired', function(){
         });
     });
 });
+
+describe('Multi-user handling', function() {
+    it('should set Uber tokens', function(done) {
+      uber.setTokens(reply('token').access_token, reply('token').refresh_token, reply('token').expires_in, reply('token').scope);
+
+      uber.access_token.should.equal(reply('token').access_token);
+      uber.refresh_token.should.equal(reply('token').refresh_token);
+      uber.tokenExpiration.should.equal(reply('token').expires_in);
+      uber.authorizedScopes.should.equal(reply('token').scope);
+      done();
+    });
+
+    it('should clear Uber tokens', function(done) {
+      uber.setTokens(reply('token').access_token, reply('token').refresh_token, reply('token').expires_in, reply('token').scope);
+
+      uber.clearTokens();
+
+      should.not.exist(uber.access_token);
+      should.not.exist(uber.refresh_token);
+      should.not.exist(uber.tokenExpiration);
+      should.not.exist(uber.authorizedScopes);
+      
+      done();
+    });
+});

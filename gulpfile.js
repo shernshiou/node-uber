@@ -30,7 +30,7 @@ gulp.task('pre-test', function() {
         .pipe(istanbul.hookRequire());
 });
 
-gulp.task('test', function() {
+gulp.task('test', ['pre-test'], function() {
     return gulp.src(['test/**/*.js'])
         .pipe(mocha({
             reporter: 'spec',
