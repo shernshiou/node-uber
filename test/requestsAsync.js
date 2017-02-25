@@ -4,13 +4,16 @@ var common = require("./common"),
     uber_sandbox = common.uber_sandbox,
     reply = common.jsonReply,
     ac = common.authCode,
-    acNR = common.authCodeNoRequest;
+    acNR = common.authCodeNoRequest,
+    rPA = common.requestProductCreate,
+    rPS = common.requestProductSurge,
+    rPSOE = common.requestProductSomeOtherError;
 
 describe('Current Request', function() {
     it('should return error for new request without authorization', function(done) {
         uber.clearTokens();
         uber.requests.createAsync({
-                "product_id": "a1111c8c-c720-46c3-8534-2fcdd730040d",
+                "product_id": rPA,
                 "start_latitude": 37.761492,
                 "start_longitude": -122.423941,
                 "end_latitude": 37.775393,
@@ -28,7 +31,7 @@ describe('Current Request', function() {
             })
             .then(function() {
                 return uber.requests.createAsync({
-                    "product_id": "a1111c8c-c720-46c3-8534-2fcdd730040d",
+                    "product_id": rPA,
                     "start_latitude": 37.761492,
                     "start_longitude": -122.423941,
                     "end_latitude": 37.775393,
@@ -47,7 +50,7 @@ describe('Current Request', function() {
             })
             .then(function() {
                 return uber.requests.createAsync({
-                    "product_id": "a1111c8c-c720-46c3-8534-2fcdd730040d",
+                    "product_id": rPA,
                     "startAddress": 'A',
                     "endAddress": 'B'
                 });
@@ -64,7 +67,7 @@ describe('Current Request', function() {
             })
             .then(function() {
                 return uber.requests.createAsync({
-                    "product_id": "a1111c8c-c720-46c3-8534-2fcdd730040d",
+                    "product_id": rPA,
                     "startAddress": ' ',
                     "endAddress": 'B'
                 });
@@ -81,7 +84,7 @@ describe('Current Request', function() {
             })
             .then(function() {
                 return uber.requests.createAsync({
-                    "product_id": "a1111c8c-c720-46c3-8534-2fcdd730040d",
+                    "product_id": rPA,
                     "startAddress": 'A',
                     "endAddress": ' '
                 });
@@ -91,7 +94,77 @@ describe('Current Request', function() {
                 done();
             });
     });
-
+    it ('should return an error along with surge confirmation details if surge pricing is active', function(done) {
+        uber.authorizationAsync({
+                authorization_code: ac
+            })
+            .then(function() {
+                return uber.requests.createAsync({
+                    "product_id": rPS,
+                    "startAddress": 'A',
+                    "endAddress": 'B'
+                });
+            })
+            .error(function(err) {
+                should.exist(err);
+                uber.isSurge(err).should.deep.equal(true);
+                err.surge_confirmation.should.have.property('href');
+                err.surge_confirmation.should.have.property('surge_confirmation_id');
+                err.surge_confirmation.should.have.property('multiplier');
+                done();
+            });
+    });
+    it ('should create ride request after user has accepted surge pricing', function(done) {
+        uber.authorizationAsync({
+                authorization_code: ac
+            })
+            .then(function() {
+                return uber.requests.createAsync({
+                    "product_id": rPS,
+                    "startAddress": 'A',
+                    "endAddress": 'B'
+                });
+            })
+            .error(function(err) {
+                should.exist(err);
+                uber.isSurge(err).should.deep.equal(true);
+                return uber.requests.acceptSurgeForLastRequestAsync();
+            })
+            .then(function (res) {
+                should.exist(res);
+                res.should.deep.equal(reply('requestCreate'));
+                done();
+            });
+    });
+    it ('should return an error if there is a blocker other than surge conflict', function(done) {
+        uber.authorizationAsync({
+                authorization_code: ac
+            })
+            .then(function() {
+                return uber.requests.createAsync({
+                    "product_id": rPSOE,
+                    "startAddress": 'A',
+                    "endAddress": 'B'
+                });
+            })
+            .error(function(err) {
+                should.exist(err);
+                uber.isSurge(err).should.deep.equal(false);
+                done();
+            });
+    });
+    it('should return an error if there is no active surge request to accept', function(done) {
+        uber.authorizationAsync({
+                authorization_code: ac
+            })
+            .then(function() {
+                return uber.requests.acceptSurgeForLastRequestAsync();
+            })
+            .error(function(err) {
+                should.exist(err);
+                done();
+            });
+    });
     it('should return error if there is no required params for POST', function(done) {
         uber.requests.createAsync(null)
             .error(function(err) {
@@ -169,7 +242,7 @@ describe('Current Request', function() {
 describe('Estimate', function() {
     it('should get estimates', function(done) {
         uber.requests.getEstimatesAsync({
-                "product_id": "a1111c8c-c720-46c3-8534-2fcdd730040d",
+                "product_id": rPA,
                 "start_latitude": 37.761492,
                 "start_longitude": -122.423941,
                 "end_latitude": 37.775393,
@@ -183,7 +256,7 @@ describe('Estimate', function() {
 
     it('should get estimates for address', function(done) {
         uber.requests.getEstimatesAsync({
-                "product_id": "a1111c8c-c720-46c3-8534-2fcdd730040d",
+                "product_id": rPA,
                 "startAddress": 'A',
                 "endAddress": 'B'
             })
@@ -195,7 +268,7 @@ describe('Estimate', function() {
 
     it('should return error for estimates for invalid start address', function(done) {
         uber.requests.getEstimatesAsync({
-                "product_id": "a1111c8c-c720-46c3-8534-2fcdd730040d",
+                "product_id": rPA,
                 "startAddress": ' ',
                 "endAddress": 'B'
             })
@@ -207,7 +280,7 @@ describe('Estimate', function() {
 
     it('should return error for estimates for invalid end address', function(done) {
         uber.requests.getEstimatesAsync({
-                "product_id": "a1111c8c-c720-46c3-8534-2fcdd730040d",
+                "product_id": rPA,
                 "startAddress": 'A',
                 "endAddress": ' '
             })

@@ -50,3 +50,7 @@ exports.authCodeTokenExpired = 'h0P6dK3aA6iKaTK4gzVfFvyYoNrfG5';
 exports.authCodeTokenNoRefresh = 'm0P6dK3aTPiKaTK4gzVfFvyYoNrfG5';
 exports.authCodeRefreshTokenError = 'Zxkcv8qdSRRseIVlshydoQ4wnZBehr';
 exports.authCodeTokenRefresh = 'Zx8fJ8qdSRRseIVlsGgtgQ4wnZBehr';
+exports.requestProductCreate = 'a1111c8c-c720-46c3-8534-2fcdd730040d';
+exports.requestProductSurge = 'a1111c8c-c720-8150-8534-2fcdd730040d';
+exports.requestProductSomeOtherError = 'a2341c8c-c720-8150-8534-2fcdd730040d';
+exports.requestSurgeConfirmationID = 'e100a670';

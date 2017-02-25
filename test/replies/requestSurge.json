@@ -1,0 +1,17 @@
+{
+  "meta": {
+    "surge_confirmation": {
+      "href": "https:\/\/api.uber.com\/v1\/surge-confirmations\/e100a670",
+      "surge_confirmation_id": "e100a670",
+      "multiplier": 1.4,
+      "expires_at": 1459191276
+    }
+  },
+  "errors":[
+    {
+      "status": 409,
+      "code": "surge",
+      "title": "Surge pricing is currently in effect for this product."
+    }
+  ]
+}
