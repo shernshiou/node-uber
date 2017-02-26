@@ -1,151 +1,18 @@
 var common = require("./common"),
-    nock = common.nock,
     should = common.should,
     uber = common.uber,
-    uber_sandbox = common.uber_sandbox;
-
-var tokenResponse = {
-        "access_token": "EE1IDxytP04tJ767GbjH7ED9PpGmYvL",
-        "token_type": "Bearer",
-        "expires_in": 2592000,
-        "refresh_token": "Zx8fJ8qdSRRseIVlsGgtgQ4wnZBehr",
-        "scope": "profile history"
-    },
-    acceptedRequestReply = {
-        "request_id": "17cb78a7-b672-4d34-a288-a6c6e44d5315",
-        "status": "accepted",
-        "location": {
-            "latitude": 37.7886532015,
-            "longitude": -122.3961987534,
-            "bearing": 135
-        },
-        "pickup": {
-            "latitude": 37.7872486012,
-            "longitude": -122.4026315287,
-            "eta": 5
-        },
-        "destination": {
-            "latitude": 37.7766874,
-            "longitude": -122.394857,
-            "eta": 19
-        },
-        "driver": {
-            "phone_number": "(555)555-5555",
-            "rating": 5,
-            "picture_url": "https:\/\/d1w2poirtb3as9.cloudfront.net\/img.jpeg",
-            "name": "Bob"
-        },
-        "vehicle": {
-            "make": "Bugatti",
-            "model": "Veyron",
-            "license_plate": "I<3Uber",
-            "picture_url": "https:\/\/d1w2poirtb3as9.cloudfront.net\/car.jpeg"
-        },
-        "surge_multiplier": 1.0,
-        "eta": 5
-    },
-    createRequestReply = {
-        "request_id": "852b8fdd-4369-4659-9628-e122662ad257",
-        "status": "processing",
-        "vehicle": null,
-        "driver": null,
-        "location": null,
-        "eta": 5,
-        "surge_multiplier": null
-    },
-    estimateReply = {
-        "price": {
-            "surge_confirmation_href": "https:\/\/api.uber.com\/v1\/surge-confirmations\/7d604f5e",
-            "high_estimate": 6,
-            "surge_confirmation_id": "7d604f5e",
-            "minimum": 5,
-            "low_estimate": 5,
-            "surge_multiplier": 1.2,
-            "display": "$5-6",
-            "currency_code": "USD"
-        },
-        "trip": {
-            "distance_unit": "mile",
-            "duration_estimate": 540,
-            "distance_estimate": 2.1
-        },
-        "pickup_estimate": 2
-    },
-    mapReply = {
-        "request_id": "b5512127-a134-4bf4-b1ba-fe9f48f56d9d",
-        "href": "https://trip.uber.com/abc123"
-    },
-    receiptReply = {
-        "request_id": "b5512127-a134-4bf4-b1ba-fe9f48f56d9d",
-        "charges": [{
-            "name": "Base Fare",
-            "amount": "2.20",
-            "type": "base_fare"
-        }, {
-            "name": "Distance",
-            "amount": "2.75",
-            "type": "distance"
-        }, {
-            "name": "Time",
-            "amount": "3.57",
-            "type": "time"
-        }],
-        "surge_charge": {
-            "name": "Surge x1.5",
-            "amount": "4.26",
-            "type": "surge"
-        },
-        "charge_adjustments": [{
-            "name": "Promotion",
-            "amount": "-2.43",
-            "type": "promotion"
-        }, {
-            "name": "Booking Fee",
-            "amount": "1.00",
-            "type": "booking_fee"
-        }, {
-            "name": "Rounding Down",
-            "amount": "0.78",
-            "type": "rounding_down"
-        }],
-        "normal_fare": "$8.52",
-        "subtotal": "$12.78",
-        "total_charged": "$5.92",
-        "total_owed": null,
-        "currency_code": "USD",
-        "duration": "00:11:35",
-        "distance": "1.49",
-        "distance_label": "miles"
-    };
-
+    uber_sandbox = common.uber_sandbox,
+    reply = common.jsonReply,
+    ac = common.authCode,
+    acNR = common.authCodeNoRequest,
+    rPA = common.requestProductCreate,
+    rPS = common.requestProductSurge,
+    rPSOE = common.requestProductSomeOtherError;
 describe('Current Request', function() {
-    before(function() {
-        nock('https://login.uber.com')
-            .post('/oauth/token')
-            .times(2)
-            .reply(200, tokenResponse);
-        nock('https://api.uber.com', {
-                reqheaders: {
-                    'Authorization': 'Bearer EE1IDxytP04tJ767GbjH7ED9PpGmYvL'
-                }
-            })
-            .get('/v1/requests/current')
-            .reply(200, acceptedRequestReply);
-        nock('https://api.uber.com')
-            .post('/v1/requests')
-            .reply(200, createRequestReply);
-        nock('https://api.uber.com')
-            .patch('/v1/requests/current')
-            .reply(204);
-        nock('https://api.uber.com')
-            .delete('/v1/requests/current')
-            .reply(204);
-    });
-
     it('should return error for new request without authorization', function(done) {
         uber.clearTokens();
         uber.requests.create({
-            "product_id": "a1111c8c-c720-46c3-8534-2fcdd730040d",
+            "product_id": rPA,
             "start_latitude": 37.761492,
             "start_longitude": -122.423941,
             "end_latitude": 37.775393,
@@ -158,19 +25,144 @@ describe('Current Request', function() {
 
     it('should create new request after authorization', function(done) {
         uber.authorization({
-                authorization_code: 'x8Y6dF2qA6iKaTKlgzVfFvyYoNrlkp'
+                authorization_code: ac
             },
             function(err, accessToken, refreshToken) {
                 should.not.exist(err);
                 uber.requests.create({
-                    "product_id": "a1111c8c-c720-46c3-8534-2fcdd730040d",
+                    "product_id": rPA,
                     "start_latitude": 37.761492,
                     "start_longitude": -122.423941,
                     "end_latitude": 37.775393,
                     "end_longitude": -122.417546
                 }, function(err, res) {
                     should.not.exist(err);
-                    res.should.deep.equal(createRequestReply);
+                    res.should.deep.equal(reply('requestCreate'));
+                    done();
+                });
+            });
+    });
+
+    it('should create new request with address after authorization', function(done) {
+        uber.authorization({
+                authorization_code: ac
+            },
+            function(err, accessToken, refreshToken) {
+                should.not.exist(err);
+                uber.requests.create({
+                    "product_id": rPA,
+                    "startAddress": 'A',
+                    "endAddress": 'B'
+                }, function(err, res) {
+                    should.not.exist(err);
+                    res.should.deep.equal(reply('requestCreate'));
+                    done();
+                });
+            });
+    });
+
+    it('should return error for invalid start address', function(done) {
+        uber.authorization({
+                authorization_code: ac
+            },
+            function(err, accessToken, refreshToken) {
+                should.not.exist(err);
+                uber.requests.create({
+                    "product_id": rPA,
+                    "startAddress": ' ',
+                    "endAddress": 'B'
+                }, function(err, res) {
+                    err.message.should.equal('No coordinates found for: " "');
+                    done();
+                });
+            });
+    });
+
+    it('should return error for invalid end address', function(done) {
+        uber.authorization({
+                authorization_code: ac
+            },
+            function(err, accessToken, refreshToken) {
+                should.not.exist(err);
+                uber.requests.create({
+                    "product_id": rPA,
+                    "startAddress": 'A',
+                    "endAddress": ' '
+                }, function(err, res) {
+                    err.message.should.equal('No coordinates found for: " "');
+                    done();
+                });
+            });
+    });
+
+    it ('should return an error along with surge confirmation details if surge pricing is active', function(done) {
+        uber.authorization({
+                authorization_code: ac
+            },
+            function(err, accessToken, refreshToken) {
+                should.not.exist(err);
+                uber.requests.create({
+                    "product_id": rPS,
+                    "startAddress": 'A',
+                    "endAddress": 'B'
+                }, function(err, res) {
+                    should.exist(err);
+                    uber.isSurge(err).should.deep.equal(true);
+                    err.surge_confirmation.should.have.property('href');
+                    err.surge_confirmation.should.have.property('surge_confirmation_id');
+                    err.surge_confirmation.should.have.property('multiplier');
+                    done();
+                });
+            });
+    });
+    it ('should create ride request after user has accepted surge pricing', function(done) {
+        uber.authorization({
+                authorization_code: ac
+            },
+            function(err, accessToken, refreshToken) {
+                should.not.exist(err);
+                uber.requests.create({
+                    "product_id": rPS,
+                    "startAddress": 'A',
+                    "endAddress": 'B'
+                }, function(err, res) {
+                    should.exist(err);
+                    uber.isSurge(err).should.deep.equal(true);
+                    should.exist(uber.currentRequestParameters.surge_confirmation_id);
+                    uber.requests.acceptSurgeForLastRequest(function (err, res) {
+                        should.not.exist(err);
+                        res.should.deep.equal(reply('requestCreate'));
+                        done();
+                    });
+                });
+            });
+    });
+    it ('should return an error if there is a blocker other than surge conflict', function(done) {
+        uber.authorization({
+                authorization_code: ac
+            },
+            function(err, accessToken, refreshToken) {
+                should.not.exist(err);
+                uber.requests.create({
+                    "product_id": rPSOE,
+                    "startAddress": 'A',
+                    "endAddress": 'B'
+                }, function(err, res) {
+                    should.exist(err);
+                    uber.isSurge(err).should.deep.equal(false);
+                    done();
+                });
+            });
+    });
+
+    it('should return an error if there is no active surge request to accept', function(done) {
+        uber.authorization({
+                authorization_code: ac
+            },
+            function(err, accessToken, refreshToken) {
+                should.not.exist(err);
+                uber.requests.acceptSurgeForLastRequest(function(err, res) {
+                    should.exist(err);
                     done();
                 });
             });
@@ -193,13 +185,26 @@ describe('Current Request', function() {
 
     it('should get current request after authorization', function(done) {
         uber.authorization({
-                authorization_code: 'x8Y6dF2qA6iKaTKlgzVfFvyYoNrlkp'
+                authorization_code: ac
             },
             function(err, accessToken, refreshToken) {
                 should.not.exist(err);
                 uber.requests.getCurrent(function(err, res) {
                     should.not.exist(err);
-                    res.should.deep.equal(acceptedRequestReply);
+                    res.should.deep.equal(reply('requestAccept'));
+                    done();
+                });
+            });
+    });
+
+    it('should return error for current request with missing scope', function(done) {
+        uber.authorization({
+                authorization_code: acNR
+            },
+            function(err, accessToken, refreshToken) {
+                should.not.exist(err);
+                uber.requests.getCurrent(function(err, res) {
+                    err.message.should.equal('Required scope not found');
                     done();
                 });
             });
@@ -207,6 +212,15 @@ describe('Current Request', function() {
 
     it('should patch current request', function(done) {
         uber.requests.updateCurrent({}, function(err, res) {
+            should.not.exist(err);
+            done();
+        });
+    });
+
+    it('should patch current request with new end address', function(done) {
+        uber.requests.updateCurrent({
+            endAddress: 'C'
+        }, function(err, res) {
             should.not.exist(err);
             done();
         });
@@ -228,22 +242,50 @@ describe('Current Request', function() {
 });
 
 describe('Estimate', function() {
-    before(function() {
-        nock('https://api.uber.com')
-            .post('/v1/requests/estimate')
-            .reply(200, estimateReply);
-    });
-
     it('should get estimates', function(done) {
         uber.requests.getEstimates({
-            "product_id": "a1111c8c-c720-46c3-8534-2fcdd730040d",
+            "product_id": rPA,
             "start_latitude": 37.761492,
             "start_longitude": -122.423941,
             "end_latitude": 37.775393,
             "end_longitude": -122.417546
         }, function(err, res) {
             should.not.exist(err);
-            res.should.deep.equal(estimateReply);
+            res.should.deep.equal(reply('requestEstimate'));
+            done();
+        });
+    });
+
+    it('should get estimates for address', function(done) {
+        uber.requests.getEstimates({
+            "product_id": rPA,
+            "startAddress": 'A',
+            "endAddress": 'B'
+        }, function(err, res) {
+            should.not.exist(err);
+            res.should.deep.equal(reply('requestEstimate'));
+            done();
+        });
+    });
+
+    it('should return error for estimates for invalid start address', function(done) {
+        uber.requests.getEstimates({
+            "product_id": rPA,
+            "startAddress": ' ',
+            "endAddress": 'B'
+        }, function(err, res) {
+            err.message.should.equal('No coordinates found for: " "');
+            done();
+        });
+    });
+
+    it('should return error for estimates for invalid start address', function(done) {
+        uber.requests.getEstimates({
+            "product_id": rPA,
+            "startAddress": 'A',
+            "endAddress": ' '
+        }, function(err, res) {
+            err.message.should.equal('No coordinates found for: " "');
             done();
         });
     });
@@ -258,38 +300,6 @@ describe('Estimate', function() {
 });
 
 describe('By Request ID', function() {
-    before(function() {
-        nock('https://login.uber.com')
-            .post('/oauth/token')
-            .times(4)
-            .reply(200, tokenResponse);
-        nock('https://api.uber.com', {
-                reqheaders: {
-                    'Authorization': 'Bearer EE1IDxytP04tJ767GbjH7ED9PpGmYvL'
-                }
-            })
-            .get('/v1/requests/17cb78a7-b672-4d34-a288-a6c6e44d5315')
-            .reply(200, acceptedRequestReply);
-        nock('https://api.uber.com')
-            .patch('/v1/requests/abcd')
-            .reply(404, "Request could not be found");
-        nock('https://api.uber.com')
-            .get('/v1/requests/abcd')
-            .reply(404, "Request could not be found");
-        nock('https://api.uber.com')
-            .patch('/v1/requests/17cb78a7-b672-4d34-a288-a6c6e44d5315')
-            .times(2)
-            .reply(204);
-        nock('https://sandbox-api.uber.com/')
-            .put('/v1/sandbox/requests/17cb78a7-b672-4d34-a288-a6c6e44d5315', {
-                status: 'accepted'
-            })
-            .reply(204);
-        nock('https://api.uber.com')
-            .delete('/v1/requests/17cb78a7-b672-4d34-a288-a6c6e44d5315')
-            .reply(204);
-    });
-
     it('should return error for getting request by ID without authorization', function(done) {
         uber.clearTokens();
         uber.requests.getByID('17cb78a7-b672-4d34-a288-a6c6e44d5315', function(err, res) {
@@ -300,13 +310,13 @@ describe('By Request ID', function() {
 
     it('should get existing request by ID after authorization', function(done) {
         uber.authorization({
-                authorization_code: 'x8Y6dF2qA6iKaTKlgzVfFvyYoNrlkp'
+                authorization_code: ac
             },
             function(err, accessToken, refreshToken) {
                 should.not.exist(err);
                 uber.requests.getByID('17cb78a7-b672-4d34-a288-a6c6e44d5315', function(err, res) {
                     should.not.exist(err);
-                    res.should.deep.equal(acceptedRequestReply);
+                    res.should.deep.equal(reply('requestAccept'));
                     done();
                 });
             });
@@ -337,12 +347,42 @@ describe('By Request ID', function() {
 
     it('should patch an existing request by ID after authorization', function(done) {
         uber.authorization({
-                authorization_code: 'x8Y6dF2qA6iKaTKlgzVfFvyYoNrlkp'
+                authorization_code: ac
             },
             function(err, accessToken, refreshToken) {
                 should.not.exist(err);
                 uber.requests.updateByID('17cb78a7-b672-4d34-a288-a6c6e44d5315', {}, function(err, res) {
                     should.not.exist(err);
+                    done();
+                });
+            });
+    });
+
+    it('should return eroor for patch by ID with invalid start address', function(done) {
+        uber.authorization({
+                authorization_code: ac
+            },
+            function(err, accessToken, refreshToken) {
+                should.not.exist(err);
+                uber.requests.updateByID('17cb78a7-b672-4d34-a288-a6c6e44d5315', {
+                    startAddress: ' '
+                }, function(err, res) {
+                    err.message.should.equal('No coordinates found for: " "');
+                    done();
+                });
+            });
+    });
+
+    it('should return eroor for patch by ID with invalid end address', function(done) {
+        uber.authorization({
+                authorization_code: ac
+            },
+            function(err, accessToken, refreshToken) {
+                should.not.exist(err);
+                uber.requests.updateByID('17cb78a7-b672-4d34-a288-a6c6e44d5315', {
+                    endAddress: ' '
+                }, function(err, res) {
+                    err.message.should.equal('No coordinates found for: " "');
                     done();
                 });
             });
@@ -379,7 +419,7 @@ describe('By Request ID', function() {
 
     it('should return error for putting an existing request in production mode', function(done) {
         uber.authorization({
-                authorization_code: 'x8Y6dF2qA6iKaTKlgzVfFvyYoNrlkp'
+                authorization_code: ac
             },
             function(err, accessToken, refreshToken) {
                 should.not.exist(err);
@@ -392,7 +432,7 @@ describe('By Request ID', function() {
 
     it('should accept an existing request by ID after authorization', function(done) {
         uber_sandbox.authorization({
-                authorization_code: 'x8Y6dF2qA6iKaTKlgzVfFvyYoNrlkp'
+                authorization_code: ac
             },
             function(err, accessToken, refreshToken) {
                 should.not.exist(err);
@@ -434,7 +474,7 @@ describe('By Request ID', function() {
 
     it('should delete an existing request by ID after authorization', function(done) {
         uber.authorization({
-                authorization_code: 'x8Y6dF2qA6iKaTKlgzVfFvyYoNrlkp'
+                authorization_code: ac
             },
             function(err, accessToken, refreshToken) {
                 should.not.exist(err);
@@ -453,27 +493,6 @@ describe('By Request ID', function() {
     });
 
     describe('Request Details', function() {
-        before(function() {
-            nock('https://login.uber.com')
-                .post('/oauth/token')
-                .times(2)
-                .reply(200, tokenResponse);
-            nock('https://api.uber.com', {
-                    reqheaders: {
-                        'Authorization': 'Bearer EE1IDxytP04tJ767GbjH7ED9PpGmYvL'
-                    }
-                })
-                .get('/v1/requests/17cb78a7-b672-4d34-a288-a6c6e44d5315/map')
-                .reply(200, mapReply);
-            nock('https://api.uber.com', {
-                    reqheaders: {
-                        'Authorization': 'Bearer EE1IDxytP04tJ767GbjH7ED9PpGmYvL'
-                    }
-                })
-                .get('/v1/requests/17cb78a7-b672-4d34-a288-a6c6e44d5315/receipt')
-                .reply(200, receiptReply);
-        });
-
         it('should return error for get map without authorization', function(done) {
             uber.clearTokens();
             uber.requests.getMapByID('17cb78a7-b672-4d34-a288-a6c6e44d5315', function(err, res) {
@@ -484,13 +503,13 @@ describe('By Request ID', function() {
 
         it('should get map after authorization', function(done) {
             uber.authorization({
-                    authorization_code: 'x8Y6dF2qA6iKaTKlgzVfFvyYoNrlkp'
+                    authorization_code: ac
                 },
                 function(err, accessToken, refreshToken) {
                     should.not.exist(err);
                     uber.requests.getMapByID('17cb78a7-b672-4d34-a288-a6c6e44d5315', function(err, res) {
                         should.not.exist(err);
-                        res.should.deep.equal(mapReply);
+                        res.should.deep.equal(reply('requestMap'));
                         done();
                     });
                 });
@@ -513,13 +532,13 @@ describe('By Request ID', function() {
 
         it('should get receipt after authorization', function(done) {
             uber.authorization({
-                    authorization_code: 'x8Y6dF2qA6iKaTKlgzVfFvyYoNrlkp'
+                    authorization_code: ac
                 },
                 function(err, accessToken, refreshToken) {
                     should.not.exist(err);
                     uber.requests.getReceiptByID('17cb78a7-b672-4d34-a288-a6c6e44d5315', function(err, res) {
                         should.not.exist(err);
-                        res.should.deep.equal(receiptReply);
+                        res.should.deep.equal(reply('requestReceipt'));
                         done();
                     });
                 });

@@ -1,8 +1,12 @@
 var common = require("./common"),
-    nock = common.nock,
     should = common.should,
     qs = common.qs,
-    uber = common.uber;
+    uber = common.uber,
+    reply = common.jsonReply,
+    ac = common.authCode,
+    acTE = common.authCodeTokenExpired,
+    acTNR = common.authCodeTokenNoRefresh;
+
 
 describe('OAuth2 authorization url', function() {
     it('generate OAuth2 correct authorization url', function(done) {
@@ -28,50 +32,17 @@ describe('OAuth2 authorization url', function() {
     });
 });
 
-describe('OAuth2 error catching', function() {
-    before(function() {
-        nock('https://login.uber.com')
-            .post('/oauth/token')
-            .reply(404);
-    });
-
-    it('should catch authorization error if uber.com not reachable', function(done) {
-        uber.authorization({
-                authorization_code: 'x8Y6dF2qA6iKaTKlgzVfFvyYoNrlkp'
-            },
-            function(err, access_token, refresh_token) {
-                should.exist(err);
-                done();
-            });
-    });
-});
-
 describe('Exchange authorization code into access token', function() {
-    var tokenResponse = {
-        "access_token": "EE1IDxytP04tJ767GbjH7ED9PpGmYvL",
-        "token_type": "Bearer",
-        "expires_in": 2592000,
-        "refresh_token": "Zx8fJ8qdSRRseIVlsGgtgQ4wnZBehr",
-        "scope": "profile history"
-    };
-
-    before(function() {
-        nock('https://login.uber.com')
-            .post('/oauth/token')
-            .times(2)
-            .reply(200, tokenResponse);
-    });
-
     it('should be able to get access token and refresh token using authorization code', function(done) {
         uber.authorization({
-                authorization_code: 'x8Y6dF2qA6iKaTKlgzVfFvyYoNrlkp'
+                authorization_code: ac
             },
-            function(err, access_token, refresh_token) {
+            function(err, res) {
                 should.not.exist(err);
-                access_token.should.equal(tokenResponse.access_token);
-                refresh_token.should.equal(tokenResponse.refresh_token);
-                uber.access_token.should.equal(tokenResponse.access_token);
-                uber.refresh_token.should.equal(tokenResponse.refresh_token);
+                res[0].should.equal(reply('token').access_token);
+                res[1].should.equal(reply('token').refresh_token);
+                uber.access_token.should.equal(reply('token').access_token);
+                uber.refresh_token.should.equal(reply('token').refresh_token);
                 done();
             });
     });
@@ -80,12 +51,12 @@ describe('Exchange authorization code into access token', function() {
         uber.authorization({
                 refresh_token: 'x8Y6dF2qA6iKaTKlgzVfFvyYoNrlkp'
             },
-            function(err, access_token, refresh_token) {
+            function(err, res) {
                 should.not.exist(err);
-                access_token.should.equal(tokenResponse.access_token);
-                refresh_token.should.equal(tokenResponse.refresh_token);
-                uber.access_token.should.equal(tokenResponse.access_token);
-                uber.refresh_token.should.equal(tokenResponse.refresh_token);
+                res[0].should.equal(reply('token').access_token);
+                res[1].should.equal(reply('token').refresh_token);
+                uber.access_token.should.equal(reply('token').access_token);
+                uber.refresh_token.should.equal(reply('token').refresh_token);
                 done();
             });
     });
@@ -95,5 +66,78 @@ describe('Exchange authorization code into access token', function() {
             err.message.should.equal('No authorization_code or refresh_token');
             done();
         });
+    });
+
+    it('should return error if uber auth service not reachable', function(done) {
+        uber.authorization({
+                authorization_code: ''
+            }, function(err, access_token, refresh_token) {
+            err.statusCode.should.equal(500);
+            done();
+        });
+    });
+});
+
+describe('Auto refresh token whenever it is expired', function(){
+    it ('should be able to recognize an expired token and then auto refresh the token ', function(done) {
+       uber.authorization({
+           authorization_code : acTE
+       }, function(err, res) {
+           should.not.exist(err);
+           uber.requests.create({
+               "product_id": "a1111c8c-c720-46c3-8534-2fcdd730040d",
+               "start_latitude": 37.761492,
+               "start_longitude": -122.423941,
+               "end_latitude": 37.775393,
+               "end_longitude": -122.417546
+           }, function(err, res) {
+               should.not.exist(err);
+               uber.tokenExpiration.should.be.above(new Date());
+               done();
+           });
+       });
+    });
+    it('should return an error if the uber server is not available while refreshing token', function(done) {
+        uber.authorization({
+            authorization_code : acTNR
+        }, function(err, res) {
+            should.not.exist(err);
+            uber.requests.create({
+                "product_id": "a1111c8c-c720-46c3-8534-2fcdd730040d",
+                "start_latitude": 37.761492,
+                "start_longitude": -122.423941,
+                "end_latitude": 37.775393,
+                "end_longitude": -122.417546
+            }, function(err, res) {
+                should.exist(err);
+                err.statusCode.should.equal(500);
+                done();
+            });
+        });
+    });
+});
+
+describe('Multi-user handling', function() {
+    it('should set Uber tokens', function(done) {
+      uber.setTokens(reply('token').access_token, reply('token').refresh_token, reply('token').expires_in, reply('token').scope);
+
+      uber.access_token.should.equal(reply('token').access_token);
+      uber.refresh_token.should.equal(reply('token').refresh_token);
+      uber.tokenExpiration.should.equal(reply('token').expires_in);
+      uber.authorizedScopes.should.equal(reply('token').scope);
+      done();
+    });
+
+    it('should clear Uber tokens', function(done) {
+      uber.setTokens(reply('token').access_token, reply('token').refresh_token, reply('token').expires_in, reply('token').scope);
+
+      uber.clearTokens();
+
+      should.not.exist(uber.access_token);
+      should.not.exist(uber.refresh_token);
+      should.not.exist(uber.tokenExpiration);
+      should.not.exist(uber.authorizedScopes);
+      
+      done();
     });
 });

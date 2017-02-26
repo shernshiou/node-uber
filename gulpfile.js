@@ -30,14 +30,16 @@ gulp.task('pre-test', function() {
         .pipe(istanbul.hookRequire());
 });
 
-gulp.task('test', function() {
+gulp.task('test', ['pre-test'], function() {
     return gulp.src(['test/**/*.js'])
         .pipe(mocha({
-            reporter: 'spec'
+            reporter: 'spec',
+            //useColors: false,
+            timeout: 5000
         }))
         // Creating the reports after tests ran
         .pipe(istanbul.writeReports())
-        // Enforce a coverage of at least 90%
+        // Enforce a coverage of at least 95%
         .pipe(istanbul.enforceThresholds({
             thresholds: {
                 global: 95

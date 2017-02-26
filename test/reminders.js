@@ -1,61 +1,8 @@
 var common = require("./common"),
-    nock = common.nock,
     should = common.should,
-    uber = common.uber;
-
-var reminderReply = {
-    "event": {
-        "name": "Frisbee with friends",
-        "location": "Dolores Park",
-        "latitude": 37.759773,
-        "longitude": -122.427063,
-        "time": 1429294463
-    },
-    "product_id": "a1111c8c-c720-46c3-8534-2fcdd730040d",
-    "reminder_id": "def-456",
-    "reminder_time": 1429294463,
-    "reminder_status": "pending",
-    "trip_branding": {
-        "link_text": "View team roster",
-        "partner_deeplink": "partner://team/9383"
-    }
-};
-
-
-before(function() {
-    nock('https://api.uber.com', {
-            reqheaders: {
-                'Authorization': 'Token SERVERTOKENSERVERTOKENSERVERTOKENSERVERT'
-            }
-        })
-        .get('/v1/reminders/def-456')
-        .times(2)
-        .reply(200, reminderReply);
-    nock('https://api.uber.com', {
-            reqheaders: {
-                'Authorization': 'Token SERVERTOKENSERVERTOKENSERVERTOKENSERVERT'
-            }
-        })
-        .post('/v1/reminders')
-        .times(2)
-        .reply(200, reminderReply);
-    nock('https://api.uber.com', {
-            reqheaders: {
-                'Authorization': 'Token SERVERTOKENSERVERTOKENSERVERTOKENSERVERT'
-            }
-        })
-        .patch('/v1/reminders/def-456')
-        .times(2)
-        .reply(200, reminderReply);
-    nock('https://api.uber.com', {
-            reqheaders: {
-                'Authorization': 'Token SERVERTOKENSERVERTOKENSERVERTOKENSERVERT'
-            }
-        })
-        .delete('/v1/reminders/def-456')
-        .times(2)
-        .reply(204);
-});
+    uber = common.uber,
+    reply = common.jsonReply,
+    ac = common.authCode;
 
 it('should create new reminder', function(done) {
     uber.reminders.create({
@@ -65,8 +12,8 @@ it('should create new reminder', function(done) {
             time: 1429294463,
             name: 'Frisbee with friends',
             location: 'Dolores Park',
-            latitude: 37.759773,
-            longitude: -122.427063,
+            latitude: 37.7598258,
+            longitude: -122.4260558,
             product_id: 'a1111c8c-c720-46c3-8534-2fcdd730040d'
         },
         trip_branding: {
@@ -75,7 +22,71 @@ it('should create new reminder', function(done) {
         }
     }, function(err, res) {
         should.not.exist(err);
-        res.should.deep.equal(reminderReply);
+        res.should.deep.equal(reply('reminder'));
+        done();
+    });
+});
+
+it('should create new reminder using address', function(done) {
+    uber.reminders.create({
+        reminder_time: 1429294463,
+        phone_number: 16508420126,
+        event: {
+            time: 1429294463,
+            name: 'Frisbee with friends',
+            location: 'Dolores Park',
+            address: 'C',
+            product_id: 'a1111c8c-c720-46c3-8534-2fcdd730040d'
+        },
+        trip_branding: {
+            link_text: 'View team roster',
+            partner_deeplink: 'partner://team/9383'
+        }
+    }, function(err, res) {
+        should.not.exist(err);
+        res.should.deep.equal(reply('reminder'));
+        done();
+    });
+});
+
+it('should return error for new reminder with empty address', function(done) {
+    uber.reminders.create({
+        reminder_time: 1429294463,
+        phone_number: 16508420126,
+        event: {
+            time: 1429294463,
+            name: 'Frisbee with friends',
+            location: 'Dolores Park',
+            address: ' ',
+            product_id: 'a1111c8c-c720-46c3-8534-2fcdd730040d'
+        },
+        trip_branding: {
+            link_text: 'View team roster',
+            partner_deeplink: 'partner://team/9383'
+        }
+    }, function(err, res) {
+        err.message.should.equal('No coordinates found for: " "');
+        done();
+    });
+});
+
+it('should return error for new reminder with null address', function(done) {
+    uber.reminders.create({
+        reminder_time: 1429294463,
+        phone_number: 16508420126,
+        event: {
+            time: 1429294463,
+            name: 'Frisbee with friends',
+            location: 'Dolores Park',
+            address: null,
+            product_id: 'a1111c8c-c720-46c3-8534-2fcdd730040d'
+        },
+        trip_branding: {
+            link_text: 'View team roster',
+            partner_deeplink: 'partner://team/9383'
+        }
+    }, function(err, res) {
+        err.message.should.equal('Geocoder.geocode requires a location.');
         done();
     });
 });
@@ -94,8 +105,8 @@ it('should return error if reminder time is missing for POST', function(done) {
             time: 1429294463,
             name: 'Frisbee with friends',
             location: 'Dolores Park',
-            latitude: 37.759773,
-            longitude: -122.427063,
+            latitude: 37.7598258,
+            longitude: -122.4260558,
             product_id: 'a1111c8c-c720-46c3-8534-2fcdd730040d'
         },
         trip_branding: {
@@ -115,8 +126,8 @@ it('should return error if phone number is missing for POST', function(done) {
             time: 1429294463,
             name: 'Frisbee with friends',
             location: 'Dolores Park',
-            latitude: 37.759773,
-            longitude: -122.427063,
+            latitude: 37.7598258,
+            longitude: -122.4260558,
             product_id: 'a1111c8c-c720-46c3-8534-2fcdd730040d'
         },
         trip_branding: {
@@ -136,8 +147,8 @@ it('should return error if event object is missing for POST', function(done) {
         event: {
             name: 'Frisbee with friends',
             location: 'Dolores Park',
-            latitude: 37.759773,
-            longitude: -122.427063,
+            latitude: 37.7598258,
+            longitude: -122.4260558,
             product_id: 'a1111c8c-c720-46c3-8534-2fcdd730040d'
         },
         trip_branding: {
@@ -167,7 +178,7 @@ it('should return error if event.time is missing for POST', function(done) {
 it('should get existing reminder by ID', function(done) {
     uber.reminders.getByID('def-456', function(err, res) {
         should.not.exist(err);
-        res.should.deep.equal(reminderReply);
+        res.should.deep.equal(reply('reminder'));
         done();
     });
 });
@@ -187,8 +198,8 @@ it('should patch an existing reminder by ID', function(done) {
             time: 1429294463,
             name: 'Frisbee with friends',
             location: 'Dolores Park',
-            latitude: 37.759773,
-            longitude: -122.427063,
+            latitude: 37.7598258,
+            longitude: -122.4260558,
             product_id: 'a1111c8c-c720-46c3-8534-2fcdd730040d'
         },
         trip_branding: {
@@ -197,7 +208,50 @@ it('should patch an existing reminder by ID', function(done) {
         }
     }, function(err, res) {
         should.not.exist(err);
-        res.should.deep.equal(reminderReply);
+        res.should.deep.equal(reply('reminder'));
+        done();
+    });
+});
+
+it('should patch an existing reminder by ID using address', function(done) {
+    uber.reminders.updateByID('def-456', {
+        reminder_time: 1429294463,
+        phone_number: 16508420126,
+        event: {
+            time: 1429294463,
+            name: 'Frisbee with friends',
+            location: 'Dolores Park',
+            address: 'C',
+            product_id: 'a1111c8c-c720-46c3-8534-2fcdd730040d'
+        },
+        trip_branding: {
+            link_text: 'View team roster',
+            partner_deeplink: 'partner://team/9383'
+        }
+    }, function(err, res) {
+        should.not.exist(err);
+        res.should.deep.equal(reply('reminder'));
+        done();
+    });
+});
+
+it('should return error for update reminder by ID using invalid address', function(done) {
+    uber.reminders.updateByID('def-456', {
+        reminder_time: 1429294463,
+        phone_number: 16508420126,
+        event: {
+            time: 1429294463,
+            name: 'Frisbee with friends',
+            location: 'Dolores Park',
+            address: ' ',
+            product_id: 'a1111c8c-c720-46c3-8534-2fcdd730040d'
+        },
+        trip_branding: {
+            link_text: 'View team roster',
+            partner_deeplink: 'partner://team/9383'
+        }
+    }, function(err, res) {
+        err.message.should.equal('No coordinates found for: " "');
         done();
     });
 });
@@ -210,8 +264,8 @@ it('should return error in case of missing reminder ID for patch', function(done
             time: 1429294463,
             name: 'Frisbee with friends',
             location: 'Dolores Park',
-            latitude: 37.759773,
-            longitude: -122.427063,
+            latitude: 37.7598258,
+            longitude: -122.4260558,
             product_id: 'a1111c8c-c720-46c3-8534-2fcdd730040d'
         },
         trip_branding: {
