@@ -49,43 +49,43 @@ defineNocks = function() {
     // Login
     nock('https://login.uber.com')
         .persist()
-        .post('/oauth/token', {
+        .post('/oauth/v2/token', {
             code: ''
         })
         .reply(500)
-        .post('/oauth/token', {
+        .post('/oauth/v2/token', {
             code: ac
         })
         .replyWithFile(200, jp('token'))
-        .post('/oauth/token', {
+        .post('/oauth/v2/token', {
             refresh_token: ac
         })
         .replyWithFile(200, jp('token'))
-        .post('/oauth/token', {
+        .post('/oauth/v2/token', {
             code: acNP
         })
         .replyWithFile(200, jp('tokenNoProfile'))
-        .post('/oauth/token', {
+        .post('/oauth/v2/token', {
             code: acNPl
         })
         .replyWithFile(200, jp('tokenNoPlaces'))
-        .post('/oauth/token', {
+        .post('/oauth/v2/token', {
             code: acNR
         })
         .replyWithFile(200, jp('tokenNoRequest'))
-        .post('/oauth/token', {
+        .post('/oauth/v2/token', {
             code: acTE
         })
         .replyWithFile(200, jp('tokenExpired'))
-        .post('/oauth/token', {
+        .post('/oauth/v2/token', {
             refresh_token: acTR
         })
         .replyWithFile(200, jp('tokenRefreshed'))
-        .post('/oauth/token', {
+        .post('/oauth/v2/token', {
             code: acTNR
         })
         .replyWithFile(200, jp('tokenNoRefresh'))
-        .post('/oauth/token', {
+        .post('/oauth/v2/token', {
             refresh_token: acRTE
         })
         .reply(500);

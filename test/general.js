@@ -20,8 +20,8 @@ it('should initiate Uber client with the key', function(done) {
     uber.defaults.server_token.should.equal(key.server_token);
     uber.defaults.redirect_uri.should.equal(key.redirect_uri);
     uber.defaults.base_url.should.equal('https://api.uber.com/');
-    uber.defaults.authorize_url.should.equal('https://login.uber.com/oauth/authorize');
-    uber.defaults.access_token_url.should.equal('https://login.uber.com/oauth/token');
+    uber.defaults.authorize_url.should.equal('https://login.uber.com/oauth/v2/authorize');
+    uber.defaults.access_token_url.should.equal('https://login.uber.com/oauth/v2/token');
     uber.should.have.property('oauth2');
     done();
 });
