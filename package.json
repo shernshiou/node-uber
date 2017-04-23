@@ -27,6 +27,7 @@
     "bluebird": "^3.4.7",
     "geocoder": "^0.2.2",
     "oauth": "^0.9.15",
+    "proxy-agent": "^2.0.0",
     "request": "^2.79.0"
   },
   "devDependencies": {
