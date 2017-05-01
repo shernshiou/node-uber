@@ -306,7 +306,7 @@ uber.estimates.getPriceForRouteAsync(start_latitude, start_longitude, end_latitu
 
 ##### Example
 ```javascript
-uber.estimates.getPriceForRoute(3.1357169, 101.6881501, 3.0833, 101.6500)
+uber.estimates.getPriceForRouteAsync(3.1357169, 101.6881501, 3.0833, 101.6500)
 .then(function(res) { console.log(res); })
 .error(function(err) { console.error(err); });
 ```
