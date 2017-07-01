@@ -199,7 +199,7 @@ uber.authorizationAsync({ refresh_token: 'REFRESH_TOKEN' })
 ```
 
 #### Revoke
-Used to revoke an access or refresh token. This will invalidate the token and effectively log the user out of your application. Note that per [RFC7009](https://tools.ietf.org/html/rfc7009), revoke will return success for any string you pass into the function provided the client_id and client_secret are correct. This include previously revoked tokens and invalid tokens.
+Used to revoke an access or refresh token. This will invalidate the token and effectively log the user out of your application. Note that per [RFC7009](https://tools.ietf.org/html/rfc7009), revoke will return success for any string you pass into the function provided the client_id and client_secret are correct. This includes previously revoked tokens and invalid tokens.
 ```javascript
 uber.revoke(token);
 ```
