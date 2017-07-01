@@ -203,7 +203,7 @@ Used to revoke an access or refresh token. This will invalidate the token and ef
 ```javascript
 uber.revoke(token);
 ```
-#### Parameter
+##### Parameter
 * access or refresh token
 
 ##### Example
