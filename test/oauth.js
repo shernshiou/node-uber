@@ -7,7 +7,6 @@ var common = require("./common"),
     acTE = common.authCodeTokenExpired,
     acTNR = common.authCodeTokenNoRefresh;
 
-
 describe('OAuth2 authorization url', function() {
     it('generate OAuth2 correct authorization url', function(done) {
         var url = uber.getAuthorizeUrl(['profile', 'history', 'places', 'request', 'request_receipt', 'all_trips']),
@@ -114,6 +113,23 @@ describe('Auto refresh token whenever it is expired', function(){
                 done();
             });
         });
+    });
+});
+
+describe('OAuth2 revokeToken', function() {
+    it('should return error if token is not passed in', function(done) {
+      uber.revokeToken();
+      done();
+    });
+
+    it('should return error if token is empty', function(done) {
+      uber.revokeToken('').message.should.equal('Missing token');
+      done();
+    });
+
+    it('should return error if token is not a string', function(done) {
+      uber.revokeToken({a:1}).message.should.equal('Token is not a string');
+      done();
     });
 });
 
