@@ -1,4 +1,4 @@
-var common = require("./common"),
+var common = require("../common"),
     should = common.should,
     uber = common.uber,
     uber_sandbox = common.uber_sandbox,
@@ -39,7 +39,7 @@ describe('Current Request', function() {
                 });
             })
             .then(function(res) {
-                res.should.deep.equal(reply('requestCreate'));
+                res.should.deep.equal(reply('riders/requestCreate'));
                 done();
             });
     });
@@ -56,7 +56,7 @@ describe('Current Request', function() {
                 });
             })
             .then(function(res) {
-                res.should.deep.equal(reply('requestCreate'));
+                res.should.deep.equal(reply('riders/requestCreate'));
                 done();
             });
     });
@@ -132,7 +132,7 @@ describe('Current Request', function() {
             })
             .then(function (res) {
                 should.exist(res);
-                res.should.deep.equal(reply('requestCreate'));
+                res.should.deep.equal(reply('riders/requestCreate'));
                 done();
             });
     });
@@ -190,7 +190,7 @@ describe('Current Request', function() {
                 return uber.requests.getCurrentAsync();
             })
             .then(function(res) {
-                res.should.deep.equal(reply('requestAccept'));
+                res.should.deep.equal(reply('riders/requestAccept'));
                 done();
             });
     });
@@ -249,7 +249,7 @@ describe('Estimate', function() {
                 "end_longitude": -122.417546
             })
             .then(function(res) {
-                res.should.deep.equal(reply('requestEstimate'));
+                res.should.deep.equal(reply('riders/requestEstimate'));
                 done();
             });
     });
@@ -261,7 +261,7 @@ describe('Estimate', function() {
                 "endAddress": 'B'
             })
             .then(function(res) {
-                res.should.deep.equal(reply('requestEstimate'));
+                res.should.deep.equal(reply('riders/requestEstimate'));
                 done();
             });
     });
@@ -318,7 +318,7 @@ describe('By Request ID', function() {
                 return uber.requests.getByIDAsync('17cb78a7-b672-4d34-a288-a6c6e44d5315');
             })
             .then(function(res) {
-                res.should.deep.equal(reply('requestAccept'));
+                res.should.deep.equal(reply('riders/requestAccept'));
                 done();
             });
     });
@@ -519,7 +519,7 @@ describe('By Request ID', function() {
                     return uber.requests.getMapByIDAsync('17cb78a7-b672-4d34-a288-a6c6e44d5315');
                 })
                 .then(function(res) {
-                    res.should.deep.equal(reply('requestMap'));
+                    res.should.deep.equal(reply('riders/requestMap'));
                     done();
                 });
         });
@@ -549,7 +549,7 @@ describe('By Request ID', function() {
                     return uber.requests.getReceiptByIDAsync('17cb78a7-b672-4d34-a288-a6c6e44d5315');
                 })
                 .then(function(res) {
-                    res.should.deep.equal(reply('requestReceipt'));
+                    res.should.deep.equal(reply('riders/requestReceipt'));
                     done();
                 });
         });
