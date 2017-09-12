@@ -31,19 +31,19 @@
     "request": "^2.79.0"
   },
   "devDependencies": {
-    "chai": "^3.5.0",
-    "codeclimate-test-reporter": "^0.4.1",
+    "chai": "^4.1.2",
+    "codeclimate-test-reporter": "^0.5.0",
     "gulp": "^3.9.1",
-    "gulp-eslint": "^3.0.1",
-    "gulp-istanbul": "^1.1.1",
+    "gulp-eslint": "^4.0.0",
+    "gulp-istanbul": "^1.1.2",
     "gulp-mocha": "^3.0.1",
     "gulp-util": "^3.0.8",
     "istanbul": "^0.4.5",
-    "mocha": "^3.2.0",
-    "nock": "^9.0.7",
-    "sinon": "^1.17.7",
-    "sinon-chai": "^2.8.0",
-    "superagent": "^3.5.0"
+    "mocha": "^3.5.3",
+    "nock": "^9.0.14",
+    "sinon": "^3.2.1",
+    "sinon-chai": "^2.13.0",
+    "superagent": "^3.6.0"
   },
   "engines": {
     "node": "6.10",
