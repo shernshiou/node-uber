@@ -172,7 +172,22 @@ defineNocks = function() {
         .get('/v1/requests/17cb78a7-b672-4d34-a288-a6c6e44d5315/map')
         .replyWithFile(200, jp('riders/requestMap'))
         .get('/v1/requests/17cb78a7-b672-4d34-a288-a6c6e44d5315/receipt')
-        .replyWithFile(200, jp('riders/requestReceipt'));
+        .replyWithFile(200, jp('riders/requestReceipt'))
+        // Driver Partners
+        .get('/v1/partners/me')
+        .replyWithFile(200, jp('drivers/partnerProfile'))
+        .get('/v1/partners/payments?offset=0&limit=5&from_time=1451606400&to_time=1505160819')
+        .replyWithFile(200, jp('drivers/partnerPayments'))
+        .get('/v1/partners/payments?offset=0&limit=50&from_time=1451606400&to_time=1505160819')
+        .replyWithFile(200, jp('drivers/partnerPayments'))
+        .get('/v1/partners/payments?offset=0&limit=5')
+        .replyWithFile(200, jp('drivers/partnerPayments'))
+        .get('/v1/partners/trips?offset=0&limit=5&from_time=1451606400&to_time=1505160819')
+        .replyWithFile(200, jp('drivers/partnerTrips'))
+        .get('/v1/partners/trips?offset=0&limit=50&from_time=1451606400&to_time=1505160819')
+        .replyWithFile(200, jp('drivers/partnerTrips'))
+        .get('/v1/partners/trips?offset=0&limit=5')
+        .replyWithFile(200, jp('drivers/partnerTrips'));
 
 
     // Endpoints accessible with server_token

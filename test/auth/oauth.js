@@ -10,11 +10,12 @@ var common = require("../common"),
 
 describe('OAuth2 authorization url', function() {
     it('generate OAuth2 correct authorization url', function(done) {
-        var url = uber.getAuthorizeUrl(['profile', 'history', 'places', 'request', 'request_receipt', 'all_trips']),
+      var allScopes = ['profile', 'history', 'places', 'request', 'request_receipt', 'all_trips', 'partner.payments', 'partner.accounts', 'partner.trips'];
+        var url = uber.getAuthorizeUrl(allScopes),
             sampleUrl = uber.defaults.authorize_url + '?' + qs.stringify({
                 response_type: 'code',
                 redirect_uri: uber.defaults.redirect_uri,
-                scope: ['profile', 'history', 'places', 'request', 'request_receipt', 'all_trips'].join(' '),
+                scope: allScopes.join(' '),
                 client_id: uber.defaults.client_id
             });
         url.should.equal(sampleUrl);
