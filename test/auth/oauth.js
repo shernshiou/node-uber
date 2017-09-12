@@ -1,4 +1,4 @@
-var common = require("./common"),
+var common = require("../common"),
     should = common.should,
     qs = common.qs,
     uber = common.uber,
@@ -10,11 +10,12 @@ var common = require("./common"),
 
 describe('OAuth2 authorization url', function() {
     it('generate OAuth2 correct authorization url', function(done) {
-        var url = uber.getAuthorizeUrl(['profile', 'history', 'places', 'request', 'request_receipt', 'all_trips']),
+      var allScopes = ['profile', 'history', 'places', 'request', 'request_receipt', 'all_trips', 'partner.payments', 'partner.accounts', 'partner.trips'];
+        var url = uber.getAuthorizeUrl(allScopes),
             sampleUrl = uber.defaults.authorize_url + '?' + qs.stringify({
                 response_type: 'code',
                 redirect_uri: uber.defaults.redirect_uri,
-                scope: ['profile', 'history', 'places', 'request', 'request_receipt', 'all_trips'].join(' '),
+                scope: allScopes.join(' '),
                 client_id: uber.defaults.client_id
             });
         url.should.equal(sampleUrl);
@@ -39,10 +40,10 @@ describe('Exchange authorization code into access token', function() {
             },
             function(err, res) {
                 should.not.exist(err);
-                res[0].should.equal(reply('token').access_token);
-                res[1].should.equal(reply('token').refresh_token);
-                uber.access_token.should.equal(reply('token').access_token);
-                uber.refresh_token.should.equal(reply('token').refresh_token);
+                res[0].should.equal(reply('auth/token').access_token);
+                res[1].should.equal(reply('auth/token').refresh_token);
+                uber.access_token.should.equal(reply('auth/token').access_token);
+                uber.refresh_token.should.equal(reply('auth/token').refresh_token);
                 done();
             });
     });
@@ -53,10 +54,10 @@ describe('Exchange authorization code into access token', function() {
             },
             function(err, res) {
                 should.not.exist(err);
-                res[0].should.equal(reply('token').access_token);
-                res[1].should.equal(reply('token').refresh_token);
-                uber.access_token.should.equal(reply('token').access_token);
-                uber.refresh_token.should.equal(reply('token').refresh_token);
+                res[0].should.equal(reply('auth/token').access_token);
+                res[1].should.equal(reply('auth/token').refresh_token);
+                uber.access_token.should.equal(reply('auth/token').access_token);
+                uber.refresh_token.should.equal(reply('auth/token').refresh_token);
                 done();
             });
     });
@@ -119,17 +120,17 @@ describe('Auto refresh token whenever it is expired', function(){
 
 describe('Multi-user handling', function() {
     it('should set Uber tokens', function(done) {
-      uber.setTokens(reply('token').access_token, reply('token').refresh_token, reply('token').expires_in, reply('token').scope);
+      uber.setTokens(reply('auth/token').access_token, reply('auth/token').refresh_token, reply('auth/token').expires_in, reply('auth/token').scope);
 
-      uber.access_token.should.equal(reply('token').access_token);
-      uber.refresh_token.should.equal(reply('token').refresh_token);
-      uber.tokenExpiration.should.equal(reply('token').expires_in);
-      uber.authorizedScopes.should.equal(reply('token').scope);
+      uber.access_token.should.equal(reply('auth/token').access_token);
+      uber.refresh_token.should.equal(reply('auth/token').refresh_token);
+      uber.tokenExpiration.should.equal(reply('auth/token').expires_in);
+      uber.authorizedScopes.should.equal(reply('auth/token').scope);
       done();
     });
 
     it('should clear Uber tokens', function(done) {
-      uber.setTokens(reply('token').access_token, reply('token').refresh_token, reply('token').expires_in, reply('token').scope);
+      uber.setTokens(reply('auth/token').access_token, reply('auth/token').refresh_token, reply('auth/token').expires_in, reply('auth/token').scope);
 
       uber.clearTokens();
 
@@ -137,7 +138,7 @@ describe('Multi-user handling', function() {
       should.not.exist(uber.refresh_token);
       should.not.exist(uber.tokenExpiration);
       should.not.exist(uber.authorizedScopes);
-      
+
       done();
     });
 });

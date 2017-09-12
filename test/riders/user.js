@@ -1,4 +1,4 @@
-var common = require("./common"),
+var common = require("../common"),
     should = common.should,
     uber = common.uber,
     reply = common.jsonReply,
@@ -22,7 +22,7 @@ describe('Profile', function() {
                 should.not.exist(err);
                 uber.user.getProfile(function(err, res) {
                     should.not.exist(err);
-                    res.should.deep.equal(reply('profile'));
+                    res.should.deep.equal(reply('riders/profile'));
                     done();
                 });
             });
@@ -51,7 +51,7 @@ describe('History', function() {
                 should.not.exist(err);
                 uber.user.getHistory(0, 5, function(err, res) {
                     should.not.exist(err);
-                    res.should.deep.equal(reply('history'));
+                    res.should.deep.equal(reply('riders/history'));
                     done();
                 });
             });
@@ -65,7 +65,7 @@ describe('History', function() {
                 should.not.exist(err);
                 uber.user.getHistory(0, 99, function(err, res) {
                     should.not.exist(err);
-                    res.should.deep.equal(reply('history'));
+                    res.should.deep.equal(reply('riders/history'));
                     done();
                 });
             });
@@ -79,7 +79,7 @@ describe('History', function() {
                 should.not.exist(err);
                 uber.user.getHistory(null, null, function(err, res) {
                     should.not.exist(err);
-                    res.should.deep.equal(reply('history'));
+                    res.should.deep.equal(reply('riders/history'));
                     done();
                 });
             });

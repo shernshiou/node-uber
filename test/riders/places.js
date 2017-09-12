@@ -1,4 +1,4 @@
-var common = require("./common"),
+var common = require("../common"),
     should = common.should,
     uber = common.uber,
     reply = common.jsonReply,
@@ -22,7 +22,7 @@ describe('Home', function() {
                 should.not.exist(err);
                 uber.places.getHome(function(err, res) {
                     should.not.exist(err);
-                    res.should.deep.equal(reply('placeHome'));
+                    res.should.deep.equal(reply('riders/placeHome'));
                     done();
                 });
             });
@@ -48,7 +48,7 @@ describe('Work', function() {
                 should.not.exist(err);
                 uber.places.getWork(function(err, res) {
                     should.not.exist(err);
-                    res.should.deep.equal(reply('placeWork'));
+                    res.should.deep.equal(reply('riders/placeWork'));
                     done();
                 });
             });
@@ -72,7 +72,7 @@ describe('By Place ID', function() {
                 should.not.exist(err);
                 uber.places.updateHome('685 Market St, San Francisco, CA 94103, USA', function(err, res) {
                     should.not.exist(err);
-                    res.should.deep.equal(reply('placeHome'));
+                    res.should.deep.equal(reply('riders/placeHome'));
                     done();
                 });
             });
@@ -99,7 +99,7 @@ describe('By Place ID', function() {
                 should.not.exist(err);
                 uber.places.updateWork('1455 Market St, San Francisco, CA 94103, USA', function(err, res) {
                     should.not.exist(err);
-                    res.should.deep.equal(reply('placeWork'));
+                    res.should.deep.equal(reply('riders/placeWork'));
                     done();
                 });
             });

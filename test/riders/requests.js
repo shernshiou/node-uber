@@ -1,4 +1,4 @@
-var common = require("./common"),
+var common = require("../common"),
     should = common.should,
     uber = common.uber,
     uber_sandbox = common.uber_sandbox,
@@ -37,7 +37,7 @@ describe('Current Request', function() {
                     "end_longitude": -122.417546
                 }, function(err, res) {
                     should.not.exist(err);
-                    res.should.deep.equal(reply('requestCreate'));
+                    res.should.deep.equal(reply('riders/requestCreate'));
                     done();
                 });
             });
@@ -55,7 +55,7 @@ describe('Current Request', function() {
                     "endAddress": 'B'
                 }, function(err, res) {
                     should.not.exist(err);
-                    res.should.deep.equal(reply('requestCreate'));
+                    res.should.deep.equal(reply('riders/requestCreate'));
                     done();
                 });
             });
@@ -131,7 +131,7 @@ describe('Current Request', function() {
                     should.exist(uber.currentRequestParameters.surge_confirmation_id);
                     uber.requests.acceptSurgeForLastRequest(function (err, res) {
                         should.not.exist(err);
-                        res.should.deep.equal(reply('requestCreate'));
+                        res.should.deep.equal(reply('riders/requestCreate'));
                         done();
                     });
                 });
@@ -191,7 +191,7 @@ describe('Current Request', function() {
                 should.not.exist(err);
                 uber.requests.getCurrent(function(err, res) {
                     should.not.exist(err);
-                    res.should.deep.equal(reply('requestAccept'));
+                    res.should.deep.equal(reply('riders/requestAccept'));
                     done();
                 });
             });
@@ -251,7 +251,7 @@ describe('Estimate', function() {
             "end_longitude": -122.417546
         }, function(err, res) {
             should.not.exist(err);
-            res.should.deep.equal(reply('requestEstimate'));
+            res.should.deep.equal(reply('riders/requestEstimate'));
             done();
         });
     });
@@ -263,7 +263,7 @@ describe('Estimate', function() {
             "endAddress": 'B'
         }, function(err, res) {
             should.not.exist(err);
-            res.should.deep.equal(reply('requestEstimate'));
+            res.should.deep.equal(reply('riders/requestEstimate'));
             done();
         });
     });
@@ -316,7 +316,7 @@ describe('By Request ID', function() {
                 should.not.exist(err);
                 uber.requests.getByID('17cb78a7-b672-4d34-a288-a6c6e44d5315', function(err, res) {
                     should.not.exist(err);
-                    res.should.deep.equal(reply('requestAccept'));
+                    res.should.deep.equal(reply('riders/requestAccept'));
                     done();
                 });
             });
@@ -509,7 +509,7 @@ describe('By Request ID', function() {
                     should.not.exist(err);
                     uber.requests.getMapByID('17cb78a7-b672-4d34-a288-a6c6e44d5315', function(err, res) {
                         should.not.exist(err);
-                        res.should.deep.equal(reply('requestMap'));
+                        res.should.deep.equal(reply('riders/requestMap'));
                         done();
                     });
                 });
@@ -538,7 +538,7 @@ describe('By Request ID', function() {
                     should.not.exist(err);
                     uber.requests.getReceiptByID('17cb78a7-b672-4d34-a288-a6c6e44d5315', function(err, res) {
                         should.not.exist(err);
-                        res.should.deep.equal(reply('requestReceipt'));
+                        res.should.deep.equal(reply('riders/requestReceipt'));
                         done();
                     });
                 });

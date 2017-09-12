@@ -1,4 +1,4 @@
-var common = require("./common"),
+var common = require("../common"),
     should = common.should,
     qs = common.qs,
     uber = common.uber,
@@ -13,10 +13,10 @@ describe('Exchange authorization code into access token', function() {
                 authorization_code: ac
             })
             .spread(function(access_token, refresh_token) {
-                access_token.should.equal(reply('token').access_token);
-                refresh_token.should.equal(reply('token').refresh_token);
-                uber.access_token.should.equal(reply('token').access_token);
-                uber.refresh_token.should.equal(reply('token').refresh_token);
+                access_token.should.equal(reply('auth/token').access_token);
+                refresh_token.should.equal(reply('auth/token').refresh_token);
+                uber.access_token.should.equal(reply('auth/token').access_token);
+                uber.refresh_token.should.equal(reply('auth/token').refresh_token);
             })
             .error(function(err) {
                 should.not.exist(err);
@@ -28,10 +28,10 @@ describe('Exchange authorization code into access token', function() {
         uber.authorizationAsync({
                 refresh_token: 'x8Y6dF2qA6iKaTKlgzVfFvyYoNrlkp'
             }).spread(function(access_token, refresh_token) {
-                access_token.should.equal(reply('token').access_token);
-                refresh_token.should.equal(reply('token').refresh_token);
-                uber.access_token.should.equal(reply('token').access_token);
-                uber.refresh_token.should.equal(reply('token').refresh_token);
+                access_token.should.equal(reply('auth/token').access_token);
+                refresh_token.should.equal(reply('auth/token').refresh_token);
+                uber.access_token.should.equal(reply('auth/token').access_token);
+                uber.refresh_token.should.equal(reply('auth/token').refresh_token);
             })
             .error(function(err) {
                 should.not.exist(err);
@@ -65,7 +65,7 @@ describe('Auto refresh token whenever it is expired', function() {
                     "end_longitude": -122.417546
                 });
             }).then(function(res) {
-                res.should.deep.equal(reply('requestCreate'));
+                res.should.deep.equal(reply('riders/requestCreate'));
                 uber.tokenExpiration.should.be.above(new Date());
                 done();
             });

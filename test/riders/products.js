@@ -1,4 +1,4 @@
-var common = require("./common"),
+var common = require("../common"),
     should = common.should,
     uber = common.uber,
     uber_sandbox = common.uber_sandbox,
@@ -10,7 +10,7 @@ describe('List', function() {
         uber.clearTokens();
         uber.products.getAllForLocation(3.1357169, 101.6881501, function(err, res) {
             should.not.exist(err);
-            res.should.deep.equal(reply('product'));
+            res.should.deep.equal(reply('riders/product'));
             done();
         });
     });
@@ -19,7 +19,7 @@ describe('List', function() {
         uber.clearTokens();
         uber.products.getAllForAddress('A', function(err, res) {
             should.not.exist(err);
-            res.should.deep.equal(reply('product'));
+            res.should.deep.equal(reply('riders/product'));
             done();
         });
     });
@@ -54,7 +54,7 @@ describe('Details', function() {
     it('should list all the product types', function(done) {
         uber.products.getByID('d4abaae7-f4d6-4152-91cc-77523e8165a4', function(err, res) {
             should.not.exist(err);
-            res.should.deep.equal(reply('productDetail'));
+            res.should.deep.equal(reply('riders/productDetail'));
             done();
         });
     });

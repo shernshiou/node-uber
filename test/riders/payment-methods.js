@@ -1,4 +1,4 @@
-var common = require("./common"),
+var common = require("../common"),
     should = common.should,
     uber = common.uber,
     reply = common.jsonReply,
@@ -12,7 +12,7 @@ it('should list the payment methods after authentication', function(done) {
             should.not.exist(err);
             uber.payment.getMethods(function(err, res) {
                 should.not.exist(err);
-                res.should.deep.equal(reply('paymentMethod'));
+                res.should.deep.equal(reply('riders/paymentMethod'));
                 done();
             });
         });

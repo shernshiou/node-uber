@@ -1,4 +1,4 @@
-var common = require("./common"),
+var common = require("../common"),
     should = common.should,
     uber = common.uber,
     reply = common.jsonReply,
@@ -8,7 +8,7 @@ describe('Price', function() {
     it('should list all the price estimates by address', function(done) {
         uber.estimates.getPriceForRouteByAddressAsync('A', 'B')
         .then(function(res) {
-                res.should.deep.equal(reply('price'));
+                res.should.deep.equal(reply('riders/price'));
                 done();
             });
     });
@@ -16,7 +16,7 @@ describe('Price', function() {
     it('should list all the price estimates by address with invalid seats count', function(done) {
         uber.estimates.getPriceForRouteByAddressAsync('A', 'B', '')
         .then(function(res) {
-                res.should.deep.equal(reply('price'));
+                res.should.deep.equal(reply('riders/price'));
                 done();
             });
     });
@@ -24,7 +24,7 @@ describe('Price', function() {
     it('should list all the price estimates from server', function(done) {
         uber.estimates.getPriceForRouteAsync(3.1357169, 101.6881501, 3.0831659, 101.6505078)
             .then(function(res) {
-                res.should.deep.equal(reply('price'));
+                res.should.deep.equal(reply('riders/price'));
                 done();
             });
     });
@@ -32,7 +32,7 @@ describe('Price', function() {
     it('should list all the price estimates from server with invalid seats count', function(done) {
         uber.estimates.getPriceForRouteAsync(3.1357169, 101.6881501, 3.0831659, 101.6505078, '')
             .then(function(res) {
-                res.should.deep.equal(reply('price'));
+                res.should.deep.equal(reply('riders/price'));
                 done();
             });
     });
@@ -41,7 +41,7 @@ describe('Price', function() {
         uber.clearTokens();
         uber.estimates.getPriceForRouteByAddressAsync('A', 'B')
         .then(function(res) {
-                res.should.deep.equal(reply('price'));
+                res.should.deep.equal(reply('riders/price'));
                 done();
             });
     });
@@ -50,7 +50,7 @@ describe('Price', function() {
         uber.clearTokens();
         uber.estimates.getPriceForRouteAsync(3.1357169, 101.6881501, 3.0831659, 101.6505078)
             .then(function(res) {
-                res.should.deep.equal(reply('price'));
+                res.should.deep.equal(reply('riders/price'));
                 done();
             });
     });
@@ -136,7 +136,7 @@ describe('Time', function() {
                 return uber.estimates.getETAForLocationAsync(3.1357169, 101.6881501);
             })
             .then(function(res) {
-                res.should.deep.equal(reply('time'));
+                res.should.deep.equal(reply('riders/time'));
                 done();
             });
     });
@@ -148,7 +148,7 @@ describe('Time', function() {
                 return uber.estimates.getETAForAddressAsync('A');
             })
             .then(function(res) {
-                res.should.deep.equal(reply('time'));
+                res.should.deep.equal(reply('riders/time'));
                 done();
             });
     });
@@ -157,7 +157,7 @@ describe('Time', function() {
         uber.clearTokens();
         uber.estimates.getETAForLocationAsync(3.1357169, 101.6881501)
             .then(function(res) {
-                res.should.deep.equal(reply('time'));
+                res.should.deep.equal(reply('riders/time'));
                 done();
             });
     });
@@ -166,7 +166,7 @@ describe('Time', function() {
         uber.clearTokens();
         uber.estimates.getETAForAddressAsync('A')
             .then(function(res) {
-                res.should.deep.equal(reply('time'));
+                res.should.deep.equal(reply('riders/time'));
                 done();
             });
     });
@@ -174,7 +174,7 @@ describe('Time', function() {
     it('should list all the price estimates for product and location', function(done) {
         uber.estimates.getETAForLocationAsync(3.1357169, 101.6881501, '327f7914-cd12-4f77-9e0c-b27bac580d03')
             .then(function(res) {
-                res.should.deep.equal(reply('time'));
+                res.should.deep.equal(reply('riders/time'));
                 done();
             });
     });
@@ -182,7 +182,7 @@ describe('Time', function() {
     it('should list all the price estimates for product and address', function(done) {
         uber.estimates.getETAForAddressAsync('A', '327f7914-cd12-4f77-9e0c-b27bac580d03')
             .then(function(res) {
-                res.should.deep.equal(reply('time'));
+                res.should.deep.equal(reply('riders/time'));
                 done();
             });
     });
@@ -190,7 +190,7 @@ describe('Time', function() {
     it('should list all the price estimates for location but empty product', function(done) {
         uber.estimates.getETAForLocationAsync(3.1357169, 101.6881501, '')
             .then(function(res) {
-                res.should.deep.equal(reply('time'));
+                res.should.deep.equal(reply('riders/time'));
                 done();
             });
     });
@@ -198,7 +198,7 @@ describe('Time', function() {
     it('should list all the price estimates for address but empty product', function(done) {
         uber.estimates.getETAForAddressAsync('A', '')
             .then(function(res) {
-                res.should.deep.equal(reply('time'));
+                res.should.deep.equal(reply('riders/time'));
                 done();
             });
     });

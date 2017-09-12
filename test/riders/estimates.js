@@ -1,4 +1,4 @@
-var common = require("./common"),
+var common = require("../common"),
     should = common.should,
     uber = common.uber,
     reply = common.jsonReply,
@@ -9,7 +9,7 @@ describe('Price', function() {
         uber.estimates.getPriceForRouteByAddress('A', 'B',
             function(err, res) {
                 should.not.exist(err);
-                res.should.deep.equal(reply('price'));
+                res.should.deep.equal(reply('riders/price'));
                 done();
             });
     });
@@ -18,7 +18,7 @@ describe('Price', function() {
         uber.estimates.getPriceForRouteByAddress('A', 'B', '',
             function(err, res) {
                 should.not.exist(err);
-                res.should.deep.equal(reply('price'));
+                res.should.deep.equal(reply('riders/price'));
                 done();
             });
     });
@@ -27,7 +27,7 @@ describe('Price', function() {
         uber.estimates.getPriceForRoute(3.1357169, 101.6881501, 3.0831659, 101.6505078,
             function(err, res) {
                 should.not.exist(err);
-                res.should.deep.equal(reply('price'));
+                res.should.deep.equal(reply('riders/price'));
                 done();
             });
     });
@@ -36,7 +36,7 @@ describe('Price', function() {
         uber.estimates.getPriceForRoute(3.1357169, 101.6881501, 3.0831659, 101.6505078, '',
             function(err, res) {
                 should.not.exist(err);
-                res.should.deep.equal(reply('price'));
+                res.should.deep.equal(reply('riders/price'));
                 done();
             });
     });
@@ -48,7 +48,7 @@ describe('Price', function() {
             'B',
             function(err, res) {
                 should.not.exist(err);
-                res.should.deep.equal(reply('price'));
+                res.should.deep.equal(reply('riders/price'));
                 done();
             });
     });
@@ -58,7 +58,7 @@ describe('Price', function() {
         uber.estimates.getPriceForRoute(3.1357169, 101.6881501, 3.0831659, 101.6505078,
             function(err, res) {
                 should.not.exist(err);
-                res.should.deep.equal(reply('price'));
+                res.should.deep.equal(reply('riders/price'));
                 done();
             });
     });
@@ -157,7 +157,7 @@ describe('Time', function() {
                 uber.estimates.getETAForLocation(3.1357169, 101.6881501,
                     function(err, res) {
                         should.not.exist(err);
-                        res.should.deep.equal(reply('time'));
+                        res.should.deep.equal(reply('riders/time'));
                         done();
                     });
             });
@@ -173,7 +173,7 @@ describe('Time', function() {
                     'A',
                     function(err, res) {
                         should.not.exist(err);
-                        res.should.deep.equal(reply('time'));
+                        res.should.deep.equal(reply('riders/time'));
                         done();
                     });
             });
@@ -184,7 +184,7 @@ describe('Time', function() {
         uber.estimates.getETAForLocation(3.1357169, 101.6881501,
             function(err, res) {
                 should.not.exist(err);
-                res.should.deep.equal(reply('time'));
+                res.should.deep.equal(reply('riders/time'));
                 done();
             });
     });
@@ -194,7 +194,7 @@ describe('Time', function() {
             'A',
             function(err, res) {
                 should.not.exist(err);
-                res.should.deep.equal(reply('time'));
+                res.should.deep.equal(reply('riders/time'));
                 done();
             });
     });
@@ -203,7 +203,7 @@ describe('Time', function() {
         uber.estimates.getETAForLocation(3.1357169, 101.6881501, '327f7914-cd12-4f77-9e0c-b27bac580d03',
             function(err, res) {
                 should.not.exist(err);
-                res.should.deep.equal(reply('time'));
+                res.should.deep.equal(reply('riders/time'));
                 done();
             });
     });
@@ -214,7 +214,7 @@ describe('Time', function() {
             '327f7914-cd12-4f77-9e0c-b27bac580d03',
             function(err, res) {
                 should.not.exist(err);
-                res.should.deep.equal(reply('time'));
+                res.should.deep.equal(reply('riders/time'));
                 done();
             });
     });
@@ -223,7 +223,7 @@ describe('Time', function() {
         uber.estimates.getETAForLocation(3.1357169, 101.6881501, '',
             function(err, res) {
                 should.not.exist(err);
-                res.should.deep.equal(reply('time'));
+                res.should.deep.equal(reply('riders/time'));
                 done();
             });
     });
@@ -234,7 +234,7 @@ describe('Time', function() {
             '',
             function(err, res) {
                 should.not.exist(err);
-                res.should.deep.equal(reply('time'));
+                res.should.deep.equal(reply('riders/time'));
                 done();
             });
     });

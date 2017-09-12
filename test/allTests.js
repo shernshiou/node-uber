@@ -26,23 +26,31 @@ function importTest(name, path) {
 
 describe("Running all tests ...", function() {
     importTest("Uber client general tests", './general');
-    importTest("Localization tests", './localization');
-    importTest("OAuth2 authorization methods", './oauth');
-    importTest("OAuth2 authorization methods (Async)", './oauthAsync');
-    importTest("/Estimates", './estimates');
-    importTest("/Estimates (Async)", './estimatesAsync');
-    importTest("/Payment-Methods", './payment-methods');
-    importTest("/Payment-Methods (Async)", './payment-methodsAsync');
-    importTest("/Places", './places');
-    importTest("/Places (Async)", './placesAsync');
-    importTest("/Products", './products');
-    importTest("/Products (Async)", './productsAsync');
-    importTest("/Reminders", './reminders');
-    importTest("/Reminders (Async)", './remindersAsync');
-    importTest("/Requests", './requests');
-    importTest("/Requests (Async)", './requestsAsync');
-    importTest("/User", './user');
-    importTest("/User (Async)", './userAsync');
+    // Auth
+    importTest("OAuth2 authorization methods", './auth/oauth');
+    importTest("OAuth2 authorization methods (Async)", './auth/oauthAsync');
+    // Riders
+    importTest("/Estimates", './riders/estimates');
+    importTest("/Estimates (Async)", './riders/estimatesAsync');
+    importTest("/Payment-Methods", './riders/payment-methods');
+    importTest("/Payment-Methods (Async)", './riders/payment-methodsAsync');
+    importTest("/Places", './riders/places');
+    importTest("/Places (Async)", './riders/placesAsync');
+    importTest("/Products", './riders/products');
+    importTest("/Products (Async)", './riders/productsAsync');
+    importTest("/Reminders", './riders/reminders');
+    importTest("/Reminders (Async)", './riders/remindersAsync');
+    importTest("/Requests", './riders/requests');
+    importTest("/Requests (Async)", './riders/requestsAsync');
+    importTest("/User", './riders/user');
+    importTest("/User (Async)", './riders/userAsync');
+    // Drivers
+    importTest("/Partners/Me", './drivers/profile');
+    importTest("/Partner/Me (Async)", './drivers/profileAsync');
+    importTest("/Partners/Payments", './drivers/payments');
+    importTest("/Partner/Payments (Async)", './drivers/paymentsAsync');
+    importTest("/Partners/Trips", './drivers/trips');
+    importTest("/Partner/Trips (Async)", './drivers/tripsAsync');
 });
 
 defineNocks = function() {
@@ -56,35 +64,35 @@ defineNocks = function() {
         .post('/oauth/v2/token', {
             code: ac
         })
-        .replyWithFile(200, jp('token'))
+        .replyWithFile(200, jp('auth/token'))
         .post('/oauth/v2/token', {
             refresh_token: ac
         })
-        .replyWithFile(200, jp('token'))
+        .replyWithFile(200, jp('auth/token'))
         .post('/oauth/v2/token', {
             code: acNP
         })
-        .replyWithFile(200, jp('tokenNoProfile'))
+        .replyWithFile(200, jp('auth/tokenNoProfile'))
         .post('/oauth/v2/token', {
             code: acNPl
         })
-        .replyWithFile(200, jp('tokenNoPlaces'))
+        .replyWithFile(200, jp('auth/tokenNoPlaces'))
         .post('/oauth/v2/token', {
             code: acNR
         })
-        .replyWithFile(200, jp('tokenNoRequest'))
+        .replyWithFile(200, jp('auth/tokenNoRequest'))
         .post('/oauth/v2/token', {
             code: acTE
         })
-        .replyWithFile(200, jp('tokenExpired'))
+        .replyWithFile(200, jp('auth/tokenExpired'))
         .post('/oauth/v2/token', {
             refresh_token: acTR
         })
-        .replyWithFile(200, jp('tokenRefreshed'))
+        .replyWithFile(200, jp('auth/tokenRefreshed'))
         .post('/oauth/v2/token', {
             code: acTNR
         })
-        .replyWithFile(200, jp('tokenNoRefresh'))
+        .replyWithFile(200, jp('auth/tokenNoRefresh'))
         .post('/oauth/v2/token', {
             refresh_token: acRTE
         })
@@ -93,29 +101,29 @@ defineNocks = function() {
     // Endpoints accessible with OAuth2 Token
     nock('https://api.uber.com', {
             reqheaders: {
-                'Authorization': 'Bearer ' + jr('token').access_token
+                'Authorization': 'Bearer ' + jr('auth/token').access_token
             }
         })
         .persist()
         // Payment-Methods
         .get('/v1/payment-methods')
-        .replyWithFile(200, jp('paymentMethod'))
+        .replyWithFile(200, jp('riders/paymentMethod'))
         // Places
         .get('/v1/places/home')
-        .replyWithFile(200, jp('placeHome'))
+        .replyWithFile(200, jp('riders/placeHome'))
         .put('/v1/places/home')
-        .replyWithFile(200, jp('placeHome'))
+        .replyWithFile(200, jp('riders/placeHome'))
         .get('/v1/places/work')
-        .replyWithFile(200, jp('placeWork'))
+        .replyWithFile(200, jp('riders/placeWork'))
         .put('/v1/places/work')
-        .replyWithFile(200, jp('placeWork'))
+        .replyWithFile(200, jp('riders/placeWork'))
         .get('/v1/places/shop')
         .reply(404)
         .put('/v1/places/shop')
         .reply(404)
         // User
         .get('/v1/me')
-        .replyWithFile(200, jp('profile'))
+        .replyWithFile(200, jp('riders/profile'))
         .get(function(uri) {
             var parts = uri.split('/v1.2/history?offset=0&limit=');
             if (parts.length !== 2) {
@@ -124,35 +132,35 @@ defineNocks = function() {
             // range should be between 1 and 50
             return (parts[1] > 0 && parts[1] <= 50);
         })
-        .replyWithFile(200, jp('history'))
+        .replyWithFile(200, jp('riders/history'))
         // Requests
         .get('/v1/requests/current')
-        .replyWithFile(200, jp('requestAccept'))
+        .replyWithFile(200, jp('riders/requestAccept'))
         .post('/v1/requests', {
             product_id : rPC
         })
-        .replyWithFile(200, jp('requestCreate'))
+        .replyWithFile(200, jp('riders/requestCreate'))
         .post('/v1/requests', {
             product_id : rPS,
             surge_confirmation_id : rSC
         })
-        .replyWithFile(200, jp('requestCreate'))
+        .replyWithFile(200, jp('riders/requestCreate'))
         .post('/v1/requests', {
             product_id : rPS
         })
-        .replyWithFile(409, jp('requestSurge'))
+        .replyWithFile(409, jp('riders/requestSurge'))
         .post('/v1/requests', {
             product_id : rPSOE
         })
-        .replyWithFile(409, jp('requestFareExpired'))
+        .replyWithFile(409, jp('riders/requestFareExpired'))
         .patch('/v1/requests/current')
         .reply(204)
         .delete('/v1/requests/current')
         .reply(204)
         .post('/v1/requests/estimate')
-        .replyWithFile(200, jp('requestEstimate'))
+        .replyWithFile(200, jp('riders/requestEstimate'))
         .get('/v1/requests/17cb78a7-b672-4d34-a288-a6c6e44d5315')
-        .replyWithFile(200, jp('requestAccept'))
+        .replyWithFile(200, jp('riders/requestAccept'))
         .patch('/v1/requests/abcd')
         .reply(404)
         .get('/v1/requests/abcd')
@@ -162,9 +170,24 @@ defineNocks = function() {
         .delete('/v1/requests/17cb78a7-b672-4d34-a288-a6c6e44d5315')
         .reply(204)
         .get('/v1/requests/17cb78a7-b672-4d34-a288-a6c6e44d5315/map')
-        .replyWithFile(200, jp('requestMap'))
+        .replyWithFile(200, jp('riders/requestMap'))
         .get('/v1/requests/17cb78a7-b672-4d34-a288-a6c6e44d5315/receipt')
-        .replyWithFile(200, jp('requestReceipt'));
+        .replyWithFile(200, jp('riders/requestReceipt'))
+        // Driver Partners
+        .get('/v1/partners/me')
+        .replyWithFile(200, jp('drivers/partnerProfile'))
+        .get('/v1/partners/payments?offset=0&limit=5&from_time=1451606400&to_time=1505160819')
+        .replyWithFile(200, jp('drivers/partnerPayments'))
+        .get('/v1/partners/payments?offset=0&limit=50&from_time=1451606400&to_time=1505160819')
+        .replyWithFile(200, jp('drivers/partnerPayments'))
+        .get('/v1/partners/payments?offset=0&limit=5')
+        .replyWithFile(200, jp('drivers/partnerPayments'))
+        .get('/v1/partners/trips?offset=0&limit=5&from_time=1451606400&to_time=1505160819')
+        .replyWithFile(200, jp('drivers/partnerTrips'))
+        .get('/v1/partners/trips?offset=0&limit=50&from_time=1451606400&to_time=1505160819')
+        .replyWithFile(200, jp('drivers/partnerTrips'))
+        .get('/v1/partners/trips?offset=0&limit=5')
+        .replyWithFile(200, jp('drivers/partnerTrips'));
 
 
     // Endpoints accessible with server_token
@@ -176,25 +199,25 @@ defineNocks = function() {
         .persist()
         //Estimates
         .get('/v1/estimates/price?start_latitude=3.1357169&start_longitude=101.6881501&end_latitude=3.0831659&end_longitude=101.6505078&seat_count=2')
-        .replyWithFile(200, jp('price'))
+        .replyWithFile(200, jp('riders/price'))
         .get(function(uri) {
             return uri.indexOf('v1/estimates/time?start_latitude=3.1357169&start_longitude=101.6881501') >= 0;
         })
-        .replyWithFile(200, jp('time'))
+        .replyWithFile(200, jp('riders/time'))
         // Reminders
         .get('/v1/reminders/def-456')
-        .replyWithFile(200, jp('reminder'))
+        .replyWithFile(200, jp('riders/reminder'))
         .post('/v1/reminders')
-        .replyWithFile(200, jp('reminder'))
+        .replyWithFile(200, jp('riders/reminder'))
         .patch('/v1/reminders/def-456')
-        .replyWithFile(200, jp('reminder'))
+        .replyWithFile(200, jp('riders/reminder'))
         .delete('/v1/reminders/def-456')
         .reply(204)
         // Products
         .get('/v1/products?latitude=3.1357169&longitude=101.6881501')
-        .replyWithFile(200, jp('product'))
+        .replyWithFile(200, jp('riders/product'))
         .get('/v1/products/d4abaae7-f4d6-4152-91cc-77523e8165a4')
-        .replyWithFile(200, jp('productDetail'));
+        .replyWithFile(200, jp('riders/productDetail'));
 
     // Endpoints for sandbox mode with server_token
     nock('https://sandbox-api.uber.com', {
@@ -215,7 +238,7 @@ defineNocks = function() {
     // Endpoints for sandbox mode with OAuth2 Token
     nock('https://sandbox-api.uber.com', {
             reqheaders: {
-                'Authorization': 'Bearer ' + jr('token').access_token
+                'Authorization': 'Bearer ' + jr('auth/token').access_token
             }
         })
         .persist()
@@ -228,11 +251,11 @@ defineNocks = function() {
     nock('http://maps.googleapis.com')
         .persist()
         .get('/maps/api/geocode/json?sensor=false&address=A')
-        .replyWithFile(200, jp('locationA'))
+        .replyWithFile(200, jp('geocoder/locationA'))
         .get('/maps/api/geocode/json?sensor=false&address=B')
-        .replyWithFile(200, jp('locationB'))
+        .replyWithFile(200, jp('geocoder/locationB'))
         .get('/maps/api/geocode/json?sensor=false&address=C')
-        .replyWithFile(200, jp('locationC'))
+        .replyWithFile(200, jp('geocoder/locationC'))
         .get('/maps/api/geocode/json?sensor=false&address=%20')
-        .replyWithFile(200, jp('locationEmpty'));
+        .replyWithFile(200, jp('geocoder/locationEmpty'));
 };

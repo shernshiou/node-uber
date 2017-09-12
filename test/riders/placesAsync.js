@@ -1,4 +1,4 @@
-var common = require("./common"),
+var common = require("../common"),
     should = common.should,
     uber = common.uber,
     reply = common.jsonReply,
@@ -24,7 +24,7 @@ describe('Home', function() {
                 return uber.places.getHomeAsync();
             })
             .then(function(res) {
-                res.should.deep.equal(reply('placeHome'));
+                res.should.deep.equal(reply('riders/placeHome'));
             })
             .error(function(err) {
                 should.not.exist(err);
@@ -53,7 +53,7 @@ describe('Work', function() {
                 return uber.places.getWorkAsync();
             })
             .then(function(res) {
-                res.should.deep.equal(reply('placeWork'));
+                res.should.deep.equal(reply('riders/placeWork'));
             })
             .error(function(err) {
                 should.not.exist(err);
@@ -81,7 +81,7 @@ describe('By Place ID', function() {
                 return uber.places.updateHomeAsync('685 Market St, San Francisco, CA 94103, USA');
             })
             .then(function(res) {
-                res.should.deep.equal(reply('placeHome'));
+                res.should.deep.equal(reply('riders/placeHome'));
             })
             .error(function(err) {
                 should.not.exist(err);
@@ -108,7 +108,7 @@ describe('By Place ID', function() {
                 return uber.places.updateWorkAsync('1455 Market St, San Francisco, CA 94103, USA');
             })
             .then(function(res) {
-                res.should.deep.equal(reply('placeWork'));
+                res.should.deep.equal(reply('riders/placeWork'));
             })
             .error(function(err) {
                 should.not.exist(err);

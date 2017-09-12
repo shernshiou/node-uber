@@ -1,4 +1,4 @@
-var common = require("./common"),
+var common = require("../common"),
     should = common.should,
     uber = common.uber,
     reply = common.jsonReply,
@@ -22,7 +22,7 @@ it('should create new reminder', function(done) {
             }
         })
         .then(function(res) {
-            res.should.deep.equal(reply('reminder'));
+            res.should.deep.equal(reply('riders/reminder'));
             done();
         });
 });
@@ -44,7 +44,7 @@ it('should create new reminder using address', function(done) {
             }
         })
         .then(function(res) {
-            res.should.deep.equal(reply('reminder'));
+            res.should.deep.equal(reply('riders/reminder'));
             done();
         });
 });
@@ -185,7 +185,7 @@ it('should return error if event.time is missing for POST', function(done) {
 it('should get existing reminder by ID', function(done) {
     uber.reminders.getByIDAsync('def-456')
         .then(function(res) {
-            res.should.deep.equal(reply('reminder'));
+            res.should.deep.equal(reply('riders/reminder'));
             done();
         });
 });
@@ -216,7 +216,7 @@ it('should patch an existing reminder by ID', function(done) {
             }
         })
         .then(function(res) {
-            res.should.deep.equal(reply('reminder'));
+            res.should.deep.equal(reply('riders/reminder'));
             done();
         });
 });
@@ -238,7 +238,7 @@ it('should patch an existing reminder by ID using address', function(done) {
             }
         })
         .then(function(res) {
-            res.should.deep.equal(reply('reminder'));
+            res.should.deep.equal(reply('riders/reminder'));
             done();
         });
 });

@@ -1,0 +1,26 @@
+{
+  "count": 1200,
+  "limit": 1,
+  "payments": [
+    {
+      "payment_id": "5cb8304c-f3f0-4a46-b6e3-b55e020750d7",
+      "category": "fare",
+      "event_time": 1502842757,
+      "trip_id": "5cb8304c-f3f0-4a46-b6e3-b55e020750d7",
+      "cash_collected": 0,
+      "amount": 4.12,
+      "driver_id": "8LvWuRAq2511gmr8EMkovekFNa2848lyMaQevIto-aXmnK9oKNRtfTxYLgPq9OSt8EzAu5pDB7XiaQIrcp-zXgOA5EyK4h00U6D1o7aZpXIQah--U77Eh7LEBiksj2rahB==",
+      "breakdown": {
+        "other": 4.16,
+        "toll": 1,
+        "service_fee": -1.04
+      },
+      "rider_fees": {
+        "split_fare": 0.50
+      },
+      "partner_id": "8LvWuRAq2511gmr8EMkovekFNa2848lyMaQevIto-aXmnK9oKNRtfTxYLgPq9OSt8EzAu5pDB7XiaQIrcp-zXgOA5EyK4h00U6D1o7aZpXIQah--U77Eh7LEBiksj2rahB==",
+      "currency_code": "USD"
+    }
+  ],
+  "offset": 0
+}
