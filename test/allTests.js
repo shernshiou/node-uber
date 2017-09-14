@@ -38,8 +38,6 @@ describe("Running all tests ...", function() {
     importTest("/Places (Async)", './riders/placesAsync');
     importTest("/Products", './riders/products');
     importTest("/Products (Async)", './riders/productsAsync');
-    importTest("/Reminders", './riders/reminders');
-    importTest("/Reminders (Async)", './riders/remindersAsync');
     importTest("/Requests", './riders/requests');
     importTest("/Requests (Async)", './riders/requestsAsync');
     importTest("/User", './riders/user');
@@ -108,23 +106,23 @@ defineNocks = function() {
         })
         .persist()
         // Payment-Methods
-        .get('/v1/payment-methods')
+        .get('/v1.2/payment-methods')
         .replyWithFile(200, jp('riders/paymentMethod'))
         // Places
-        .get('/v1/places/home')
+        .get('/v1.2/places/home')
         .replyWithFile(200, jp('riders/placeHome'))
-        .put('/v1/places/home')
+        .put('/v1.2/places/home')
         .replyWithFile(200, jp('riders/placeHome'))
-        .get('/v1/places/work')
+        .get('/v1.2/places/work')
         .replyWithFile(200, jp('riders/placeWork'))
-        .put('/v1/places/work')
+        .put('/v1.2/places/work')
         .replyWithFile(200, jp('riders/placeWork'))
-        .get('/v1/places/shop')
+        .get('/v1.2/places/shop')
         .reply(404)
-        .put('/v1/places/shop')
+        .put('/v1.2/places/shop')
         .reply(404)
         // User
-        .get('/v1/me')
+        .get('/v1.2/me')
         .replyWithFile(200, jp('riders/profile'))
         .patch('/v1.2/me', {
             applied_promotion_codes: 'FREE_RIDEZ'
@@ -144,44 +142,44 @@ defineNocks = function() {
         })
         .replyWithFile(200, jp('riders/history'))
         // Requests
-        .get('/v1/requests/current')
+        .get('/v1.2/requests/current')
         .replyWithFile(200, jp('riders/requestAccept'))
-        .post('/v1/requests', {
+        .post('/v1.2/requests', {
             product_id : rPC
         })
         .replyWithFile(200, jp('riders/requestCreate'))
-        .post('/v1/requests', {
+        .post('/v1.2/requests', {
             product_id : rPS,
             surge_confirmation_id : rSC
         })
         .replyWithFile(200, jp('riders/requestCreate'))
-        .post('/v1/requests', {
+        .post('/v1.2/requests', {
             product_id : rPS
         })
         .replyWithFile(409, jp('riders/requestSurge'))
-        .post('/v1/requests', {
+        .post('/v1.2/requests', {
             product_id : rPSOE
         })
         .replyWithFile(409, jp('riders/requestFareExpired'))
-        .patch('/v1/requests/current')
+        .patch('/v1.2/requests/current')
         .reply(204)
-        .delete('/v1/requests/current')
+        .delete('/v1.2/requests/current')
         .reply(204)
-        .post('/v1/requests/estimate')
+        .post('/v1.2/requests/estimate')
         .replyWithFile(200, jp('riders/requestEstimate'))
-        .get('/v1/requests/17cb78a7-b672-4d34-a288-a6c6e44d5315')
+        .get('/v1.2/requests/17cb78a7-b672-4d34-a288-a6c6e44d5315')
         .replyWithFile(200, jp('riders/requestAccept'))
-        .patch('/v1/requests/abcd')
+        .patch('/v1.2/requests/abcd')
         .reply(404)
-        .get('/v1/requests/abcd')
+        .get('/v1.2/requests/abcd')
         .reply(404)
-        .patch('/v1/requests/17cb78a7-b672-4d34-a288-a6c6e44d5315')
+        .patch('/v1.2/requests/17cb78a7-b672-4d34-a288-a6c6e44d5315')
         .reply(204)
-        .delete('/v1/requests/17cb78a7-b672-4d34-a288-a6c6e44d5315')
+        .delete('/v1.2/requests/17cb78a7-b672-4d34-a288-a6c6e44d5315')
         .reply(204)
-        .get('/v1/requests/17cb78a7-b672-4d34-a288-a6c6e44d5315/map')
+        .get('/v1.2/requests/17cb78a7-b672-4d34-a288-a6c6e44d5315/map')
         .replyWithFile(200, jp('riders/requestMap'))
-        .get('/v1/requests/17cb78a7-b672-4d34-a288-a6c6e44d5315/receipt')
+        .get('/v1.2/requests/17cb78a7-b672-4d34-a288-a6c6e44d5315/receipt')
         .replyWithFile(200, jp('riders/requestReceipt'))
         // Driver Partners
         .get('/v1/partners/me')
@@ -208,25 +206,16 @@ defineNocks = function() {
         })
         .persist()
         //Estimates
-        .get('/v1/estimates/price?start_latitude=3.1357169&start_longitude=101.6881501&end_latitude=3.0831659&end_longitude=101.6505078&seat_count=2')
+        .get('/v1.2/estimates/price?start_latitude=3.1357169&start_longitude=101.6881501&end_latitude=3.0831659&end_longitude=101.6505078&seat_count=2')
         .replyWithFile(200, jp('riders/price'))
         .get(function(uri) {
-            return uri.indexOf('v1/estimates/time?start_latitude=3.1357169&start_longitude=101.6881501') >= 0;
+            return uri.indexOf('v1.2/estimates/time?start_latitude=3.1357169&start_longitude=101.6881501') >= 0;
         })
         .replyWithFile(200, jp('riders/time'))
-        // Reminders
-        .get('/v1/reminders/def-456')
-        .replyWithFile(200, jp('riders/reminder'))
-        .post('/v1/reminders')
-        .replyWithFile(200, jp('riders/reminder'))
-        .patch('/v1/reminders/def-456')
-        .replyWithFile(200, jp('riders/reminder'))
-        .delete('/v1/reminders/def-456')
-        .reply(204)
         // Products
-        .get('/v1/products?latitude=3.1357169&longitude=101.6881501')
+        .get('/v1.2/products?latitude=3.1357169&longitude=101.6881501')
         .replyWithFile(200, jp('riders/product'))
-        .get('/v1/products/d4abaae7-f4d6-4152-91cc-77523e8165a4')
+        .get('/v1.2/products/d4abaae7-f4d6-4152-91cc-77523e8165a4')
         .replyWithFile(200, jp('riders/productDetail'));
 
     // Endpoints for sandbox mode with server_token
@@ -236,11 +225,11 @@ defineNocks = function() {
             }
         })
         .persist()
-        .put('/v1/sandbox/products/d4abaae7-f4d6-4152-91cc-77523e8165a4', {
+        .put('/v1.2/sandbox/products/d4abaae7-f4d6-4152-91cc-77523e8165a4', {
             surge_multiplier: 2.2
         })
         .reply(204)
-        .put('/v1/sandbox/products/d4abaae7-f4d6-4152-91cc-77523e8165a4', {
+        .put('/v1.2/sandbox/products/d4abaae7-f4d6-4152-91cc-77523e8165a4', {
             drivers_available: false
         })
         .reply(204);
@@ -252,7 +241,7 @@ defineNocks = function() {
             }
         })
         .persist()
-        .put('/v1/sandbox/requests/17cb78a7-b672-4d34-a288-a6c6e44d5315', {
+        .put('/v1.2/sandbox/requests/17cb78a7-b672-4d34-a288-a6c6e44d5315', {
             status: 'accepted'
         })
         .reply(204);

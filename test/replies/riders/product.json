@@ -1,27 +1,112 @@
 {
-    "products": [{
-        "product_id": "327f7914-cd12-4f77-9e0c-b27bac580d03",
-        "description": "The original Uber",
-        "display_name": "UberBLACK",
-        "capacity": 4,
-        "image": "http://..."
-    }, {
-        "product_id": "955b92da-2b90-4f32-9586-f766cee43b99",
-        "description": "Room for everyone",
-        "display_name": "UberSUV",
-        "capacity": 6,
-        "image": "http://..."
-    }, {
-        "product_id": "622237e-c1e4-4523-b6e7-e1ac53f625ed",
-        "description": "Taxi without the hassle",
-        "display_name": "uberTAXI",
-        "capacity": 4,
-        "image": "http://..."
-    }, {
-        "product_id": "b5e74e96-5d27-4caf-83e9-54c030cd6ac5",
-        "description": "The low-cost Uber",
-        "display_name": "uberX",
-        "capacity": 4,
-        "image": "http://..."
-    }]
+  "products": [
+    {
+      "upfront_fare_enabled": true,
+      "capacity": 2,
+      "product_id": "26546650-e557-4a7b-86e7-6a3942445247",
+      "image": "http://d1a3f4spazzrp4.cloudfront.net/car-types/mono/mono-uberx.png",
+      "cash_enabled": false,
+      "shared": true,
+      "short_description": "POOL",
+      "display_name": "POOL",
+      "product_group": "rideshare",
+      "description": "Share the ride, split the cost."
+    },
+    {
+      "upfront_fare_enabled": true,
+      "capacity": 4,
+      "product_id": "a1111c8c-c720-46c3-8534-2fcdd730040d",
+      "image": "http://d1a3f4spazzrp4.cloudfront.net/car-types/mono/mono-uberx.png",
+      "cash_enabled": false,
+      "shared": false,
+      "short_description": "uberX",
+      "display_name": "uberX",
+      "product_group": "uberx",
+      "description": "THE LOW-COST UBER"
+    },
+    {
+      "upfront_fare_enabled": true,
+      "capacity": 6,
+      "product_id": "821415d8-3bd5-4e27-9604-194e4359a449",
+      "image": "http://d1a3f4spazzrp4.cloudfront.net/car-types/mono/mono-uberxl2.png",
+      "cash_enabled": false,
+      "shared": false,
+      "short_description": "uberXL",
+      "display_name": "uberXL",
+      "product_group": "uberxl",
+      "description": "LOW-COST RIDES FOR LARGE GROUPS"
+    },
+    {
+      "upfront_fare_enabled": true,
+      "capacity": 4,
+      "product_id": "57c0ff4e-1493-4ef9-a4df-6b961525cf92",
+      "image": "http://d1a3f4spazzrp4.cloudfront.net/car-types/mono/mono-uberselect.png",
+      "cash_enabled": false,
+      "shared": false,
+      "short_description": "SELECT",
+      "display_name": "SELECT",
+      "product_group": "uberx",
+      "description": "A STEP ABOVE THE EVERY DAY"
+    },
+    {
+      "upfront_fare_enabled": true,
+      "capacity": 4,
+      "product_id": "d4abaae7-f4d6-4152-91cc-77523e8165a4",
+      "image": "http://d1a3f4spazzrp4.cloudfront.net/car-types/mono/mono-black.png",
+      "cash_enabled": false,
+      "shared": false,
+      "short_description": "BLACK",
+      "display_name": "BLACK",
+      "product_group": "uberblack",
+      "description": "THE ORIGINAL UBER"
+    },
+    {
+      "upfront_fare_enabled": true,
+      "capacity": 6,
+      "product_id": "8920cb5e-51a4-4fa4-acdf-dd86c5e18ae0",
+      "image": "http://d1a3f4spazzrp4.cloudfront.net/car-types/mono/mono-suv.png",
+      "cash_enabled": false,
+      "shared": false,
+      "short_description": "SUV",
+      "display_name": "SUV",
+      "product_group": "suv",
+      "description": "ROOM FOR EVERYONE"
+    },
+    {
+      "upfront_fare_enabled": true,
+      "capacity": 4,
+      "product_id": "ff5ed8fe-6585-4803-be13-3ca541235de3",
+      "image": "http://d1a3f4spazzrp4.cloudfront.net/car-types/mono/mono-uberx.png",
+      "cash_enabled": false,
+      "shared": false,
+      "short_description": "ASSIST",
+      "display_name": "ASSIST",
+      "product_group": "uberx",
+      "description": "uberX with extra assistance"
+    },
+    {
+      "upfront_fare_enabled": true,
+      "capacity": 4,
+      "product_id": "2832a1f5-cfc0-48bb-ab76-7ea7a62060e7",
+      "image": "http://d1a3f4spazzrp4.cloudfront.net/car-types/mono/mono-wheelchair.png",
+      "cash_enabled": false,
+      "shared": false,
+      "short_description": "WAV",
+      "display_name": "WAV",
+      "product_group": "uberx",
+      "description": "WHEELCHAIR ACCESSIBLE VEHICLES"
+    },
+    {
+      "upfront_fare_enabled": false,
+      "capacity": 4,
+      "product_id": "3ab64887-4842-4c8e-9780-ccecd3a0391d",
+      "image": "http://d1a3f4spazzrp4.cloudfront.net/car-types/mono/mono-taxi.png",
+      "cash_enabled": false,
+      "shared": false,
+      "short_description": "TAXI",
+      "display_name": "TAXI",
+      "product_group": "taxi",
+      "description": "TAXI WITHOUT THE HASSLE"
+    }
+  ]
 }
