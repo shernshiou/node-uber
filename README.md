@@ -130,44 +130,40 @@ uber.revokeTokenAsync('My_access_token');
 
 HTTP Method | Endpoint                          | Auth Method           | Required Scope                                 | Methods
 ----------- | --------------------------------- | --------------------- | ---------------------------------------------- | -------------------------------------------------
-GET         | /v1/products                      | OAuth or server_token |                                                | products.getAllForAddressAsync
-GET         | /v1/products                      | OAuth or server_token |                                                | products.getAllForLocationAsync
-GET         | /v1/products/{product_id}         | OAuth or server_token |                                                | products.getByIDAsync
-PUT         | /v1/sandbox/products/{product_id} | OAuth or server_token | (Sandbox mode)                                 | products.setSurgeMultiplierByIDAsync
-PUT         | /v1/sandbox/products/{product_id} | OAuth or server_token | (Sandbox mode)                                 | products.setDriversAvailabilityByIDAsync
-GET         | /v1/estimates/price               | OAuth or server_token |                                                | estimates.getPriceForRouteAsync
-GET         | /v1/estimates/price               | OAuth or server_token |                                                | estimates.getPriceForRouteByAddressAsync
-GET         | /v1/estimates/time                | OAuth or server_token |                                                | estimates.getETAForAddressAsync
-GET         | /v1/estimates/time                | OAuth or server_token |                                                | estimates.getETAForLocationAsync
+GET         | /v1.2/products                      | OAuth or server_token |                                                | products.getAllForAddressAsync
+GET         | /v1.2/products                      | OAuth or server_token |                                                | products.getAllForLocationAsync
+GET         | /v1.2/products/{product_id}         | OAuth or server_token |                                                | products.getByIDAsync
+PUT         | /v1.2/sandbox/products/{product_id} | OAuth or server_token | (Sandbox mode)                                 | products.setSurgeMultiplierByIDAsync
+PUT         | /v1.2/sandbox/products/{product_id} | OAuth or server_token | (Sandbox mode)                                 | products.setDriversAvailabilityByIDAsync
+GET         | /v1.2/estimates/price               | OAuth or server_token |                                                | estimates.getPriceForRouteAsync
+GET         | /v1.2/estimates/price               | OAuth or server_token |                                                | estimates.getPriceForRouteByAddressAsync
+GET         | /v1.2/estimates/time                | OAuth or server_token |                                                | estimates.getETAForAddressAsync
+GET         | /v1.2/estimates/time                | OAuth or server_token |                                                | estimates.getETAForLocationAsync
 GET         | /v1.2/history                     | OAuth                 | history or history_lite                        | user.getHistoryAsync
-GET         | /v1/me                            | OAuth                 | profile                                        | user.getProfileAsync
-PATCH         | /v1/me                          | OAuth                 | profile                                        | user.applyPromoAsync
-POST        | /v1/requests                      | OAuth                 | request (privileged)                           | requests.createAsync
-GET         | /v1/requests/current              | OAuth                 | request (privileged) or all_trips (privileged) | requests.getCurrentAsync
-PATCH       | /v1/requests/current              | OAuth                 | request (privileged)                           | requests.updateCurrentAsync
-DELETE      | /v1/requests/current              | OAuth                 | request (privileged)                           | requests.deleteCurrentAsync
-POST        | /v1/requests/estimate             | OAuth                 | request (privileged)                           | requests.getEstimatesAsync
-GET         | /v1/requests/{request_id}         | OAuth                 | request (privileged)                           | requests.getByIDAsync
-PATCH       | /v1/requests/{request_id}         | OAuth                 | request (privileged)                           | requests.updateByIDAsync
-PUT         | /v1/sandbox/requests/{request_id} | OAuth                 | request (privileged & Sandbox mode )           | requests.setStatusByIDAsync
-DELETE      | /v1/requests/{request_id}         | OAuth                 | request (privileged)                           | requests.deleteByIDAsync
-GET         | /v1/requests/{request_id}/map     | OAuth                 | request (privileged)                           | requests.getMapByIDAsync
-GET         | /v1/requests/{request_id}/receipt | OAuth                 | request_receipt (privileged)                   | requests.getReceiptByIDAsync
-GET         | /v1/places/{place_id}             | OAuth                 | places                                         | places.getHomeAsync and places.getWorkAsync
-PUT         | /v1/places/{place_id}             | OAuth                 | places                                         | places.updateHomeAsync and places.updateWorkAsync
-GET         | v1/payment-methods                | OAuth                 | request (privileged)                           | payment.getMethodsAsync
-POST        | /v1/reminders                     | server_token          |                                                | reminders.createAsync
-GET         | /v1/reminders/{reminder_id}       | server_token          |                                                | reminders.getByIDAsync
-PATCH       | /v1/reminders/{reminder_id}       | server_token          |                                                | reminders.updateByIDAsync
-DELETE      | /v1/reminders/{reminder_id}       | server_token          |                                                | reminders.deleteByIDAsync
+GET         | /v1.2/me                            | OAuth                 | profile                                        | user.getProfileAsync
+PATCH       | /v1.2/me                          | OAuth                 | profile                                        | user.applyPromoAsync
+POST        | /v1.2/requests                      | OAuth                 | request (privileged)                           | requests.createAsync
+GET         | /v1.2/requests/current              | OAuth                 | request (privileged) or all_trips (privileged) | requests.getCurrentAsync
+PATCH       | /v1.2/requests/current              | OAuth                 | request (privileged)                           | requests.updateCurrentAsync
+DELETE      | /v1.2/requests/current              | OAuth                 | request (privileged)                           | requests.deleteCurrentAsync
+POST        | /v1.2/requests/estimate             | OAuth                 | request (privileged)                           | requests.getEstimatesAsync
+GET         | /v1.2/requests/{request_id}         | OAuth                 | request (privileged)                           | requests.getByIDAsync
+PATCH       | /v1.2/requests/{request_id}         | OAuth                 | request (privileged)                           | requests.updateByIDAsync
+PUT         | /v1.2/sandbox/requests/{request_id} | OAuth                 | request (privileged & Sandbox mode )           | requests.setStatusByIDAsync
+DELETE      | /v1.2/requests/{request_id}         | OAuth                 | request (privileged)                           | requests.deleteByIDAsync
+GET         | /v1.2/requests/{request_id}/map     | OAuth                 | request (privileged)                           | requests.getMapByIDAsync
+GET         | /v1.2/requests/{request_id}/receipt | OAuth                 | request_receipt (privileged)                   | requests.getReceiptByIDAsync
+GET         | /v1.2/places/{place_id}             | OAuth                 | places                                         | places.getHomeAsync and places.getWorkAsync
+PUT         | /v1.2/places/{place_id}             | OAuth                 | places                                         | places.updateHomeAsync and places.updateWorkAsync
+GET         | /v1.2/payment-methods                | OAuth                 | request (privileged)                           | payment.getMethodsAsync
 
 ## [Drivers API](https://developer.uber.com/docs/drivers)
 
 HTTP Method | Endpoint           | Auth Method | Required Scope   | Methods
 ----------- | ------------------ | ----------- | ---------------- | --------------------------------
-GET         | /partners/me       | OAuth       | partner.accounts | partnerprofile.getProfileAsync
-GET         | /partners/payments | OAuth       | partner.payments | partnerpayments.getPaymentsAsync
-GET         | /partners/trips    | OAuth       | partner.trips    | partnertrips.getTripsAsync
+GET         | /v1/partners/me       | OAuth       | partner.accounts | partnerprofile.getProfileAsync
+GET         | /v1/partners/payments | OAuth       | partner.payments | partnerpayments.getPaymentsAsync
+GET         | /v1/partners/trips    | OAuth       | partner.trips    | partnertrips.getTripsAsync
 
 ## Endpoint Details
 
@@ -460,7 +456,10 @@ uber.requests.createAsync(parameter);
 
 ##### Parameter
 
-- JS Object with at least the following attributes: `start_latitude` & `start_longitude` OR `start_place_id`
+- JS Object with at least the following attributes:
+  - `start_latitude` & `start_longitude` OR `start_place_id`
+  - `end_latitude` & `end_longitude` OR `end_place_id`
+  -  The key for the upfront fare of a ride (`fare_id`)
 - You can provide `startAddress` instead of `start_latitude` & `start_longitude` and `endAddress` instead of `end_latitude` & `end_longitude` thanks to [geocoder](https://github.com/wyattdanger/geocoder)
 
 > **Note**: To ensure correct coordinates you should provide the complete address, including city, ZIP code, state, and country.
@@ -469,6 +468,7 @@ uber.requests.createAsync(parameter);
 
 ```javascript
 uber.requests.createAsync({
+  "fare_id": "d30e732b8bba22c9cdc10513ee86380087cb4a6f89e37ad21ba2a39f3a1ba960",
   "product_id": "a1111c8c-c720-46c3-8534-2fcdd730040d",
   "start_latitude": 37.761492,
   "start_longitude": -122.423941,
@@ -541,7 +541,9 @@ uber.requests.getEstimatesAsync(parameter);
 
 ##### Parameter
 
-- JS Object with at least the following attributes: `start_latitude` & `start_longitude` OR `start_place_id`
+- JS Object with at least the following attributes:
+  - `start_latitude` & `start_longitude` OR `start_place_id`
+  - `end_latitude` & `end_longitude` OR `end_place_id`
 - You can provide `startAddress` instead of `start_latitude` & `start_longitude` and `endAddress` instead of `end_latitude` & `end_longitude` thanks to [geocoder](https://github.com/wyattdanger/geocoder)
 
 > **Note**: To ensure correct coordinates you should provide the complete address, including city, ZIP code, state, and country.
@@ -738,98 +740,6 @@ uber.payment.getMethodsAsync();
 
 ```javascript
 uber.payment.getMethodsAsync()
-.then(function(res) { console.log(res); })
-.error(function(err) { console.error(err); });
-```
-
-### /reminders
-
-The reminders endpoint can be accessed ONLY with a `server_token`. No OAuth authorization is needed.
-
-#### [Create new reminder](https://developer.uber.com/docs/v1-reminders-post)
-
-```javascript
-uber.reminders.createAsync(parameter);
-```
-
-##### Parameter
-
-- JS Object with at least the following attributes: `reminder_time`, `phone_number`, `event` & `event.time`
-- You can provide `event.address` instead of `event.latitude` & `event.longitude` thanks to [geocoder](https://github.com/wyattdanger/geocoder)
-
-  > **Note**: To ensure correct coordinates you should provide the complete address, including city, ZIP code, state, and country.
-
-##### Example
-
-```javascript
-uber.reminders.createAsync({
-  reminder_time: 1429294463,
-  phone_number: '+10000000000',
-  event: {
-    time: 1429294463,
-    name: 'Frisbee with friends',
-    location: 'Dolores Park',
-    address: '532-564 Dolores St, San Francisco, CA 94114, USA',
-    product_id: 'a1111c8c-c720-46c3-8534-2fcdd730040d'
-  }
-})
-.then(function(res) { console.log(res); })
-.error(function(err) { console.error(err); });
-```
-
-#### [Get reminder by reminder_id](https://developer.uber.com/docs/v1-reminders-get)
-
-```javascript
-uber.reminders.getByIDAsync(reminder_id);
-```
-
-##### Example
-
-```javascript
-uber.reminders.getByIDAsync('def-456')
-.then(function(res) { console.log(res); })
-.error(function(err) { console.error(err); });
-```
-
-#### [Update reminder by reminder_id](https://developer.uber.com/docs/v1-reminders-patch)
-
-```javascript
-uber.reminders.updateByIDAsync(reminder_id, parameter);
-```
-
-##### Parameter
-
-- JS Object with attributes to be updated
-- You can provide `event.address` instead of `event.latitude` & `event.longitude` thanks to [geocoder](https://github.com/wyattdanger/geocoder)
-
-  > **Note**: To ensure correct coordinates you should provide the complete address, including city, ZIP code, state, and country.
-
-##### Example
-
-```javascript
-uber.reminders.updateByIDAsync('def-456', {
-  event: {
-    time: 1429294463,
-    name: 'Frisbee with friends',
-    location: 'Dolores Park',
-    address: '532-564 Dolores St, San Francisco, CA 94114, USA',
-    product_id: 'a1111c8c-c720-46c3-8534-2fcdd730040d'
-  }
-})
-.then(function(res) { console.log(res); })
-.error(function(err) { console.error(err); });
-```
-
-#### [Delete reminder by reminder_id](https://developer.uber.com/docs/v1-reminders-delete)
-
-```javascript
-uber.reminders.deleteByIDAsync(reminder_id);
-```
-
-##### Example
-
-```javascript
-uber.reminders.deleteByIDAsync('def-456')
 .then(function(res) { console.log(res); })
 .error(function(err) { console.error(err); });
 ```
