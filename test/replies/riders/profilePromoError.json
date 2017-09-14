@@ -1,0 +1,10 @@
+{
+   "meta": {},
+   "errors":[
+      {
+         "status": 400,
+         "code": "promotion_code_invalid",
+         "title": "The promotion code is not valid."
+      }
+   ]
+}
