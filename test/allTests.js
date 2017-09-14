@@ -57,6 +57,8 @@ defineNocks = function() {
     // Login
     nock('https://login.uber.com')
         .persist()
+        .post('/oauth/v2/revoke')
+        .reply(200)
         .post('/oauth/v2/token', {
             code: ''
         })

@@ -98,6 +98,14 @@ app.get('/api/products', function(request, response) {
 });
 ```
 
+### Optional: Revoke user access (token)
+
+If your users decide to disconnect or revoke access to their Uber accounts, you can use the `uber.revokeToken` method. This will invalidate either `access_token` or `refresh_token`. Note that per [RFC7009](https://tools.ietf.org/html/rfc7009), revoke will return success for any string you pass into the function provided the client_id and client_secret are correct. This includes previously revoked tokens and invalid tokens.
+
+```javascript
+uber.revokeToken('My_access_token');
+```
+
 # Method Overview
 
 ## [Riders API](https://developer.uber.com/docs/riders/introduction)
@@ -839,6 +847,13 @@ uber.partnerprofile.getProfile(function (err, res) {
 uber.partnerpayments.getPayments(offset, limit, from_time, to_time, callback);
 ```
 
+##### Parameter
+
+- offset for payments list (sorted by creation time). Defaults to `0`
+- limit of payments list. Defaults to `5`
+- minimum Unix timestamp for filtered payments list
+- maximum Unix timestamp for filtered payments list
+
 #### Example
 
 ```javascript
@@ -853,6 +868,13 @@ uber.partnerpayments.getPayments(0, 50, 1451606400, 1505160819, function (err, r
 ```javascript
 uber.partnertrips.getTrips(offset, limit, from_time, to_time, callback);
 ```
+
+##### Parameter
+
+- offset for trips list (sorted by creation time). Defaults to `0`
+- limit of trips list. Defaults to `5`
+- minimum Unix timestamp for filtered trips list
+- maximum Unix timestamp for filtered trips list
 
 #### Example
 
