@@ -91,3 +91,36 @@ describe('Auto refresh token whenever it is expired', function() {
             });
     });
 });
+
+describe('OAuth2 revokeTokenAsync', function() {
+    it('should return error if token is empty', function(done) {
+      uber.revokeTokenAsync('').then(function(res) {
+              should.not.exist(res);
+          })
+          .error(function (err) {
+              should.exist(err);
+              done();
+          });
+    });
+
+    it('should return error if token is not a string', function(done) {
+      uber.revokeTokenAsync({a: 1}).then(function(res) {
+              should.not.exist(res);
+          })
+          .error(function (err) {
+              should.exist(err);
+              done();
+          });
+    });
+
+    if('should return success if token is revoked', function(done) {
+      uber.revokeTokenAsync('my_access_token').then(function(res) {
+              should.exist(res);
+          })
+          .error(function (err) {
+              should.not.exist(err);
+              done();
+          });
+      done();
+    });
+});

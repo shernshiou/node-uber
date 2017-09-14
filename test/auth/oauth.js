@@ -142,3 +142,27 @@ describe('Multi-user handling', function() {
       done();
     });
 });
+
+describe('OAuth2 revokeToken', function() {
+    it('should return error if token is empty', function(done) {
+      uber.revokeToken('', function(err, res) {
+        should.exist(err);
+        done();
+      });
+    });
+
+    it('should return error if token is not a string', function(done) {
+      uber.revokeToken({a: 1}, function(err, res) {
+        should.exist(err);
+        done();
+      });
+    });
+
+    if('should return success if token is revoked', function(done) {
+      uber.revokeToken('my_access_token', function(err, res) {
+        should.not.exist(err);
+        should.exist(res);
+        done();
+      });
+    });
+});

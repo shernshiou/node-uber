@@ -114,6 +114,14 @@ app.get('/api/products', function(request, response) {
 });
 ```
 
+### Optional: Revoke user access (token)
+
+If your users decide to disconnect or revoke access to their Uber accounts, you can use the `uber.revokeTokenAsync` method. This will invalidate either `access_token` or `refresh_token`. Note that per [RFC7009](https://tools.ietf.org/html/rfc7009), revoke will return success for any string you pass into the function provided the client_id and client_secret are correct. This includes previously revoked tokens and invalid tokens.
+
+```javascript
+uber.revokeTokenAsync('My_access_token');
+```
+
 ## Method Overview
 
 > **Nodeback**: Looking for nodeback-style methods? Check out the [nodeback-readme](README-Nodeback.md).
@@ -831,6 +839,13 @@ uber.partnerprofile.getProfileAsync()
 uber.partnerpayments.getPaymentsAsync(offset, limit, from_time, to_time);
 ```
 
+##### Parameter
+
+- offset for payments list (sorted by creation time). Defaults to `0`
+- limit of payments list. Defaults to `5`
+- minimum Unix timestamp for filtered payments list
+- maximum Unix timestamp for filtered payments list
+
 ##### Example
 
 ```javascript
@@ -844,6 +859,13 @@ uber.partnerpayments.getPaymentsAsync(0, 50, 1451606400, 1505160819)
 ```javascript
 uber.partnertrips.getTripsAsync(offset, limit, from_time, to_time);
 ```
+
+##### Parameter
+
+- offset for trips list (sorted by creation time). Defaults to `0`
+- limit of trips list. Defaults to `5`
+- minimum Unix timestamp for filtered trips list
+- maximum Unix timestamp for filtered trips list
 
 ##### Example
 
@@ -866,14 +888,3 @@ In case you would like to contribute to this project, please ensure that all the
 ## Version History
 
 The change-log can be found in the [Wiki: Version History](https://github.com/shernshiou/node-uber/wiki/Version-History).
-
-## TODOs
-
-- [ ] Test translation support using `Content-Language`
-- [ ] Advance Sandbox implementation
-- [ ] Implement rate limit status
-- [ ] Leverage Surge Pricing responses
-- [ ] Implement access_token refresh
-- [ ] Leverage Webhooks
-- [ ] Learn from other Uber SDKs
-- [ ] Check UberPOOL compatibility (<https://developer.uber.com/docs/tutorials-rides-api#section-uberpool>)
