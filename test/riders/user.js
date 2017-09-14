@@ -40,6 +40,34 @@ describe('Profile', function() {
                 });
             });
     });
+
+    it('should fail apply promo code for user profile after authentication', function(done) {
+        uber.authorization({
+                authorization_code: ac
+            },
+            function(err, accessToken, refreshToken) {
+                should.not.exist(err);
+                uber.user.applyPromo('already-used-code', function(err, res) {
+                    should.exist(err);
+                    done();
+                });
+            });
+    });
+
+    it('should successfully apply promo code for user profile after authentication', function(done) {
+        uber.authorization({
+                authorization_code: ac
+            },
+            function(err, accessToken, refreshToken) {
+                should.not.exist(err);
+                uber.user.applyPromo('FREE_RIDEZ', function(err, res) {
+                    should.exist(res);
+                    should.not.exist(err);
+                    res.should.deep.equal(reply('riders/profilePromoSuccess'));
+                    done();
+                });
+            });
+    });
 });
 
 describe('History', function() {

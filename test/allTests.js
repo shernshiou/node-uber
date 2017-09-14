@@ -126,6 +126,14 @@ defineNocks = function() {
         // User
         .get('/v1/me')
         .replyWithFile(200, jp('riders/profile'))
+        .patch('/v1.2/me', {
+            applied_promotion_codes: 'FREE_RIDEZ'
+        })
+        .replyWithFile(200, jp('riders/profilePromoSuccess'))
+        .patch('/v1.2/me', {
+            applied_promotion_codes: 'already-used-code'
+        })
+        .replyWithFile(400, jp('riders/profilePromoError'))
         .get(function(uri) {
             var parts = uri.split('/v1.2/history?offset=0&limit=');
             if (parts.length !== 2) {

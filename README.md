@@ -141,6 +141,7 @@ GET         | /v1/estimates/time                | OAuth or server_token |       
 GET         | /v1/estimates/time                | OAuth or server_token |                                                | estimates.getETAForLocationAsync
 GET         | /v1.2/history                     | OAuth                 | history or history_lite                        | user.getHistoryAsync
 GET         | /v1/me                            | OAuth                 | profile                                        | user.getProfileAsync
+PATCH         | /v1/me                          | OAuth                 | profile                                        | user.applyPromoAsync
 POST        | /v1/requests                      | OAuth                 | request (privileged)                           | requests.createAsync
 GET         | /v1/requests/current              | OAuth                 | request (privileged) or all_trips (privileged) | requests.getCurrentAsync
 PATCH       | /v1/requests/current              | OAuth                 | request (privileged)                           | requests.updateCurrentAsync
@@ -425,6 +426,24 @@ uber.user.getProfileAsync();
 
 ```javascript
 uber.user.getProfileAsync()
+.then(function(res) { console.log(res); })
+.error(function(err) { console.error(err); });
+```
+
+#### [Apply promo code to user account](https://developer.uber.com/docs/riders/references/api/v1.2/me-patch)
+
+```javascript
+uber.user.applyPromoAsync(code);
+```
+
+##### Parameter
+
+- user promotion code (string)
+
+##### Example
+
+```javascript
+uber.user.applyPromoAsync('FREE_RIDEZ')
 .then(function(res) { console.log(res); })
 .error(function(err) { console.error(err); });
 ```
