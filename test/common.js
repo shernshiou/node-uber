@@ -12,6 +12,7 @@ var key = {
     "client_secret": "CLIENTSECRETCLIENTSECRETCLIENTSECRETCLIE",
     "server_token": "SERVERTOKENSERVERTOKENSERVERTOKENSERVERT",
     "redirect_uri": "http://localhost/callback",
+    "google_maps_api_key": process.env.GOOGLE_MAPS_API_KEY,
     "name": "nodejs uber wrapper",
     "language": "en_US"
 };
